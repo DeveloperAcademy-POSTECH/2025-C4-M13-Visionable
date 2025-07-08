@@ -9,4 +9,6 @@ import Foundation
 import SwiftData
 
 @Model
-final class ExampleModel {}
+final class ExampleModel {
+    init() {}
+}
