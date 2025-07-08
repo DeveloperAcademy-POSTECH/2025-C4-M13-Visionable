@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3DA2F8932E1CFB69003884E3 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 3DA2F8922E1CFB69003884E3 /* .swiftlint.yml */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3DA2F8222E1CC6F5003884E3 /* FFIP-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FFIP-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DA2F8922E1CFB69003884E3 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		3DA2F8192E1CC6F5003884E3 = {
 			isa = PBXGroup;
 			children = (
+				3DA2F8922E1CFB69003884E3 /* .swiftlint.yml */,
 				3DA2F8242E1CC6F5003884E3 /* FFIP-iOS */,
 				3DA2F8232E1CC6F5003884E3 /* Products */,
 			);
@@ -55,6 +61,7 @@
 				3DA2F81E2E1CC6F5003884E3 /* Sources */,
 				3DA2F81F2E1CC6F5003884E3 /* Frameworks */,
 				3DA2F8202E1CC6F5003884E3 /* Resources */,
+				3DA2F8962E1CFBA6003884E3 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -110,10 +117,31 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DA2F8932E1CFB69003884E3 /* .swiftlint.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3DA2F8962E1CFBA6003884E3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -x /opt/homebrew/bin/swiftlint ]; then\n  /opt/homebrew/bin/swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3DA2F81E2E1CC6F5003884E3 /* Sources */ = {
@@ -258,6 +286,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JF6B89ULG6;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -289,6 +318,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JF6B89ULG6;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
