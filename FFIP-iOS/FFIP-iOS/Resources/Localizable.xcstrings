@@ -1,29 +1,19 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "frank" : {
+    "helloWorld" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "this is frank string"
+            "value" : "Hello, World!"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이게 프랭크?"
-          }
-        }
-      }
-    },
-    "Hello, World!" : {
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "안녕 월드"
+            "value" : "헬로 월드"
           }
         }
       }
