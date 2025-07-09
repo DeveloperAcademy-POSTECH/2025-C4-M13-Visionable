@@ -1,14 +1,32 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
+    "frank" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "this is frank string"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이게 프랭크?"
+          }
+        }
+      }
     },
     "Hello, World!" : {
-
-    },
-    "Push camera view" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "안녕 월드"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

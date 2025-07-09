@@ -16,7 +16,7 @@ struct SearchView: View {
             Button {
                 coordinator.push(.camera)
             } label: {
-                Text("Push camera view")
+                Text(.frank)
             }
         }
     }

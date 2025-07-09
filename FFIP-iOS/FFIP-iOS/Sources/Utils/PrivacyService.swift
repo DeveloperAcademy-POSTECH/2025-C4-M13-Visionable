@@ -34,20 +34,4 @@ actor PrivacyService {
             microphone = false
         }
     }
-
-    func fetchPhotoLibraryAuthorization() async {
-        switch PHPhotoLibrary.authorizationStatus(for: .addOnly) {
-        case .authorized:
-            photoLibrary = true
-        case .notDetermined:
-            let newStatus = await withCheckedContinuation { continuation in
-                PHPhotoLibrary.requestAuthorization { newStatus in
-                    continuation.resume(returning: newStatus)
-                }
-            }
-            photoLibrary = (newStatus == .authorized)
-        default:
-            photoLibrary = false
-        }
-    }
 }

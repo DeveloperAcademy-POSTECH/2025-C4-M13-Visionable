@@ -46,23 +46,6 @@
           }
         }
       }
-    },
-    "NSPhotoLibraryUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "FFIP requires access to your photo library to save and manage photos."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "FFIP 앱이 사진을 저장하고 관리하기 위해 사진 보관함 접근을 요청합니다."
-          }
-        }
-      }
     }
   },
   "version" : "1.1"

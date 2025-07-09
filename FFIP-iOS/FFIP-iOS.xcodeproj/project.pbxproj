@@ -290,7 +290,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "FFIP requires access to your camera to capture photos.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FFIP requires access to your microphone to search with voice.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "FFIP requires access to your photo library to save and manage photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -325,7 +324,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "FFIP requires access to your camera to capture photos.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FFIP requires access to your microphone to search with voice.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "FFIP requires access to your photo library to save and manage photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

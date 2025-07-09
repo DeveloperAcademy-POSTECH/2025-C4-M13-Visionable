@@ -20,7 +20,6 @@ final class CameraModel: NSObject {
 
     func start() async {
         await privacyService.fetchCameraAuthorization()
-        await privacyService.fetchPhotoLibraryAuthorization()
         await deviceService.fetchVideoDevice()
         
         guard let videoDevice = await deviceService.videoDevice else { return }
