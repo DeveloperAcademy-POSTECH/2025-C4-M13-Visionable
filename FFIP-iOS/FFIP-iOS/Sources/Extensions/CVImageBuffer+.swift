@@ -1,0 +1,10 @@
+//
+//  CVImageBuffer+.swift
+//  FFIP-iOS
+//
+//  Created by SeanCho on 7/9/25.
+//
+
+import CoreMedia
+
+extension CVImageBuffer: @unchecked @retroactive Sendable {}

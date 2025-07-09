@@ -12,7 +12,13 @@ struct SearchView: View {
     @Bindable var searchModel: SearchModel
 
     var body: some View {
-        Text("Hello C4 !")
+        VStack {
+            Button {
+                coordinator.push(.camera)
+            } label: {
+                Text("Push camera view")
+            }
+        }
     }
 }
 
