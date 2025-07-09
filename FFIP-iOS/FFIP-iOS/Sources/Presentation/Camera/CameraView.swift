@@ -12,7 +12,12 @@ struct CameraView: View {
     @Bindable var cameraModel: CameraModel
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            FrameView(image: cameraModel.frame)
+        }
+        .task {
+            await cameraModel.start()
+        }
     }
 }
 
