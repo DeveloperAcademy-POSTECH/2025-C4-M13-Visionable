@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct FrameView: UIViewRepresentable {
-    let image: Any?
-    var gravity = CALayerContentsGravity.resizeAspectFill
+    let image: CVImageBuffer?
+    
+    private let gravity = CALayerContentsGravity.resizeAspectFill
 
     func makeUIView(context: Context) -> UIView {
         let view = UIView()

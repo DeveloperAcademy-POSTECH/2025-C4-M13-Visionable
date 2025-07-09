@@ -8,9 +8,10 @@
 import AVFoundation
 
 actor VideoDeviceService {
-    var videoDevice: AVCaptureDevice?
+    private(set) var videoDevice: AVCaptureDevice?
     
     func fetchVideoDevice() {
-        videoDevice = AVCaptureDevice.default(for: .video)!
+        guard let videoDevice = AVCaptureDevice.default(for: .video) else { return }
+        self.videoDevice = videoDevice
     }
 }
