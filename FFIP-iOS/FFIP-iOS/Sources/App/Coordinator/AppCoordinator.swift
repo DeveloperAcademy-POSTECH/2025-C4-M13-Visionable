@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class AppCoordinator: ObservableObject {
+final class AppCoordinator {
     var path = NavigationPath()
 
     /// push : 다음 화면으로 넘어갈 때 사용하는 메서드 (_ route 부분에 전환하고자 하는 다음 화면 명시)
