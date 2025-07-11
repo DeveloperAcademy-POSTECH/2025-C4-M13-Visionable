@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RecentSearchRow: View {
+struct RecentSearchView: View {
     var keyword: String
     var onDelete: () -> Void
     
@@ -23,6 +23,6 @@ struct RecentSearchRow: View {
     }
 }
 
-#Preview {
-    RecentSearchRow(keyword: "최근 검색어", onDelete: {})
-}
+//#Preview {
+//    RecentSearchView(keyword: "최근 검색어", onDelete: {})
+//}
