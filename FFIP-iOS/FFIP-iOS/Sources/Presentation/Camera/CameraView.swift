@@ -12,6 +12,7 @@ struct CameraView: View {
     @Bindable var cameraModel: CameraModel
     
     @State private var frame: CVImageBuffer?
+    @State private var isAnalyzing = false
     
     var body: some View {
         VStack {
@@ -22,9 +23,16 @@ struct CameraView: View {
             
             guard let imageBufferStream = cameraModel.imageBufferStream else { return }
             for await imageBuffer in imageBufferStream {
+                guard !isAnalyzing else { continue }
+                
+                isAnalyzing = true
                 frame = imageBuffer
                 
-                // TODO: 이미지 분석 호출
+                Task {
+                    // TODO: await 이미지 분석 호출
+                    
+                    defer { isAnalyzing = false}
+                }
             }
         }
     }
