@@ -12,7 +12,8 @@ struct FfipTextField: View {
     @Binding var text: String
     
     var onVoiceSearch: () -> Void
-    var onSubmit: () -> Void = {}
+    var onSubmit: () -> Void
+    var onEmptySubmit: () -> Void
     
     private var isTextEmpty: Bool {
         text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -23,7 +24,13 @@ struct FfipTextField: View {
             TextField(placeholder, text: $text)
                 .padding(.vertical, 16)
                 .submitLabel(.search)
-                .onSubmit(onSubmit)
+                .onSubmit {
+                    if isTextEmpty {
+                        onEmptySubmit()
+                    } else {
+                        onSubmit()
+                    }
+                }
             
             Button {
                 if isTextEmpty {
@@ -41,7 +48,7 @@ struct FfipTextField: View {
     }
 }
 
-#Preview {
-    @Previewable @State var text = "검색어"
-    FfipTextField(placeholder: "placeholder", text: $text, onVoiceSearch: {})
-}
+//#Preview {
+//    @Previewable @State var text = "검색어"
+//    FfipTextField(placeholder: "placeholder", text: $text, onVoiceSearch: {})
+//}
