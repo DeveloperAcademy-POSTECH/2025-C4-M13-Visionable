@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct RecentSearchRow: View {
+    var keyword: String
+    var onDelete: () -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            Text(keyword)
+            Spacer()
+            Button(action: onDelete) {
+                Image(systemName: "xmark")
+            }
+            .tint(.black)
+        }
     }
 }
 
 #Preview {
-    RecentSearchRow()
+    RecentSearchRow(keyword: "최근 검색어", onDelete: {})
 }
