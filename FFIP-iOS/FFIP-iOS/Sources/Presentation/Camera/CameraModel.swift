@@ -13,10 +13,13 @@ import Vision
 @MainActor
 @Observable
 final class CameraModel: NSObject {
+    var inputText: String = ""
+    
     private(set) var imageBufferStream: AsyncStream<CVImageBuffer>?
     private var continuation: AsyncStream<CVImageBuffer>.Continuation?
     
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
+    private(set) var matchedObservations = [RecognizedTextObservation]()
     
     private let privacyService = PrivacyService()
     private let captureService = VideoCaptureService()
@@ -37,6 +40,7 @@ final class CameraModel: NSObject {
             await MainActor.run {
                 self.recognizedTextObservations = textRects
             }
+            filterMatchedObservations()
         } catch {
             print("Vision Processing Error !")
         }
@@ -45,6 +49,12 @@ final class CameraModel: NSObject {
     private func setupStream() {
         imageBufferStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
             self.continuation = continuation
+        }
+    }
+    
+    private func filterMatchedObservations() {
+        matchedObservations = recognizedTextObservations.filter {
+            $0.transcript.localizedCaseInsensitiveContains(inputText)
         }
     }
 }

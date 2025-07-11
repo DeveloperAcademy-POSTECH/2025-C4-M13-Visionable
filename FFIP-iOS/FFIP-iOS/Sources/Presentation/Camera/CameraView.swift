@@ -17,12 +17,18 @@ struct CameraView: View {
     
     var body: some View {
         ZStack {
+            
             FrameView(image: frame)
             // TODO: - 박스 영역 디자인 완료 후 수정
-            ForEach(cameraModel.recognizedTextObservations, id: \.self) { observation in
+            ForEach(cameraModel.matchedObservations, id: \.self) { observation in
                 Box(observation: observation)
                     .stroke(.red, lineWidth: 1)
             }
+            
+            TextField("찾을 단어 입력", text: $cameraModel.inputText)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
         }
         .task {
             await cameraModel.start()
