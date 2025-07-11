@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Vision
 
 struct CameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
@@ -15,8 +16,13 @@ struct CameraView: View {
     @State private var isAnalyzing = false
     
     var body: some View {
-        VStack {
+        ZStack {
             FrameView(image: frame)
+            // TODO: - 박스 영역 디자인 완료 후 수정
+            ForEach(cameraModel.recognizedTextObservations, id: \.self) { observation in
+                Box(observation: observation)
+                    .stroke(.red, lineWidth: 1)
+            }
         }
         .task {
             await cameraModel.start()
@@ -29,9 +35,8 @@ struct CameraView: View {
                 frame = imageBuffer
                 
                 Task {
-                    // TODO: await 이미지 분석 호출
-                    
-                    defer { isAnalyzing = false}
+                    defer { isAnalyzing = false }
+                    await cameraModel.processFrame(imageBuffer)
                 }
             }
         }
