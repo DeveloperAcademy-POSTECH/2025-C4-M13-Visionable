@@ -18,12 +18,10 @@ struct CameraView: View {
     var body: some View {
         ZStack {
             FrameView(image: frame)
+            // TODO: - 박스 영역 디자인 완료 후 수정
             ForEach(cameraModel.recognizedTextObservations, id: \.self) { observation in
                 Box(observation: observation)
                     .stroke(.red, lineWidth: 1)
-                    .overlay {
-                        Text(observation.topCandidates(1).first?.string ?? "기본")
-                    }
             }
         }
         .task {
@@ -37,16 +35,9 @@ struct CameraView: View {
                 frame = imageBuffer
                 
                 Task {
-                    // TODO: await 이미지 분석 호출
-                    
-                    defer { isAnalyzing = false}
+                    defer { isAnalyzing = false }
+                    await cameraModel.processFrame(imageBuffer)
                 }
-            }
-        }
-        .onChange(of: cameraModel.frame) {
-            print("⭐️", cameraModel.recognizedTextObservations)
-            cameraModel.recognizedTextObservations.forEach {
-                print("❌", $0.topCandidates(1).first?.string)
             }
         }
     }
