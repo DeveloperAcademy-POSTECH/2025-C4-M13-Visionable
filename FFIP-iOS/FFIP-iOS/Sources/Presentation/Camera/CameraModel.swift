@@ -12,8 +12,10 @@ import SwiftUI
 @MainActor
 @Observable
 final class CameraModel: NSObject {
-    private(set) var frame: CVImageBuffer?
-
+    private(set) var imageBufferStream: AsyncStream<CVImageBuffer>?
+    
+    private var continuation: AsyncStream<CVImageBuffer>.Continuation?
+    
     private let privacyService = PrivacyService()
     private let captureService = VideoCaptureService()
     private let deviceService = VideoDeviceService()
@@ -27,6 +29,14 @@ final class CameraModel: NSObject {
             device: videoDevice,
             delegate: self
         )
+        
+        setupStream()
+    }
+    
+    private func setupStream() {
+        imageBufferStream = AsyncStream { continuation in
+            self.continuation = continuation
+        }
     }
 }
 
@@ -39,7 +49,8 @@ extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate,
     ) {
         if sampleBuffer.isValid && sampleBuffer.imageBuffer != nil {
             Task { @MainActor in
-                frame = sampleBuffer.imageBuffer
+                guard let imageBuffer = sampleBuffer.imageBuffer else { return }
+                continuation?.yield(imageBuffer)
             }
         }
     }
