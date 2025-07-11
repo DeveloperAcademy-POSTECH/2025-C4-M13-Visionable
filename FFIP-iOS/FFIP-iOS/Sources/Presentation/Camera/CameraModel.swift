@@ -8,11 +8,13 @@
 @preconcurrency import AVFoundation
 import Photos
 import SwiftUI
-import Vision
 
 @MainActor
 @Observable
 final class CameraModel: NSObject {
+    private(set) var imageBufferStream: AsyncStream<CVImageBuffer>?
+    
+    private var continuation: AsyncStream<CVImageBuffer>.Continuation?
     private(set) var frame: CVImageBuffer?
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     
@@ -36,6 +38,9 @@ final class CameraModel: NSObject {
                     self.recognizedTextObservations = textRects
                 }
             }
+    private func setupStream() {
+        imageBufferStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
+            self.continuation = continuation
         }
     }
 }
@@ -51,6 +56,7 @@ extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate,
         Task { @MainActor in
             self.frame = sampleBuffer.imageBuffer
             self.processFrame(imageBuffer)
+                continuation?.yield(imageBuffer)
         }
     }
 }
