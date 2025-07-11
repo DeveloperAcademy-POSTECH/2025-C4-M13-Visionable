@@ -32,15 +32,20 @@ struct SearchView: View {
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
             
-            FfipTextField(placeholder: String(localized: "searchPlaceholder"),
-                          text: $searchModel.searchKeyword,
-                          onVoiceSearch: {
-                coordinator.push(.voiceSearch)
-            },
-                          onSubmit: {
-                searchModel.submitSearch()
-                coordinator.push(.camera)
-            })
+            FfipTextField(
+                placeholder: String(localized: "searchPlaceholder"),
+                text: $searchModel.searchKeyword,
+                onVoiceSearch: {
+                    coordinator.push(.voiceSearch)
+                },
+                onSubmit: {
+                    searchModel.submitSearch()
+                    coordinator.push(.camera)
+                },
+                onEmptySubmit: {
+                    
+                }
+            )
             .focused($isFocused)
             .padding(.vertical, 12)
             
@@ -52,7 +57,7 @@ struct SearchView: View {
                     
                     VStack(spacing: 16) {
                         ForEach(searchModel.recentSearchKeyword, id: \.self) { keyword in
-                            RecentSearchRow(keyword: keyword) {
+                            RecentSearchView(keyword: keyword) {
                                 searchModel.deleteRecentSearchKeyword(keyword)
                             }
                         }
