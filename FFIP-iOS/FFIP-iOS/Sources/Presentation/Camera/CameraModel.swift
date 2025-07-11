@@ -34,7 +34,7 @@ final class CameraModel: NSObject {
     }
     
     private func setupStream() {
-        imageBufferStream = AsyncStream { continuation in
+        imageBufferStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
             self.continuation = continuation
         }
     }
