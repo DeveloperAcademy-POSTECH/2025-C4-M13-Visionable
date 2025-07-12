@@ -14,11 +14,12 @@ import Vision
 @Observable
 final class CameraModel: NSObject {
     private(set) var frameToDisplay: CVImageBuffer?
+    private(set) var lastAnalyzedFrame: CVImageBuffer?
 
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
-
-    private(set) var framesToDisplayStream: AsyncStream<CVImageBuffer>?
-    private(set) var framesToAnalyzeStream: AsyncStream<CVImageBuffer>?
+    
+    private var framesToDisplayStream: AsyncStream<CVImageBuffer>?
+    private var framesToAnalyzeStream: AsyncStream<CVImageBuffer>?
     private var framesToDisplayContinuation:
         AsyncStream<CVImageBuffer>.Continuation?
     private var framesToAnalyzeContinuation:
@@ -51,6 +52,8 @@ final class CameraModel: NSObject {
         guard let framesToAnalyzeStream = framesToAnalyzeStream else { return }
         for await imageBuffer in framesToAnalyzeStream {
             await processFrame(imageBuffer)
+            
+            lastAnalyzedFrame = imageBuffer
 
             // CPU 부담저하를 위한 의도적 딜레이
             do {
