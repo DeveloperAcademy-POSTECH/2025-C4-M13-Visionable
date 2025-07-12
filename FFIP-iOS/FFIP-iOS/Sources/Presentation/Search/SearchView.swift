@@ -5,20 +5,22 @@
 //  Created by mini on 7/8/25.
 //
 
+enum SearchFocusState {
+    case home, editing
+}
+
 import SwiftUI
 
 struct SearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
     @FocusState private var isFocused: Bool
-    
-    @State private var showRecent = false
-    @State private var showButton = true
+    @State private var focusState: SearchFocusState = .home
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             
-            if showButton {
+            if focusState == .home {
                 Button {
                     // TODO: - 검색 옵션 선택 뷰 액션 추가
                 } label: {
@@ -30,6 +32,7 @@ struct SearchView: View {
                 .tint(.black)
                 .padding(.top, 90)
                 .transition(.move(edge: .top).combined(with: .opacity))
+                
             }
             
             FfipTextField(
@@ -49,7 +52,7 @@ struct SearchView: View {
             .focused($isFocused)
             .padding(.vertical, 12)
             
-            if showRecent {
+            if focusState == .editing {
                 VStack(alignment: .leading, spacing: 20) {
                     Text(.recentSearchTitle)
                         .font(.caption)
@@ -64,6 +67,7 @@ struct SearchView: View {
                     }
                 }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
+                
             }
             
             Spacer()
@@ -76,35 +80,15 @@ struct SearchView: View {
             }
         }
         .onChange(of: isFocused) {
-            Task {
-                if isFocused {
-                    withAnimation {
-                        showButton = false
-                    }
-                    
-                    try? await Task.sleep(nanoseconds: 250_000_000)
-                    withAnimation {
-                        showRecent = true
-                    }
-                    
-                } else {
-                    withAnimation {
-                        showRecent = false
-                    }
-                    
-                    try? await Task.sleep(nanoseconds: 250_000_000)
-                    withAnimation {
-                        showButton = true
-                    }
-                }
+            withAnimation(.easeInOut(duration: 0.3)) {
+                focusState = isFocused ? .editing : .home
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: isFocused)
     }
 }
 
-#Preview {
-    let coordinator = AppCoordinator()
-    SearchView(searchModel: SearchModel())
-        .environment(coordinator)
-}
+//#Preview {
+//    let coordinator = AppCoordinator()
+//    SearchView(searchModel: SearchModel())
+//        .environment(coordinator)
+//}
