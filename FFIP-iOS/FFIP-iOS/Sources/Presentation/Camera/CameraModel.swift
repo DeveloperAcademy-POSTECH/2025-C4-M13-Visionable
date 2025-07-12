@@ -42,14 +42,14 @@ final class CameraModel: NSObject {
     }
 
     func distributeDisplayFrames() async {
-        guard let framesToDisplayStream = framesToDisplayStream else { return }
+        guard let framesToDisplayStream else { return }
         for await imageBuffer in framesToDisplayStream {
             frameToDisplay = imageBuffer
         }
     }
 
     func distributeAnalyzeFrames() async {
-        guard let framesToAnalyzeStream = framesToAnalyzeStream else { return }
+        guard let framesToAnalyzeStream else { return }
         for await imageBuffer in framesToAnalyzeStream {
             await processFrame(imageBuffer)
             
@@ -67,9 +67,8 @@ final class CameraModel: NSObject {
             let textRects = try await visionService.performTextRecognition(
                 image: buffer
             )
-            await MainActor.run {
-                self.recognizedTextObservations = textRects
-            }
+            
+            self.recognizedTextObservations = textRects
         } catch {
             print("Vision Processing Error !")
         }
@@ -90,8 +89,7 @@ final class CameraModel: NSObject {
     }
 }
 
-extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate,
-    AVCaptureAudioDataOutputSampleBufferDelegate {
+extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
     nonisolated func captureOutput(
         _ output: AVCaptureOutput,
         didOutput sampleBuffer: CMSampleBuffer,
