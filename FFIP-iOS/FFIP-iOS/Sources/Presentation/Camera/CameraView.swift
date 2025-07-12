@@ -28,6 +28,9 @@ struct CameraView: View {
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
         }
+        .onChange(of: cameraModel.matchedObservations) { _, newObservations in
+            if !newObservations.isEmpty { triggerHapticFeedback() }
+        }
         .task {
             await cameraModel.start()
 
