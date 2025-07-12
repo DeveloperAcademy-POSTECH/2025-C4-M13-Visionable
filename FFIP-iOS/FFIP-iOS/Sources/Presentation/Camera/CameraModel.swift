@@ -13,52 +13,93 @@ import Vision
 @MainActor
 @Observable
 final class CameraModel: NSObject {
-    private(set) var imageBufferStream: AsyncStream<CVImageBuffer>?
-    private var continuation: AsyncStream<CVImageBuffer>.Continuation?
-    
+    private(set) var frameToDisplay: CVImageBuffer?
+    private(set) var lastAnalyzedFrame: CVImageBuffer?
+
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     
+    private var framesToDisplayStream: AsyncStream<CVImageBuffer>?
+    private var framesToAnalyzeStream: AsyncStream<CVImageBuffer>?
+    private var framesToDisplayContinuation:
+        AsyncStream<CVImageBuffer>.Continuation?
+    private var framesToAnalyzeContinuation:
+        AsyncStream<CVImageBuffer>.Continuation?
+
     private let privacyService = PrivacyService()
     private let captureService = VideoCaptureService()
     private let deviceService = VideoDeviceService()
     private let visionService = VisionService()
-    
+
     func start() async {
         await privacyService.fetchCameraAuthorization()
         await deviceService.fetchVideoDevice()
         guard let videoDevice = await deviceService.videoDevice else { return }
-        await captureService.configureSession(device: videoDevice, delegate: self)
         setupStream()
+        await captureService.configureSession(
+            device: videoDevice,
+            delegate: self
+        )
     }
-    
-    func processFrame(_ buffer: CVImageBuffer) async {
+
+    func distributeDisplayFrames() async {
+        guard let framesToDisplayStream else { return }
+        for await imageBuffer in framesToDisplayStream {
+            frameToDisplay = imageBuffer
+        }
+    }
+
+    func distributeAnalyzeFrames() async {
+        guard let framesToAnalyzeStream else { return }
+        for await imageBuffer in framesToAnalyzeStream {
+            await processFrame(imageBuffer)
+            
+            lastAnalyzedFrame = imageBuffer
+
+            // CPU 부담저하를 위한 의도적 딜레이
+            do {
+                try await Task.sleep(for: Duration.milliseconds(1))
+            } catch { return }
+        }
+    }
+
+    private func processFrame(_ buffer: CVImageBuffer) async {
         do {
-            let textRects = try await visionService.performTextRecognition(image: buffer)
-            await MainActor.run {
-                self.recognizedTextObservations = textRects
-            }
+            let textRects = try await visionService.performTextRecognition(
+                image: buffer
+            )
+            
+            self.recognizedTextObservations = textRects
         } catch {
             print("Vision Processing Error !")
         }
     }
-    
+
     private func setupStream() {
-        imageBufferStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
-            self.continuation = continuation
+        framesToDisplayStream = AsyncStream(
+            bufferingPolicy: .bufferingNewest(1)
+        ) { continuation in
+            self.framesToDisplayContinuation = continuation
+        }
+        
+        framesToAnalyzeStream = AsyncStream(
+            bufferingPolicy: .bufferingNewest(1)
+        ) { continuation in
+            self.framesToAnalyzeContinuation = continuation
         }
     }
 }
 
-extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate,
-                       AVCaptureAudioDataOutputSampleBufferDelegate {
+extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
     nonisolated func captureOutput(
         _ output: AVCaptureOutput,
         didOutput sampleBuffer: CMSampleBuffer,
         from connection: AVCaptureConnection
     ) {
-        guard sampleBuffer.isValid, let imageBuffer = sampleBuffer.imageBuffer else { return }
+        guard sampleBuffer.isValid, let imageBuffer = sampleBuffer.imageBuffer
+        else { return }
         Task { @MainActor in
-            continuation?.yield(imageBuffer)
+            framesToDisplayContinuation?.yield(imageBuffer)
+            framesToAnalyzeContinuation?.yield(imageBuffer)
         }
     }
 }
