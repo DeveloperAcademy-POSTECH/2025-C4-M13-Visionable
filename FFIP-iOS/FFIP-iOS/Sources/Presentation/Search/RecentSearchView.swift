@@ -23,6 +23,6 @@ struct RecentSearchView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    RecentSearchView(keyword: "최근 검색어", onDelete: {})
-//}
+// }
