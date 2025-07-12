@@ -11,9 +11,9 @@ import Vision
 struct CameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var cameraModel: CameraModel
-    
+
     @State private var isAnalyzing = false
-    
+
     var body: some View {
         ZStack {
             FrameView(image: cameraModel.frameToDisplay)
@@ -25,13 +25,13 @@ struct CameraView: View {
         }
         .task {
             await cameraModel.start()
-            
+
             Task { await cameraModel.distributeDisplayFrames() }
             Task { await cameraModel.distributeAnalyzeFrames() }
         }
     }
 }
 
-//#Preview {
+// #Preview {
 //    CameraView(cameraModel: CameraModel())
-//}
+// }
