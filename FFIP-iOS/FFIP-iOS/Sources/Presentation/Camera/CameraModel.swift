@@ -57,7 +57,7 @@ final class CameraModel: NSObject {
 
             // CPU 부담저하를 위한 의도적 딜레이
             do {
-                try await Task.sleep(for: Duration.milliseconds(1000))
+                try await Task.sleep(for: Duration.milliseconds(1))
             } catch { return }
         }
     }
