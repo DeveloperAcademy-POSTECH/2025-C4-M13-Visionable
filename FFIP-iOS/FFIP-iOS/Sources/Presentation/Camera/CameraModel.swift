@@ -78,6 +78,10 @@ final class CameraModel: NSObject {
         }
     }
     
+    func focus(at point: CGPoint) async {
+        await deviceService.focus(at: point)
+    }
+    
     private func setDefaultZoom() async {
         await zoom(to: 2.0)
     }

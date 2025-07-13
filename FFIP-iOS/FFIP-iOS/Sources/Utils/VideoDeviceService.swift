@@ -25,10 +25,10 @@ actor VideoDeviceService {
         guard let videoDevice else { return 2.0 }
         do {
             try videoDevice.lockForConfiguration()
+            defer { videoDevice.unlockForConfiguration() }
 
             let maxZoomFactor: CGFloat = 30
             videoDevice.videoZoomFactor = max(1.0, min(factor, maxZoomFactor))
-            videoDevice.unlockForConfiguration()
 
             let zoomFactor = videoDevice.videoZoomFactor
             return zoomFactor
@@ -55,12 +55,31 @@ actor VideoDeviceService {
         guard let videoDevice else { return true }
         do {
             try videoDevice.lockForConfiguration()
+            defer { videoDevice.unlockForConfiguration() }
             videoDevice.torchMode = .off
-            videoDevice.unlockForConfiguration()
             return false
         } catch {
             print("Error setting flash mode: \(error)")
         }
         return true
+    }
+
+    func focus(at point: CGPoint) async {
+        guard let videoDevice else { return }
+        do {
+            try videoDevice.lockForConfiguration()
+            defer { videoDevice.unlockForConfiguration() }
+            
+            if videoDevice.isFocusPointOfInterestSupported {
+                videoDevice.focusPointOfInterest = point
+                videoDevice.focusMode = .autoFocus
+            }
+            if videoDevice.isExposurePointOfInterestSupported {
+                videoDevice.exposurePointOfInterest = point
+                videoDevice.exposureMode = .autoExpose
+            }
+        } catch {
+            print("Error setting focus: \(error)")
+        }
     }
 }
