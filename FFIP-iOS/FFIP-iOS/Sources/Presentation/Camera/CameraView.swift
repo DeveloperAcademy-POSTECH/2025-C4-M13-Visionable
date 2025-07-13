@@ -37,6 +37,7 @@ struct CameraView: View {
                     .gesture(
                         MagnificationGesture()
                             .onChanged { value in
+                                showFocusRectangle = false
                                 handleZoomGestureChanged(value)
                             }
                             .onEnded { _ in
