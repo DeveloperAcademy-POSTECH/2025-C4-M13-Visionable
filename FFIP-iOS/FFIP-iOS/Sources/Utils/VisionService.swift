@@ -8,9 +8,17 @@
 import Vision
 
 actor VisionService {
-    private let recognizeTextRequest = RecognizeTextRequest()
-    
-    func performTextRecognition(image: CVImageBuffer) async throws -> [RecognizedTextObservation] {
+    func performTextRecognition(
+        image: CVImageBuffer,
+        customWords: String
+    ) async throws -> [RecognizedTextObservation] {
+        var recognizeTextRequest = RecognizeTextRequest()
+        recognizeTextRequest.automaticallyDetectsLanguage = false
+        recognizeTextRequest.recognitionLanguages = [
+            Locale.Language(identifier: "ko-KR"),
+            Locale.Language(identifier: "en-US")
+        ]
+        recognizeTextRequest.customWords.append(customWords)
         return try await recognizeTextRequest.perform(on: image)
     }
 }

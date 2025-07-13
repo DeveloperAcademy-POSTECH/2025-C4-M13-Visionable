@@ -15,8 +15,10 @@ import Vision
 final class CameraModel: NSObject {
     private(set) var frameToDisplay: CVImageBuffer?
     private(set) var lastAnalyzedFrame: CVImageBuffer?
-
+    
+    private(set) var searchKeyword: String
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
+    private(set) var matchedObservations = [RecognizedTextObservation]()
     
     private(set) var zoomFactor: CGFloat = 2.0
     private(set) var isTorchOn: Bool = false
@@ -24,15 +26,29 @@ final class CameraModel: NSObject {
     private var framesToDisplayStream: AsyncStream<CVImageBuffer>?
     private var framesToAnalyzeStream: AsyncStream<CVImageBuffer>?
     private var framesToDisplayContinuation:
-        AsyncStream<CVImageBuffer>.Continuation?
+    AsyncStream<CVImageBuffer>.Continuation?
     private var framesToAnalyzeContinuation:
-        AsyncStream<CVImageBuffer>.Continuation?
-
-    private let privacyService = PrivacyService()
-    private let captureService = VideoCaptureService()
-    private let deviceService = VideoDeviceService()
-    private let visionService = VisionService()
-
+    AsyncStream<CVImageBuffer>.Continuation?
+    
+    private let privacyService: PrivacyService
+    private let captureService: VideoCaptureService
+    private let deviceService: VideoDeviceService
+    private let visionService: VisionService
+    
+    init(
+        searchKeyword: String,
+        privacyService: PrivacyService,
+        captureService: VideoCaptureService,
+        deviceService: VideoDeviceService,
+        visionService: VisionService
+    ) {
+        self.searchKeyword = searchKeyword
+        self.privacyService = privacyService
+        self.captureService = captureService
+        self.deviceService = deviceService
+        self.visionService = visionService
+    }
+    
     func start() async {
         await privacyService.fetchCameraAuthorization()
         await deviceService.fetchVideoDevice()
@@ -44,21 +60,24 @@ final class CameraModel: NSObject {
         )
         await zoom(to: 2.0)
     }
+}
 
+// MARK: - CameraModel Extension Method
+extension CameraModel {
     func distributeDisplayFrames() async {
         guard let framesToDisplayStream else { return }
         for await imageBuffer in framesToDisplayStream {
             frameToDisplay = imageBuffer
         }
     }
-
+    
     func distributeAnalyzeFrames() async {
         guard let framesToAnalyzeStream else { return }
         for await imageBuffer in framesToAnalyzeStream {
             await processFrame(imageBuffer)
             
             lastAnalyzedFrame = imageBuffer
-
+            
             // CPU 부담저하를 위한 의도적 딜레이
             do {
                 try await Task.sleep(for: Duration.milliseconds(1))
@@ -85,20 +104,25 @@ final class CameraModel: NSObject {
     private func setDefaultZoom() async {
         await zoom(to: 2.0)
     }
+}
 
-    private func processFrame(_ buffer: CVImageBuffer) async {
+// MARK: - CameraModel Private Extension Method
+private extension CameraModel {
+    func processFrame(_ buffer: CVImageBuffer) async {
         do {
             let textRects = try await visionService.performTextRecognition(
-                image: buffer
+                image: buffer,
+                customWords: searchKeyword
             )
             
             self.recognizedTextObservations = textRects
+            filterMatchedObservations()
         } catch {
             print("Vision Processing Error !")
         }
     }
-
-    private func setupStream() {
+    
+    func setupStream() {
         framesToDisplayStream = AsyncStream(
             bufferingPolicy: .bufferingNewest(1)
         ) { continuation in
@@ -111,8 +135,15 @@ final class CameraModel: NSObject {
             self.framesToAnalyzeContinuation = continuation
         }
     }
+    
+    func filterMatchedObservations() {
+        matchedObservations = recognizedTextObservations.filter {
+            $0.transcript.localizedCaseInsensitiveContains(searchKeyword)
+        }
+    }
 }
 
+// MARK: - Camera Model AVCaptureVideoDataOutputSampleBufferDelegate
 extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
     nonisolated func captureOutput(
         _ output: AVCaptureOutput,
