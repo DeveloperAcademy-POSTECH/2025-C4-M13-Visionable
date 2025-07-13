@@ -45,6 +45,15 @@ struct CameraView: View {
                     )
                     .padding(16)
                     
+                    ZoomButton(
+                        zoomFactor: cameraModel.zoomFactor,
+                        action: {
+                            Task {
+                                await handleZoomButtonTapped()
+                            }
+                        }
+                    )
+                    
                     Spacer()
                 }
                 
@@ -76,12 +85,41 @@ struct CameraView: View {
         }
     }
     
+    private struct ZoomButton: View {
+        let zoomFactor: CGFloat
+        let action: () -> Void
+
+        var body: some View {
+            Button(action: action) {
+                Text(String(format: "%.1fx", zoomFactor/2))
+                    .foregroundColor(.white)
+                    .font(.system(size: 16, weight: .bold))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(
+                    Capsule()
+                        .fill(.black.opacity(0.8))
+                )
+            }
+        }
+    }
+    
     private func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue
         zoomGestureValue = value
         let zoomFactor = cameraModel.zoomFactor
         Task {
             await cameraModel.zoom(to: zoomFactor * delta)
+        }
+    }
+    
+    private func handleZoomButtonTapped() async {
+        if cameraModel.zoomFactor >= 4.0 {
+            await cameraModel.zoom(to: 1.0)
+        } else if cameraModel.zoomFactor >= 2.0 {
+            await cameraModel.zoom(to: 4.0)
+        } else {
+            await cameraModel.zoom(to: 2.0)
         }
     }
 }
