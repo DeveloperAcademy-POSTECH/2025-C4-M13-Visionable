@@ -26,10 +26,29 @@ struct CameraView: View {
                             zoomGestureValue = 1.0
                         }
                 )
+            
             // TODO: - 박스 영역 디자인 완료 후 수정
             ForEach(cameraModel.recognizedTextObservations, id: \.self) { observation in
                 Box(observation: observation)
                     .stroke(.red, lineWidth: 1)
+            }
+
+            VStack {
+                HStack {
+                    TorchButton(
+                        isTorchOn: cameraModel.isTorchOn,
+                        action: {
+                            Task {
+                                await cameraModel.toggleTorch()
+                            }
+                        }
+                    )
+                    .padding(16)
+                    
+                    Spacer()
+                }
+                
+                Spacer()
             }
         }
         .task {
@@ -39,7 +58,24 @@ struct CameraView: View {
             Task { await cameraModel.distributeAnalyzeFrames() }
         }
     }
+    
+    private struct TorchButton: View {
+        let isTorchOn: Bool
+        let action: () -> Void
 
+        var body: some View {
+            Button(action: action) {
+                Image(systemName: isTorchOn ? "bolt.fill" : "bolt.slash")
+                    .foregroundColor(isTorchOn ? .yellow : .white)
+                    .font(.system(size: 24))
+                    .frame(width: 40, height: 40)
+                    .background(
+                        Circle()
+                            .fill(.black.opacity(0.8)))
+            }
+        }
+    }
+    
     private func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue
         zoomGestureValue = value

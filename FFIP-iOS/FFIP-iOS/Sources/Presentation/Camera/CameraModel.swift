@@ -19,6 +19,7 @@ final class CameraModel: NSObject {
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     
     private(set) var zoomFactor: CGFloat = 2.0
+    private(set) var isTorchOn: Bool = false
     
     private var framesToDisplayStream: AsyncStream<CVImageBuffer>?
     private var framesToAnalyzeStream: AsyncStream<CVImageBuffer>?
@@ -67,6 +68,14 @@ final class CameraModel: NSObject {
     
     func zoom(to factor: CGFloat) async {
         zoomFactor = await deviceService.zoom(to: factor)
+    }
+    
+    func toggleTorch() async {
+        if isTorchOn {
+            isTorchOn = await deviceService.turnOffTorch()
+        } else {
+            isTorchOn = await deviceService.turnOnTorch()
+        }
     }
     
     private func setDefaultZoom() async {
