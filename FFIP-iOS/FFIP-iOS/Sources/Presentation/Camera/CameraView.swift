@@ -100,6 +100,7 @@ struct CameraView: View {
         }
     }
     
+    // TODO: Hi-Fi 디자인 이후 수정
     private struct TorchButton: View {
         let isTorchOn: Bool
         let action: () -> Void
@@ -117,6 +118,7 @@ struct CameraView: View {
         }
     }
     
+    // TODO: Hi-Fi 디자인 이후 수정
     private struct ZoomButton: View {
         let zoomFactor: CGFloat
         let action: () -> Void
