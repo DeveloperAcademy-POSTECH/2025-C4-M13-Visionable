@@ -18,6 +18,8 @@ final class CameraModel: NSObject {
 
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     
+    private(set) var zoomFactor: CGFloat = 2.0
+    
     private var framesToDisplayStream: AsyncStream<CVImageBuffer>?
     private var framesToAnalyzeStream: AsyncStream<CVImageBuffer>?
     private var framesToDisplayContinuation:
@@ -39,6 +41,7 @@ final class CameraModel: NSObject {
             device: videoDevice,
             delegate: self
         )
+        await zoom(to: 2.0)
     }
 
     func distributeDisplayFrames() async {
@@ -60,6 +63,14 @@ final class CameraModel: NSObject {
                 try await Task.sleep(for: Duration.milliseconds(1))
             } catch { return }
         }
+    }
+    
+    func zoom(to factor: CGFloat) async {
+        zoomFactor = await deviceService.zoom(to: factor)
+    }
+    
+    private func setDefaultZoom() async {
+        await zoom(to: 2.0)
     }
 
     private func processFrame(_ buffer: CVImageBuffer) async {

@@ -12,11 +12,25 @@ struct CameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var cameraModel: CameraModel
 
-    @State private var isAnalyzing = false
+    @State var zoomGestureValue: CGFloat = 1.0
 
     var body: some View {
         ZStack {
             FrameView(image: cameraModel.frameToDisplay)
+                .gesture(
+                    MagnificationGesture()
+                        .onChanged { value in
+                            let delta = value / zoomGestureValue
+                            zoomGestureValue = value
+                            let zoomFactor = cameraModel.zoomFactor
+                            Task {
+                                await cameraModel.zoom(to: zoomFactor * delta)
+                            }
+                        }
+                        .onEnded { _ in
+                            zoomGestureValue = 1.0
+                        }
+                )
             // TODO: - 박스 영역 디자인 완료 후 수정
             ForEach(cameraModel.recognizedTextObservations, id: \.self) { observation in
                 Box(observation: observation)
