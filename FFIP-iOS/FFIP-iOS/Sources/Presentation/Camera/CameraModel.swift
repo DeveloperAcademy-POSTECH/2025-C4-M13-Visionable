@@ -87,7 +87,8 @@ private extension CameraModel {
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
             let textRects = try await visionService.performTextRecognition(
-                image: buffer
+                image: buffer,
+                customWords: searchKeyword
             )
             
             self.recognizedTextObservations = textRects
