@@ -64,7 +64,7 @@ actor VideoDeviceService {
         return true
     }
 
-    func focus(at point: CGPoint) async {
+    func focus(at point: CGPoint) {
         guard let videoDevice else { return }
         do {
             try videoDevice.lockForConfiguration()
