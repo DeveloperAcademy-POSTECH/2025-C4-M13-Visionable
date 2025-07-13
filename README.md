@@ -8,8 +8,7 @@
 <br>
 
 ## 👀 Team Visionable:
-
-| <img width="250" height="250" alt="여니 미모지" src="https://github.com/user-attachments/assets/4aaf350b-7d09-4234-a60a-9dd47d399d57" /> Yeony  <br> [@youryeony](https://github.com/youryeony) | <img width="250" height="250" alt="쪼이 미모지" src="https://github.com/user-attachments/assets/dff69558-68fc-4c5d-afe9-4fe8b9bd3e97" />  Joy <br> [@superbigjoy](https://github.com/superbigjoy) | <img width="250" height="250" alt="노우 미모지" src="https://github.com/user-attachments/assets/cd6c9311-92d1-458c-8dc4-3c16e71fb4ce" /> Snow  <br> [@Jikiim](https://github.com/Jikiim)| <img width="250" height="250" alt="후랑크 미모지" src="https://github.com/user-attachments/assets/11fd35ba-4c0e-4676-b6e0-a5cf7de52209"/> Frank <br> [@chxhyxn](https://github.com/chxhyxn) | <img width="250" height="250" alt="잼 미모지" src="https://github.com/user-attachments/assets/5e7ccfe5-08cc-4064-9009-a97b413a716a" /> Jam  <br> [@jaminleee](https://github.com/jaminleee) | <img width="250" height="250" alt="미니 미모지" src="https://github.com/user-attachments/assets/e25d905b-66a8-496e-b044-a3deaf583c7a" /> Mini <br> [@mini-min](https://github.com/mini-min) | 
+| <img width="150" height="150" alt="여니 미모지" src="https://github.com/user-attachments/assets/4aaf350b-7d09-4234-a60a-9dd47d399d57" /> <br> Yeony <br> [@youryeony](https://github.com/youryeony) | <img width="150" height="150" alt="쪼이 미모지" src="https://github.com/user-attachments/assets/dff69558-68fc-4c5d-afe9-4fe8b9bd3e97" />  <br> Joy <br> [@superbigjoy](https://github.com/superbigjoy) | <img width="150" height="150" alt="노우 미모지" src="https://github.com/user-attachments/assets/cd6c9311-92d1-458c-8dc4-3c16e71fb4ce" /> <br> Snow <br> [@Jikiim](https://github.com/Jikiim)| <img width="150" height="150" alt="후랑크 미모지" src="https://github.com/user-attachments/assets/11fd35ba-4c0e-4676-b6e0-a5cf7de52209"/> <br> Frank <br> [@chxhyxn](https://github.com/chxhyxn) | <img width="150" height="150" alt="잼 미모지" src="https://github.com/user-attachments/assets/5e7ccfe5-08cc-4064-9009-a97b413a716a" /> <br> Jam <br> [@jaminleee](https://github.com/jaminleee) | <img width="150" height="150" alt="미니 미모지" src="https://github.com/user-attachments/assets/e25d905b-66a8-496e-b044-a3deaf583c7a" /> <br> Mini <br> [@mini-min](https://github.com/mini-min) | 
 | :--: | :--: | :--: | :--: | :--: | :--: |
 
 <br>
@@ -61,8 +60,11 @@
 <br>
 
 ## 📑 Tech Archives
-| Archive | Description |
-| :----: |-----|
-| [**🍎 Coding Convention : Clean Code Swift**](https://posacademy.notion.site/Coding-Convention-Clean-Code-Swift-21f2b843d5af806f84a1fa8024ffa761?source=copy_link) | 마틴 아저씨의 클린 코드 원칙과 아카데미 컨벤션을 팀 수준에 맞게 적용하고, 그냥 남들이 사용하니까 사용하는 것이 아니라 "왜 사용해야하는지"에 대한 이해를 위한 정리 글 |
-| [**😎 Vision Framework 공부하기**](https://posacademy.notion.site/Vision-21e2b843d5af80a78ab9ccd2e0a86f3d?source=copy_link) | 유즈 케이스를 발산하기에 앞서, 팀원들의 Vision Framework 기술에 대한 이해와 싱크를 맞추기 위한 공부 내용 |
-| [**🌠 Image Processing Flow**](https://posacademy.notion.site/2272b843d5af803db4f8ff6edc42b19c?source=copy_link) | 핵심 기능을 구현하기 위해 필요한 실시간 스캐닝 -> 이미지 변환 -> 탐지 과정의 플로우를 정리하고, 그 과정에서 필요한 기술을 정리 |
+- [**🍎 Coding Convention : Clean Code Swift**](https://posacademy.notion.site/Coding-Convention-Clean-Code-Swift-21f2b843d5af806f84a1fa8024ffa761?source=copy_link)   
+: 마틴 아저씨의 클린 코드 원칙과 아카데미 컨벤션을 팀 수준에 맞게 적용하고, 그냥 남들이 사용하니까 사용하는 것이 아니라 "왜 사용해야하는지"에 대한 이해를 위한 정리 글
+
+- [**😎 Vision Framework 공부하기**](https://posacademy.notion.site/Vision-21e2b843d5af80a78ab9ccd2e0a86f3d?source=copy_link)   
+  : 유즈 케이스를 발산하기에 앞서, 팀원들의 Vision Framework 기술에 대한 이해와 싱크를 맞추기 위한 공부 내용
+  
+- [**🌠 Image Processing Flow**](https://posacademy.notion.site/2272b843d5af803db4f8ff6edc42b19c?source=copy_link)   
+  : 핵심 기능을 구현하기 위해 필요한 실시간 스캐닝 -> 이미지 변환 -> 탐지 과정의 플로우를 정리하고, 그 과정에서 필요한 기술을 정리 
