@@ -18,10 +18,13 @@ struct CameraView: View {
         ZStack {
             FrameView(image: cameraModel.frameToDisplay)
             // TODO: - 박스 영역 디자인 완료 후 수정
-            ForEach(cameraModel.recognizedTextObservations, id: \.self) { observation in
+            ForEach(cameraModel.matchedObservations, id: \.self) { observation in
                 Box(observation: observation)
                     .stroke(.red, lineWidth: 1)
             }
+        }
+        .onChange(of: cameraModel.matchedObservations) { _, newObservations in
+            if !newObservations.isEmpty { triggerHapticFeedback() }
         }
         .task {
             await cameraModel.start()
