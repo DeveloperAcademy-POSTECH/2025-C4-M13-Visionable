@@ -20,12 +20,7 @@ struct CameraView: View {
                 .gesture(
                     MagnificationGesture()
                         .onChanged { value in
-                            let delta = value / zoomGestureValue
-                            zoomGestureValue = value
-                            let zoomFactor = cameraModel.zoomFactor
-                            Task {
-                                await cameraModel.zoom(to: zoomFactor * delta)
-                            }
+                            handleZoomGestureChanged(value)
                         }
                         .onEnded { _ in
                             zoomGestureValue = 1.0
@@ -42,6 +37,15 @@ struct CameraView: View {
 
             Task { await cameraModel.distributeDisplayFrames() }
             Task { await cameraModel.distributeAnalyzeFrames() }
+        }
+    }
+
+    private func handleZoomGestureChanged(_ value: CGFloat) {
+        let delta = value / zoomGestureValue
+        zoomGestureValue = value
+        let zoomFactor = cameraModel.zoomFactor
+        Task {
+            await cameraModel.zoom(to: zoomFactor * delta)
         }
     }
 }
