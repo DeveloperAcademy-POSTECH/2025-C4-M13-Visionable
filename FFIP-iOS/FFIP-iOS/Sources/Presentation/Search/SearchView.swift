@@ -41,7 +41,7 @@ struct SearchView: View {
                 },
                 onSubmit: {
                     searchModel.submitSearch()
-                    coordinator.push(.camera)
+                    coordinator.push(.camera(searchKeyword: searchModel.searchKeyword))
                 },
                 onEmptySubmit: { }
             )

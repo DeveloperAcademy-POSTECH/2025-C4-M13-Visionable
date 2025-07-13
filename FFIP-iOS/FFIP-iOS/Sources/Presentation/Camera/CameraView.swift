@@ -22,11 +22,6 @@ struct CameraView: View {
                 Box(observation: observation)
                     .stroke(.red, lineWidth: 1)
             }
-            
-            TextField("찾을 단어 입력", text: $cameraModel.inputText)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(8)
         }
         .onChange(of: cameraModel.matchedObservations) { _, newObservations in
             if !newObservations.isEmpty { triggerHapticFeedback() }
