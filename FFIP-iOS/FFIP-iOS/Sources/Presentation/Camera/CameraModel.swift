@@ -58,7 +58,7 @@ final class CameraModel: NSObject {
             device: videoDevice,
             delegate: self
         )
-        await zoom(to: 2.0)
+        await setDefaultZoom()
     }
 }
 
@@ -100,10 +100,6 @@ extension CameraModel {
     func focus(at point: CGPoint) async {
         await deviceService.focus(at: point)
     }
-    
-    private func setDefaultZoom() async {
-        await zoom(to: 2.0)
-    }
 }
 
 // MARK: - CameraModel Private Extension Method
@@ -140,6 +136,10 @@ private extension CameraModel {
         matchedObservations = recognizedTextObservations.filter {
             $0.transcript.localizedCaseInsensitiveContains(searchKeyword)
         }
+    }
+    
+    func setDefaultZoom() async {
+        await zoom(to: 2.0)
     }
 }
 
