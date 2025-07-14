@@ -88,7 +88,10 @@ struct CameraView: View {
                 
                 Spacer()
             }
+            .padding(.top, safeAreaInset(.top))
         }
+        .ignoresSafeArea(.all)
+        .navigationBarBackButtonHidden(true)
         .onChange(of: cameraModel.matchedObservations) { _, newObservations in
             if !newObservations.isEmpty { triggerHapticFeedback() }
         }
