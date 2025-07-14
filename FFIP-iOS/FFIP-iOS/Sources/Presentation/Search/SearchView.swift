@@ -55,9 +55,17 @@ struct SearchView: View {
                         .padding(.top, 20)
                     VStack(spacing: 16) {
                         ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
-                            RecentSearchView(keyword: keyword) {
-                                searchModel.deleteRecentSearchKeyword(keyword)
-                            }
+                            RecentSearchView(
+                                keyword: keyword,
+                                onTap: {
+                                    searchModel.searchKeyword = keyword
+                                    searchModel.submitSearch()
+                                    coordinator.push(.camera(searchKeyword: searchModel.searchKeyword))
+                                },
+                                onDelete: {
+                                    searchModel.deleteRecentSearchKeyword(keyword)
+                                }
+                            )
                         }
                     }
                 }

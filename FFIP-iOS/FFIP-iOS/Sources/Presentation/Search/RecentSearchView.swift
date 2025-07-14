@@ -9,12 +9,19 @@ import SwiftUI
 
 struct RecentSearchView: View {
     var keyword: String
+    var onTap: () -> Void
     var onDelete: () -> Void
     
     var body: some View {
         HStack {
-            Text(keyword)
+            Button(action: onTap) {
+                Text(keyword)
+                    .foregroundStyle(.black)
+            }
+            .buttonStyle(.plain)
+            
             Spacer()
+            
             Button(action: onDelete) {
                 Image(systemName: "xmark")
             }
