@@ -17,6 +17,7 @@ final class CameraModel: NSObject {
     private(set) var lastAnalyzedFrame: CVImageBuffer?
     
     private(set) var searchKeyword: String
+    private(set) var isRelatedSearchMode: Bool = true
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     private(set) var matchedObservations = [RecognizedTextObservation]()
     
@@ -30,6 +31,7 @@ final class CameraModel: NSObject {
     private var framesToAnalyzeContinuation:
     AsyncStream<CVImageBuffer>.Continuation?
     
+    private let foundationModelsService: FoundationModelsService
     private let privacyService: PrivacyService
     private let captureService: VideoCaptureService
     private let deviceService: VideoDeviceService
@@ -37,12 +39,14 @@ final class CameraModel: NSObject {
     
     init(
         searchKeyword: String,
+        foundationModelsService: FoundationModelsService,
         privacyService: PrivacyService,
         captureService: VideoCaptureService,
         deviceService: VideoDeviceService,
-        visionService: VisionService
+        visionService: VisionService,
     ) {
         self.searchKeyword = searchKeyword
+        self.foundationModelsService = foundationModelsService
         self.privacyService = privacyService
         self.captureService = captureService
         self.deviceService = deviceService
@@ -110,9 +114,13 @@ private extension CameraModel {
                 image: buffer,
                 customWords: searchKeyword
             )
-            
             self.recognizedTextObservations = textRects
-            filterMatchedObservations()
+            
+            if isRelatedSearchMode {
+                await filterRelatedKeywordObservations(recognizedTexts: textRects.map { $0.transcript })
+            } else {
+                filterMatchedObservations(searchKeyword: searchKeyword)
+            }
         } catch {
             print("Vision Processing Error !")
         }
@@ -132,9 +140,23 @@ private extension CameraModel {
         }
     }
     
-    func filterMatchedObservations() {
+    func filterMatchedObservations(searchKeyword: String) {
         matchedObservations = recognizedTextObservations.filter {
             $0.transcript.localizedCaseInsensitiveContains(searchKeyword)
+        }
+    }
+    
+    func filterRelatedKeywordObservations(recognizedTexts: [String]) async {
+        guard !recognizedTexts.isEmpty else { return }
+        do {
+            try await foundationModelsService.findRelatedKeywords(
+                searchKeyword: self.searchKeyword,
+                recognitionKeywords: recognizedTexts
+            )
+            guard let findKeyword = await foundationModelsService.relatedKeywords?.findKeyword else { return }
+            filterMatchedObservations(searchKeyword: findKeyword)
+        } catch {
+            print("FoundationModelsService Error: \(error)")
         }
     }
     

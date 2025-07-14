@@ -18,14 +18,18 @@ final class ModuleFactory: ModuleFactoryProtocol {
     private init() {}
     
     func makeCameraView(searchKeyword: String) -> CameraView {
+        let foundationModelsService = FoundationModelsService()
         let privacyService = PrivacyService()
         let captureService = VideoCaptureService()
         let deviceService = VideoDeviceService()
         let visionService = VisionService()
         let model = CameraModel(
             searchKeyword: searchKeyword,
+            foundationModelsService: foundationModelsService,
             privacyService: privacyService,
-            captureService: captureService, deviceService: deviceService, visionService: visionService
+            captureService: captureService,
+            deviceService: deviceService,
+            visionService: visionService
         )
         let view = CameraView(cameraModel: model)
         return view
