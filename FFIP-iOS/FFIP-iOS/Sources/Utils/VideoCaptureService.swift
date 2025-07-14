@@ -34,6 +34,10 @@ actor VideoCaptureService {
 
         if let connection = videoOutput.connection(with: .video) {
             connection.videoRotationAngle = 90
+            
+            if connection.isVideoStabilizationSupported {
+                connection.preferredVideoStabilizationMode = .standard
+            }
         }
         videoOutput.setSampleBufferDelegate(delegate, queue: queue)
 

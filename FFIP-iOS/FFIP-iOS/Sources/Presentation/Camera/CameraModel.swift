@@ -20,6 +20,9 @@ final class CameraModel: NSObject {
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     private(set) var matchedObservations = [RecognizedTextObservation]()
     
+    private(set) var zoomFactor: CGFloat = 2.0
+    private(set) var isTorchOn: Bool = false
+    
     private var framesToDisplayStream: AsyncStream<CVImageBuffer>?
     private var framesToAnalyzeStream: AsyncStream<CVImageBuffer>?
     private var framesToDisplayContinuation:
@@ -55,6 +58,7 @@ final class CameraModel: NSObject {
             device: videoDevice,
             delegate: self
         )
+        await setDefaultZoom()
     }
 }
 
@@ -79,6 +83,22 @@ extension CameraModel {
                 try await Task.sleep(for: Duration.milliseconds(1))
             } catch { return }
         }
+    }
+    
+    func zoom(to factor: CGFloat) async {
+        zoomFactor = await deviceService.zoom(to: factor)
+    }
+    
+    func toggleTorch() async {
+        if isTorchOn {
+            isTorchOn = await deviceService.turnOffTorch()
+        } else {
+            isTorchOn = await deviceService.turnOnTorch()
+        }
+    }
+    
+    func focus(at point: CGPoint) async {
+        await deviceService.focus(at: point)
     }
 }
 
@@ -116,6 +136,10 @@ private extension CameraModel {
         matchedObservations = recognizedTextObservations.filter {
             $0.transcript.localizedCaseInsensitiveContains(searchKeyword)
         }
+    }
+    
+    func setDefaultZoom() async {
+        await zoom(to: 2.0)
     }
 }
 
