@@ -54,7 +54,7 @@ struct SearchView: View {
                         .font(.caption)
                         .padding(.top, 20)
                     VStack(spacing: 16) {
-                        ForEach(searchModel.recentSearchKeyword, id: \.self) { keyword in
+                        ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
                             RecentSearchView(keyword: keyword) {
                                 searchModel.deleteRecentSearchKeyword(keyword)
                             }
@@ -71,6 +71,9 @@ struct SearchView: View {
             withAnimation {
                 isFocused = false
             }
+        }
+        .onAppear {
+            searchModel.fetchRecentSearchKeywords()
         }
         .onChange(of: isFocused) {
             withAnimation(.easeInOut(duration: 0.3)) {
