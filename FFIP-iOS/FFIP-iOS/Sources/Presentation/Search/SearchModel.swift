@@ -9,18 +9,22 @@ import SwiftUI
 
 @Observable
 final class SearchModel {
-    var searchKeyword: String = ""
-    var recentSearchKeyword: [String] = ["최근1", "최근2"]
+    private(set) var recentSearchKeywords: [String]
     
-    func submitSearch() {
-        // TODO: 검색 키워드 전달하는 로직
-    }
+    init(recentSearchKeywords: [String]) {
+            self.recentSearchKeywords = recentSearchKeywords
+        }
     
-    func fetchRecentSearchKeywords() {
-        // TODO: UserDefaults로 최근 검색어 목록 가져오는 로직
+    func addRecentSearchKeyword(_ keyword: String) {
+        recentSearchKeywords.removeAll(where: { $0 == keyword })
+        recentSearchKeywords.insert(keyword, at: 0)
+        recentSearchKeywords = Array(recentSearchKeywords.prefix(5))
+        
+        UserDefaults.standard.set(recentSearchKeywords, forKey: UserDefaultsKey.recentSearch)
     }
     
     func deleteRecentSearchKeyword(_ keyword: String) {
-        // TODO: 해당 keyword를 recentSearchKeyword 배열에서 제거
+        recentSearchKeywords.removeAll(where: { $0 == keyword })
+        UserDefaults.standard.set(recentSearchKeywords, forKey: UserDefaultsKey.recentSearch)
     }
 }
