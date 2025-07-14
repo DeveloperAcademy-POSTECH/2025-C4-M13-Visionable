@@ -32,7 +32,8 @@ final class ModuleFactory: ModuleFactoryProtocol {
     }
     
     func makeSearchView() -> SearchView {
-        let model = SearchModel()
+        let keywords = UserDefaults.standard.stringArray(forKey: UserDefaultsKey.recentSearch) ?? []
+        let model = SearchModel(recentSearchKeywords: keywords)
         let view = SearchView(searchModel: model)
         return view
     }
