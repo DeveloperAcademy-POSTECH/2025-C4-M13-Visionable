@@ -24,11 +24,11 @@ struct CameraView: View {
                     .gesture(
                         DragGesture(minimumDistance: 0)
                             .onChanged { value in
-                                showFocusRectangle = true
                                 focusPoint = value.location
                             }
                             .onEnded { value in
                                 focusTask?.cancel()
+                                showFocusRectangle = true
                                 focusTask = Task {
                                     await handleFocus(
                                         at: value.location,
@@ -40,7 +40,6 @@ struct CameraView: View {
                     .gesture(
                         MagnificationGesture()
                             .onChanged { value in
-                                showFocusRectangle = false
                                 handleZoomGestureChanged(value)
                             }
                             .onEnded { _ in
