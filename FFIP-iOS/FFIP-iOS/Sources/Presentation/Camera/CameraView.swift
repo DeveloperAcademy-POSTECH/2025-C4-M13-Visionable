@@ -16,7 +16,7 @@ struct CameraView: View {
     @State private var focusPoint: CGPoint = .zero
     @State private var showFocusRectangle = false
     @State private var focusTask: Task<Void, Never>?
-    
+
     var body: some View {
         ZStack {
             GeometryReader { geometry in
@@ -30,7 +30,10 @@ struct CameraView: View {
                             .onEnded { value in
                                 focusTask?.cancel()
                                 focusTask = Task {
-                                    await handleFocus(at: value.location, in: geometry)
+                                    await handleFocus(
+                                        at: value.location,
+                                        in: geometry
+                                    )
                                 }
                             }
                     )
@@ -44,7 +47,7 @@ struct CameraView: View {
                                 zoomGestureValue = 1.0
                             }
                     )
-                
+
                 if showFocusRectangle {
                     Rectangle()
                         .stroke(Color.green, lineWidth: 2)
@@ -55,15 +58,25 @@ struct CameraView: View {
                         .clipped()
                 }
             }
-            
+
             // TODO: - 박스 영역 디자인 완료 후 수정
-            ForEach(cameraModel.matchedObservations, id: \.self) { observation in
+            ForEach(cameraModel.matchedObservations, id: \.self) {
+                observation in
                 Box(observation: observation)
                     .stroke(.red, lineWidth: 1)
             }
 
             VStack {
                 HStack {
+                    ZoomButton(
+                        zoomFactor: cameraModel.zoomFactor,
+                        action: {
+                            Task {
+                                await handleZoomButtonTapped()
+                            }
+                        }
+                    )
+                    Spacer()
                     TorchButton(
                         isTorchOn: cameraModel.isTorchOn,
                         action: {
@@ -73,19 +86,13 @@ struct CameraView: View {
                         }
                     )
                     .padding(16)
-                    
-                    ZoomButton(
-                        zoomFactor: cameraModel.zoomFactor,
-                        action: {
-                            Task {
-                                await handleZoomButtonTapped()
-                            }
-                        }
-                    )
-                    
                     Spacer()
+                    CloseButton {
+                        coordinator.pop()
+                    }
                 }
-                
+                .padding(.horizontal, 16)
+
                 Spacer()
             }
             .padding(.top, safeAreaInset(.top))
@@ -102,7 +109,7 @@ struct CameraView: View {
             Task { await cameraModel.distributeAnalyzeFrames() }
         }
     }
-    
+
     // TODO: Hi-Fi 디자인 이후 수정
     private struct TorchButton: View {
         let isTorchOn: Bool
@@ -116,11 +123,12 @@ struct CameraView: View {
                     .frame(width: 32, height: 32)
                     .background(
                         Circle()
-                            .fill(.black.opacity(0.8)))
+                            .fill(.black.opacity(0.8))
+                    )
             }
         }
     }
-    
+
     // TODO: Hi-Fi 디자인 이후 수정
     private struct ZoomButton: View {
         let zoomFactor: CGFloat
@@ -128,19 +136,36 @@ struct CameraView: View {
 
         var body: some View {
             Button(action: action) {
-                Text(String(format: "%.1fx", zoomFactor/2))
+                Text(String(format: "%.1fx", zoomFactor / 2))
                     .foregroundColor(.white)
                     .font(.system(size: 16, weight: .bold))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(
-                    Capsule()
-                        .fill(.black.opacity(0.8))
-                )
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        Capsule()
+                            .fill(.black.opacity(0.8))
+                    )
             }
         }
     }
-    
+
+    private struct CloseButton: View {
+        let action: () -> Void
+
+        var body: some View {
+            Button(action: action) {
+                Image(systemName: "xmark")
+                    .foregroundColor(.white)
+                    .font(.system(size: 16))
+                    .frame(width: 32, height: 32)
+                    .background(
+                        Circle()
+                            .fill(.black.opacity(0.8))
+                    )
+            }
+        }
+    }
+
     private func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue
         zoomGestureValue = value
@@ -149,7 +174,7 @@ struct CameraView: View {
             await cameraModel.zoom(to: zoomFactor * delta)
         }
     }
-    
+
     private func handleZoomButtonTapped() async {
         if cameraModel.zoomFactor >= 4.0 {
             await cameraModel.zoom(to: 1.0)
@@ -159,10 +184,15 @@ struct CameraView: View {
             await cameraModel.zoom(to: 2.0)
         }
     }
-    
-    private func handleFocus(at point: CGPoint, in geometry: GeometryProxy) async {
+
+    private func handleFocus(at point: CGPoint, in geometry: GeometryProxy)
+        async
+    {
         focusPoint = point
-        let computedPoint = CGPoint(x: point.y / geometry.size.height, y: 1 - point.x / geometry.size.width)
+        let computedPoint = CGPoint(
+            x: point.y / geometry.size.height,
+            y: 1 - point.x / geometry.size.width
+        )
         await cameraModel.focus(at: computedPoint)
         try? await Task.sleep(for: Duration.seconds(1))
         if Task.isCancelled { return }
