@@ -7,15 +7,18 @@
 
 import SwiftUI
 
+enum SearchFocusState {
+    case home
+    case editing
+}
+
 struct SearchView: View {
-    private enum SearchFocusState {
-        case home, editing
-    }
     
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
     @FocusState private var isFocused: Bool
     @State private var focusState: SearchFocusState = .home
+    @State private var searchText: String = ""
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -34,35 +37,51 @@ struct SearchView: View {
             }
             
             FfipTextField(
-                text: $searchModel.searchKeyword,
+                text: $searchText,
                 placeholder: String(localized: "searchPlaceholder"),
                 onVoiceSearch: {
                     coordinator.push(.voiceSearch)
                 },
                 onSubmit: {
-                    searchModel.submitSearch()
-                    coordinator.push(.camera(searchKeyword: searchModel.searchKeyword))
+                    searchModel.addRecentSearchKeyword(searchText)
+                    coordinator.push(.camera(searchKeyword: searchText))
                 },
                 onEmptySubmit: { }
             )
             .focused($isFocused)
             .padding(.vertical, 12)
             
+            if focusState == .home {
+                VStack(alignment: .leading, spacing: 16) {
+                    ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
+                        RecentSearchCapsule(
+                            keyword: keyword,
+                            onTap: {
+                                searchModel.addRecentSearchKeyword(keyword)
+                                coordinator.push(.camera(searchKeyword: keyword))
+                            },
+                            onTapDelete: {
+                                searchModel.deleteRecentSearchKeyword(keyword)
+                            }
+                        )
+                    }
+                }
+            }
+            
             if focusState == .editing {
                 VStack(alignment: .leading, spacing: 20) {
                     Text(.recentSearchTitle)
                         .font(.caption)
                         .padding(.top, 20)
-                    VStack(spacing: 16) {
+                    VStack(alignment: .leading, spacing: 16) {
                         ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
-                            RecentSearchView(
+                            RecentSearchRow(
                                 keyword: keyword,
                                 onTap: {
-                                    searchModel.searchKeyword = keyword
-                                    searchModel.submitSearch()
-                                    coordinator.push(.camera(searchKeyword: searchModel.searchKeyword))
+                                    searchModel.addRecentSearchKeyword(keyword)
+                                    coordinator.push(.camera(searchKeyword: keyword))
                                 },
-                                onDelete: {
+                                onTapDelete: {
                                     searchModel.deleteRecentSearchKeyword(keyword)
                                 }
                             )
@@ -76,16 +95,16 @@ struct SearchView: View {
         .padding(.horizontal, 20)
         .contentShape(Rectangle())
         .onTapGesture {
-            withAnimation {
-                isFocused = false
-            }
+            isFocused = false
         }
         .onAppear {
-            searchModel.fetchRecentSearchKeywords()
+            searchText = ""
         }
         .onChange(of: isFocused) {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                focusState = isFocused ? .editing : .home
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    focusState = isFocused ? .editing : .home
+                }
             }
         }
     }
