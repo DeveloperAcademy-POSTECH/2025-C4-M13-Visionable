@@ -67,7 +67,7 @@ struct CameraView: View {
             }
 
             VStack {
-                HStack {
+                HStack(alignment: .center) {
                     ZoomButton(
                         zoomFactor: cameraModel.zoomFactor,
                         action: {
@@ -76,7 +76,9 @@ struct CameraView: View {
                             }
                         }
                     )
+
                     Spacer()
+                    
                     TorchButton(
                         isTorchOn: cameraModel.isTorchOn,
                         action: {
@@ -85,8 +87,9 @@ struct CameraView: View {
                             }
                         }
                     )
-                    .padding(16)
+
                     Spacer()
+                    
                     CloseButton {
                         coordinator.pop()
                     }
@@ -126,6 +129,7 @@ struct CameraView: View {
                             .fill(.black.opacity(0.8))
                     )
             }
+            .frame(maxWidth: 80)
         }
     }
 
@@ -146,6 +150,7 @@ struct CameraView: View {
                             .fill(.black.opacity(0.8))
                     )
             }
+            .frame(maxWidth: 80)
         }
     }
 
@@ -163,6 +168,7 @@ struct CameraView: View {
                             .fill(.black.opacity(0.8))
                     )
             }
+            .frame(maxWidth: 80)
         }
     }
 
