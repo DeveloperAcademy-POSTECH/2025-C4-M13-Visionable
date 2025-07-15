@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FfipTextField: View {
+struct FfipSearchTextField: View {
     @Binding var text: String
     private var isTextEmpty: Bool {
         text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
