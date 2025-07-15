@@ -18,24 +18,22 @@ struct CameraView: View {
 
     var body: some View {
         ZStack {
-            GeometryReader { geometry in
-                FrameView(image: cameraModel.frameToDisplay)
-                    .gesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                handleZoomGestureChanged(value)
-                            }
-                            .onEnded { _ in
-                                zoomGestureValue = 1.0
-                            }
-                    )
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onEnded { _ in
-                                toggleCameraPauseAndShowLock()
-                            }
-                    )
-            }
+            FrameView(image: cameraModel.frameToDisplay)
+                .gesture(
+                    MagnificationGesture()
+                        .onChanged { value in
+                            handleZoomGestureChanged(value)
+                        }
+                        .onEnded { _ in
+                            zoomGestureValue = 1.0
+                        }
+                )
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onEnded { _ in
+                            toggleCameraPauseAndShowLock()
+                        }
+                )
 
             // TODO: - 박스 영역 디자인 완료 후 수정
             ForEach(cameraModel.matchedObservations, id: \.self) { observation in
@@ -139,6 +137,7 @@ struct CameraView: View {
         }
     }
 
+    // TODO: Hi-Fi 디자인 이후 수정
     private struct CloseButton: View {
         let action: () -> Void
 
@@ -204,7 +203,9 @@ struct CameraView: View {
             showLockIcon = true
         }
         showLockTask = Task {
-            try? await Task.sleep(for: .seconds(cameraModel.isCameraPaused ? 1 : 0.8))
+            try? await Task.sleep(
+                for: .seconds(cameraModel.isCameraPaused ? 1 : 0.8)
+            )
             if Task.isCancelled { return }
             withAnimation {
                 showLockIcon = false
