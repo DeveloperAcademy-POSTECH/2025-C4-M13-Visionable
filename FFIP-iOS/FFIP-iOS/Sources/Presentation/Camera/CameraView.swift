@@ -71,7 +71,10 @@ struct CameraView: View {
                     Spacer()
 
                     CloseButton {
-                        coordinator.pop()
+                        Task {
+                            await cameraModel.stop()
+                            coordinator.pop()
+                        }
                     }
                 }
                 .padding(.horizontal, 16)
@@ -175,3 +178,4 @@ struct CameraView: View {
 // #Preview {
 //    CameraView(cameraModel: CameraModel())
 // }
+

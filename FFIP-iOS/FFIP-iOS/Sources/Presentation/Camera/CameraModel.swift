@@ -60,6 +60,19 @@ final class CameraModel: NSObject {
         )
         await setDefaultZoom()
     }
+    
+    func stop() async {
+        await captureService.stopSession()
+        framesToDisplayContinuation?.finish()
+        framesToAnalyzeContinuation?.finish()
+        framesToDisplayStream = nil
+        framesToAnalyzeStream = nil
+        framesToDisplayContinuation = nil
+        framesToAnalyzeContinuation = nil
+        recognizedTextObservations = []
+        matchedObservations = []
+        frameToDisplay = nil
+    }
 }
 
 // MARK: - CameraModel Extension Method
@@ -161,3 +174,4 @@ extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
     }
 }
+
