@@ -97,9 +97,9 @@ extension CameraModel {
         }
     }
     
-    func focus(at point: CGPoint) async {
-        await deviceService.focus(at: point)
-    }
+//    func focus(at point: CGPoint) async {
+//        await deviceService.focus(at: point)
+//    }
 }
 
 // MARK: - CameraModel Private Extension Method

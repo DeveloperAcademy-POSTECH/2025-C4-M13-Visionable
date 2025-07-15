@@ -13,30 +13,30 @@ struct CameraView: View {
     @Bindable var cameraModel: CameraModel
 
     @State private var zoomGestureValue: CGFloat = 1.0
-    @State private var focusPoint: CGPoint = .zero
-    @State private var showFocusRectangle = false
-    @State private var focusTask: Task<Void, Never>?
+//    @State private var focusPoint: CGPoint = .zero
+//    @State private var showFocusRectangle = false
+//    @State private var focusTask: Task<Void, Never>?
 
     var body: some View {
         ZStack {
             GeometryReader { geometry in
                 FrameView(image: cameraModel.frameToDisplay)
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { value in
-                                focusPoint = value.location
-                            }
-                            .onEnded { value in
-                                focusTask?.cancel()
-                                showFocusRectangle = true
-                                focusTask = Task {
-                                    await handleFocus(
-                                        at: value.location,
-                                        in: geometry
-                                    )
-                                }
-                            }
-                    )
+//                    .gesture(
+//                        DragGesture(minimumDistance: 0)
+//                            .onChanged { value in
+//                                focusPoint = value.location
+//                            }
+//                            .onEnded { value in
+//                                focusTask?.cancel()
+//                                showFocusRectangle = true
+//                                focusTask = Task {
+//                                    await handleFocus(
+//                                        at: value.location,
+//                                        in: geometry
+//                                    )
+//                                }
+//                            }
+//                    )
                     .gesture(
                         MagnificationGesture()
                             .onChanged { value in
@@ -47,15 +47,15 @@ struct CameraView: View {
                             }
                     )
 
-                if showFocusRectangle {
-                    Rectangle()
-                        .stroke(Color.green, lineWidth: 2)
-                        .frame(width: 64, height: 64)
-                        .position(focusPoint)
-                        .opacity(0.8)
-                        .shadow(radius: 1)
-                        .clipped()
-                }
+//                if showFocusRectangle {
+//                    Rectangle()
+//                        .stroke(Color.green, lineWidth: 2)
+//                        .frame(width: 64, height: 64)
+//                        .position(focusPoint)
+//                        .opacity(0.8)
+//                        .shadow(radius: 1)
+//                        .clipped()
+//                }
             }
 
             // TODO: - 박스 영역 디자인 완료 후 수정
@@ -190,19 +190,19 @@ struct CameraView: View {
         }
     }
 
-    private func handleFocus(at point: CGPoint, in geometry: GeometryProxy)
-        async
-    {
-        focusPoint = point
-        let computedPoint = CGPoint(
-            x: point.y / geometry.size.height,
-            y: 1 - point.x / geometry.size.width
-        )
-        await cameraModel.focus(at: computedPoint)
-        try? await Task.sleep(for: Duration.seconds(1))
-        if Task.isCancelled { return }
-        showFocusRectangle = false
-    }
+//    private func handleFocus(at point: CGPoint, in geometry: GeometryProxy)
+//        async
+//    {
+//        focusPoint = point
+//        let computedPoint = CGPoint(
+//            x: point.y / geometry.size.height,
+//            y: 1 - point.x / geometry.size.width
+//        )
+//        await cameraModel.focus(at: computedPoint)
+//        try? await Task.sleep(for: Duration.seconds(1))
+//        if Task.isCancelled { return }
+//        showFocusRectangle = false
+//    }
 }
 
 // #Preview {

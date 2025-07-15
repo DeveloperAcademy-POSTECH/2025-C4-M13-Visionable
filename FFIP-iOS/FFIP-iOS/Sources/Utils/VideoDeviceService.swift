@@ -64,22 +64,22 @@ actor VideoDeviceService {
         return true
     }
 
-    func focus(at point: CGPoint) {
-        guard let videoDevice else { return }
-        do {
-            try videoDevice.lockForConfiguration()
-            defer { videoDevice.unlockForConfiguration() }
-            
-            if videoDevice.isFocusPointOfInterestSupported {
-                videoDevice.focusPointOfInterest = point
-                videoDevice.focusMode = .autoFocus
-            }
-            if videoDevice.isExposurePointOfInterestSupported {
-                videoDevice.exposurePointOfInterest = point
-                videoDevice.exposureMode = .autoExpose
-            }
-        } catch {
-            print("Error setting focus: \(error)")
-        }
-    }
+//    func focus(at point: CGPoint) {
+//        guard let videoDevice else { return }
+//        do {
+//            try videoDevice.lockForConfiguration()
+//            defer { videoDevice.unlockForConfiguration() }
+//            
+//            if videoDevice.isFocusPointOfInterestSupported {
+//                videoDevice.focusPointOfInterest = point
+//                videoDevice.focusMode = .autoFocus
+//            }
+//            if videoDevice.isExposurePointOfInterestSupported {
+//                videoDevice.exposurePointOfInterest = point
+//                videoDevice.exposureMode = .autoExpose
+//            }
+//        } catch {
+//            print("Error setting focus: \(error)")
+//        }
+//    }
 }
