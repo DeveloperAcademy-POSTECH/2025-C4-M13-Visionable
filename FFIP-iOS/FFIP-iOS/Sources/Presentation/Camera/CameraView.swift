@@ -16,75 +16,53 @@ struct CameraView: View {
     @State private var focusPoint: CGPoint = .zero
     @State private var showFocusRectangle = false
     @State private var focusTask: Task<Void, Never>?
-    @State private var showLastAnalyzedFrame: Bool = false
 
     var body: some View {
         ZStack {
             GeometryReader { geometry in
-                if showLastAnalyzedFrame {
-                    FrameView(image: cameraModel.lastAnalyzedFrame)
-                        .onTapGesture(count: 2) {
-                            cameraModel.startAnalyzeFrame()
-                            showLastAnalyzedFrame = false
-                        }
-                    
-                    // TODO: - 박스 영역 디자인 완료 후 수정
-                    ForEach(cameraModel.lastMatchedObservations, id: \.self) { observation in
-                        Box(observation: observation)
-                            .stroke(.red, lineWidth: 1)
-                    }
-                } else {
-                    FrameView(image: cameraModel.frameToDisplay)
-                        .onTapGesture(count: 2) {
-                            guard
-                                cameraModel
-                                    .lastAnalyzedFrame != nil
-                            else { return }
-                            cameraModel.stopAnalyzeFrame()
-                            showLastAnalyzedFrame = true
-                        }
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { value in
-                                    focusPoint = value.location
+                FrameView(image: cameraModel.frameToDisplay)
+                    .gesture(
+                        DragGesture(minimumDistance: 0)
+                            .onChanged { value in
+                                focusPoint = value.location
+                            }
+                            .onEnded { value in
+                                focusTask?.cancel()
+                                showFocusRectangle = true
+                                focusTask = Task {
+                                    await handleFocus(
+                                        at: value.location,
+                                        in: geometry
+                                    )
                                 }
-                                .onEnded { value in
-                                    focusTask?.cancel()
-                                    showFocusRectangle = true
-                                    focusTask = Task {
-                                        await handleFocus(
-                                            at: value.location,
-                                            in: geometry
-                                        )
-                                    }
-                                }
-                        )
-                        .gesture(
-                            MagnificationGesture()
-                                .onChanged { value in
-                                    handleZoomGestureChanged(value)
-                                }
-                                .onEnded { _ in
-                                    zoomGestureValue = 1.0
-                                }
-                        )
+                            }
+                    )
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                handleZoomGestureChanged(value)
+                            }
+                            .onEnded { _ in
+                                zoomGestureValue = 1.0
+                            }
+                    )
 
-                    if showFocusRectangle {
-                        Rectangle()
-                            .stroke(Color.green, lineWidth: 2)
-                            .frame(width: 64, height: 64)
-                            .position(focusPoint)
-                            .opacity(0.8)
-                            .shadow(radius: 1)
-                            .clipped()
-                    }
-                    
-                    // TODO: - 박스 영역 디자인 완료 후 수정
-                    ForEach(cameraModel.matchedObservations, id: \.self) { observation in
-                        Box(observation: observation)
-                            .stroke(.red, lineWidth: 1)
-                    }
+                if showFocusRectangle {
+                    Rectangle()
+                        .stroke(Color.green, lineWidth: 2)
+                        .frame(width: 64, height: 64)
+                        .position(focusPoint)
+                        .opacity(0.8)
+                        .shadow(radius: 1)
+                        .clipped()
                 }
+            }
+
+            // TODO: - 박스 영역 디자인 완료 후 수정
+            ForEach(cameraModel.matchedObservations, id: \.self) {
+                observation in
+                Box(observation: observation)
+                    .stroke(.red, lineWidth: 1)
             }
 
             VStack {
@@ -97,10 +75,9 @@ struct CameraView: View {
                             }
                         }
                     )
-                    .disabled(showLastAnalyzedFrame)
 
                     Spacer()
-
+                    
                     TorchButton(
                         isTorchOn: cameraModel.isTorchOn,
                         action: {
@@ -109,10 +86,9 @@ struct CameraView: View {
                             }
                         }
                     )
-                    .disabled(showLastAnalyzedFrame)
 
                     Spacer()
-
+                    
                     CloseButton {
                         coordinator.pop()
                     }

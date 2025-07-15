@@ -15,7 +15,6 @@ import Vision
 final class CameraModel: NSObject {
     private(set) var frameToDisplay: CVImageBuffer?
     private(set) var lastAnalyzedFrame: CVImageBuffer?
-    private(set) var lastMatchedObservations = [RecognizedTextObservation]()
     
     private(set) var searchKeyword: String
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
@@ -23,8 +22,6 @@ final class CameraModel: NSObject {
     
     private(set) var zoomFactor: CGFloat = 2.0
     private(set) var isTorchOn: Bool = false
-    
-    private var isAnalyzingFrame: Bool = false
     
     private var framesToDisplayStream: AsyncStream<CVImageBuffer>?
     private var framesToAnalyzeStream: AsyncStream<CVImageBuffer>?
@@ -62,7 +59,6 @@ final class CameraModel: NSObject {
             delegate: self
         )
         await setDefaultZoom()
-        startAnalyzeFrame()
     }
 }
 
@@ -78,19 +74,14 @@ extension CameraModel {
     func distributeAnalyzeFrames() async {
         guard let framesToAnalyzeStream else { return }
         for await imageBuffer in framesToAnalyzeStream {
-            guard isAnalyzingFrame else {
-                do {
-                    try await Task.sleep(for: Duration.milliseconds(500))
-                } catch { return }
-                continue
-            }
-            
             await processFrame(imageBuffer)
             
-            if !matchedObservations.isEmpty && isAnalyzingFrame {
-                lastAnalyzedFrame = imageBuffer
-                lastMatchedObservations = matchedObservations
-            }
+            lastAnalyzedFrame = imageBuffer
+            
+            // CPU 부담저하를 위한 의도적 딜레이
+            do {
+                try await Task.sleep(for: Duration.milliseconds(1))
+            } catch { return }
         }
     }
     
@@ -109,14 +100,6 @@ extension CameraModel {
     func focus(at point: CGPoint) async {
         await deviceService.focus(at: point)
     }
-    
-    func startAnalyzeFrame() {
-        isAnalyzingFrame = true
-    }
-    
-    func stopAnalyzeFrame() {
-        isAnalyzingFrame = false
-    }
 }
 
 // MARK: - CameraModel Private Extension Method
@@ -127,9 +110,6 @@ private extension CameraModel {
                 image: buffer,
                 customWords: searchKeyword
             )
-            
-            // 분석 일시정지시 반영 중단
-            guard isAnalyzingFrame else { return }
             
             self.recognizedTextObservations = textRects
             filterMatchedObservations()
@@ -174,9 +154,7 @@ extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
         else { return }
         Task { @MainActor in
             framesToDisplayContinuation?.yield(imageBuffer)
-            if isAnalyzingFrame {
-                framesToAnalyzeContinuation?.yield(imageBuffer)
-            }
+            framesToAnalyzeContinuation?.yield(imageBuffer)
         }
     }
 }
