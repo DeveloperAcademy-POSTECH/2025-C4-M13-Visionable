@@ -13,30 +13,11 @@ struct CameraView: View {
     @Bindable var cameraModel: CameraModel
 
     @State private var zoomGestureValue: CGFloat = 1.0
-//    @State private var focusPoint: CGPoint = .zero
-//    @State private var showFocusRectangle = false
-//    @State private var focusTask: Task<Void, Never>?
-
+    
     var body: some View {
         ZStack {
             GeometryReader { geometry in
                 FrameView(image: cameraModel.frameToDisplay)
-//                    .gesture(
-//                        DragGesture(minimumDistance: 0)
-//                            .onChanged { value in
-//                                focusPoint = value.location
-//                            }
-//                            .onEnded { value in
-//                                focusTask?.cancel()
-//                                showFocusRectangle = true
-//                                focusTask = Task {
-//                                    await handleFocus(
-//                                        at: value.location,
-//                                        in: geometry
-//                                    )
-//                                }
-//                            }
-//                    )
                     .gesture(
                         MagnificationGesture()
                             .onChanged { value in
@@ -46,21 +27,21 @@ struct CameraView: View {
                                 zoomGestureValue = 1.0
                             }
                     )
-
-//                if showFocusRectangle {
-//                    Rectangle()
-//                        .stroke(Color.green, lineWidth: 2)
-//                        .frame(width: 64, height: 64)
-//                        .position(focusPoint)
-//                        .opacity(0.8)
-//                        .shadow(radius: 1)
-//                        .clipped()
-//                }
+                    .gesture(
+                        DragGesture(minimumDistance: 0)
+                            .onEnded { _ in
+                                print(cameraModel.isCameraPaused)
+                                if cameraModel.isCameraPaused {
+                                    cameraModel.resumeCamera()
+                                } else {
+                                    cameraModel.pauseCamera()
+                                }
+                            }
+                    )
             }
 
             // TODO: - 박스 영역 디자인 완료 후 수정
-            ForEach(cameraModel.matchedObservations, id: \.self) {
-                observation in
+            ForEach(cameraModel.matchedObservations, id: \.self) { observation in
                 Box(observation: observation)
                     .stroke(.red, lineWidth: 1)
             }
@@ -77,7 +58,7 @@ struct CameraView: View {
                     )
 
                     Spacer()
-                    
+
                     TorchButton(
                         isTorchOn: cameraModel.isTorchOn,
                         action: {
@@ -88,7 +69,7 @@ struct CameraView: View {
                     )
 
                     Spacer()
-                    
+
                     CloseButton {
                         coordinator.pop()
                     }
@@ -189,20 +170,6 @@ struct CameraView: View {
             await cameraModel.zoom(to: 2.0)
         }
     }
-
-//    private func handleFocus(at point: CGPoint, in geometry: GeometryProxy)
-//        async
-//    {
-//        focusPoint = point
-//        let computedPoint = CGPoint(
-//            x: point.y / geometry.size.height,
-//            y: 1 - point.x / geometry.size.width
-//        )
-//        await cameraModel.focus(at: computedPoint)
-//        try? await Task.sleep(for: Duration.seconds(1))
-//        if Task.isCancelled { return }
-//        showFocusRectangle = false
-//    }
 }
 
 // #Preview {
