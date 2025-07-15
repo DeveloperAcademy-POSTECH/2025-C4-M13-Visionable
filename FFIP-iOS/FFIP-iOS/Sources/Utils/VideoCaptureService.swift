@@ -43,4 +43,9 @@ actor VideoCaptureService {
 
         session.startRunning()
     }
+
+    func stopSession() {
+        session?.stopRunning()
+        session = nil
+    }
 }

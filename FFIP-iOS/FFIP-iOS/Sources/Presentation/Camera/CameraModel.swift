@@ -14,12 +14,12 @@ import Vision
 @Observable
 final class CameraModel: NSObject {
     private(set) var frameToDisplay: CVImageBuffer?
-    private(set) var lastAnalyzedFrame: CVImageBuffer?
     
     private(set) var searchKeyword: String
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     private(set) var matchedObservations = [RecognizedTextObservation]()
     
+    private(set) var isCameraPaused: Bool = false
     private(set) var zoomFactor: CGFloat = 2.0
     private(set) var isTorchOn: Bool = false
     
@@ -60,6 +60,19 @@ final class CameraModel: NSObject {
         )
         await setDefaultZoom()
     }
+    
+    func stop() async {
+        await captureService.stopSession()
+        framesToDisplayContinuation?.finish()
+        framesToAnalyzeContinuation?.finish()
+        framesToDisplayStream = nil
+        framesToAnalyzeStream = nil
+        framesToDisplayContinuation = nil
+        framesToAnalyzeContinuation = nil
+        recognizedTextObservations = []
+        matchedObservations = []
+        frameToDisplay = nil
+    }
 }
 
 // MARK: - CameraModel Extension Method
@@ -75,9 +88,7 @@ extension CameraModel {
         guard let framesToAnalyzeStream else { return }
         for await imageBuffer in framesToAnalyzeStream {
             await processFrame(imageBuffer)
-            
-            lastAnalyzedFrame = imageBuffer
-            
+                        
             // CPU 부담저하를 위한 의도적 딜레이
             do {
                 try await Task.sleep(for: Duration.milliseconds(1))
@@ -97,8 +108,12 @@ extension CameraModel {
         }
     }
     
-    func focus(at point: CGPoint) async {
-        await deviceService.focus(at: point)
+    func pauseCamera() {
+        isCameraPaused = true
+    }
+    
+    func resumeCamera() {
+        isCameraPaused = false
     }
 }
 
@@ -153,6 +168,7 @@ extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard sampleBuffer.isValid, let imageBuffer = sampleBuffer.imageBuffer
         else { return }
         Task { @MainActor in
+            guard !isCameraPaused else { return }
             framesToDisplayContinuation?.yield(imageBuffer)
             framesToAnalyzeContinuation?.yield(imageBuffer)
         }
