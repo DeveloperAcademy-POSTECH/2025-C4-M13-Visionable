@@ -13,7 +13,9 @@ struct CameraView: View {
     @Bindable var cameraModel: CameraModel
 
     @State private var zoomGestureValue: CGFloat = 1.0
-    
+    @State private var showLockIcon: Bool = false
+    @State private var showLockTask: Task<Void, Never>?
+
     var body: some View {
         ZStack {
             GeometryReader { geometry in
@@ -30,12 +32,7 @@ struct CameraView: View {
                     .gesture(
                         DragGesture(minimumDistance: 0)
                             .onEnded { _ in
-                                print(cameraModel.isCameraPaused)
-                                if cameraModel.isCameraPaused {
-                                    cameraModel.resumeCamera()
-                                } else {
-                                    cameraModel.pauseCamera()
-                                }
+                                toggleCameraPauseAndShowLock()
                             }
                     )
             }
@@ -45,6 +42,11 @@ struct CameraView: View {
                 Box(observation: observation)
                     .stroke(.red, lineWidth: 1)
             }
+
+            CameraLockIcon(
+                isPaused: cameraModel.isCameraPaused,
+                show: showLockIcon
+            )
 
             VStack {
                 HStack(alignment: .center) {
@@ -155,6 +157,23 @@ struct CameraView: View {
         }
     }
 
+    private struct CameraLockIcon: View {
+        let isPaused: Bool
+        let show: Bool
+
+        var body: some View {
+            Image(systemName: isPaused ? "lock.fill" : "lock.open.fill")
+                .foregroundColor(.white)
+                .font(.system(size: 16, weight: .bold))
+                .padding(16)
+                .background(
+                    Circle()
+                        .fill(.black.opacity(0.4))
+                )
+                .opacity(show ? 1 : 0)
+        }
+    }
+
     private func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue
         zoomGestureValue = value
@@ -173,9 +192,27 @@ struct CameraView: View {
             await cameraModel.zoom(to: 2.0)
         }
     }
+
+    private func toggleCameraPauseAndShowLock() {
+        if cameraModel.isCameraPaused {
+            cameraModel.resumeCamera()
+        } else {
+            cameraModel.pauseCamera()
+        }
+        showLockTask?.cancel()
+        withAnimation {
+            showLockIcon = true
+        }
+        showLockTask = Task {
+            try? await Task.sleep(for: .seconds(cameraModel.isCameraPaused ? 1 : 0.8))
+            if Task.isCancelled { return }
+            withAnimation {
+                showLockIcon = false
+            }
+        }
+    }
 }
 
 // #Preview {
 //    CameraView(cameraModel: CameraModel())
 // }
-
