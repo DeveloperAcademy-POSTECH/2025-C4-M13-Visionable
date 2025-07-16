@@ -30,16 +30,12 @@ struct CameraView: View {
                                     zoomGestureValue = 1.0
                                 }
                         )
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onEnded { _ in
-                                    toggleCameraPauseAndShowLock()
-                                }
-                        )
+                        .onTapGesture(count: 2, perform: {
+                            toggleCameraPauseAndShowLock()
+                        })
 
                     // TODO: - 박스 영역 디자인 완료 후 수정
-                    ForEach(cameraModel.matchedObservations, id: \.self) {
-                        observation in
+                    ForEach(cameraModel.matchedObservations, id: \.self) { observation in
                         Box(observation: observation)
                             .stroke(.red, lineWidth: 1)
                     }
