@@ -8,6 +8,18 @@
 import SwiftUI
 
 extension View {
+    /// 디바이스의 스크린 너비
+    var screenWidth: CGFloat {
+        UIScreen.main.bounds.width
+    }
+
+    /// 디바이스의 스크린 높이
+    var screenHeight: CGFloat {
+        UIScreen.main.bounds.height
+    }
+}
+
+extension View {
     /// 햅틱 발생시키는 UIKit Extension Method
     func triggerHapticFeedback() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
