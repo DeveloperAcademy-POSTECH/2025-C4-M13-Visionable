@@ -135,5 +135,4 @@ actor SpeechRecognitionService {
         }
         self.transcript = "<< \(errorMessage) >>"
     }
-    
 }
