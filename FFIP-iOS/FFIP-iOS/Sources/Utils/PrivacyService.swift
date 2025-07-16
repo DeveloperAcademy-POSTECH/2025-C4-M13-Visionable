@@ -11,7 +11,6 @@ import Photos
 actor PrivacyService {
     private(set) var camera: Bool = false
     private(set) var microphone: Bool = false
-    private(set) var photoLibrary: Bool = false
     
     func fetchCameraAuthorization() async {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
