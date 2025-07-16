@@ -5,11 +5,11 @@
 //  Created by Jamin on 7/16/25.
 //
 
-import AVFoundation
+@preconcurrency import AVFoundation
 import Speech
 
 actor SpeechRecognitionService {
-    enum RecognizerError: Error {
+    private enum RecognizerError: Error {
         case nilRecognizer
         case recognizerIsUnavailable
         
@@ -61,7 +61,6 @@ actor SpeechRecognitionService {
                 guard let self else { return }
                 self.recognitionHandler(audioEngine: audioEngine, result: result, error: error)
             })
-            
         } catch {
             await self.reset()
             self.transcribe(error)

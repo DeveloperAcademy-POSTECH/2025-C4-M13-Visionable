@@ -42,8 +42,8 @@ struct VoiceSearchView: View {
     }
 }
 
-#Preview {
-    let coordinator = AppCoordinator()
-    VoiceSearchView(voiceSearchModel: VoiceSearchModel(privacyService: PrivacyService(), speechService: SpeechRecognitionService()))
-        .environment(coordinator)
-}
+// #Preview {
+//    let coordinator = AppCoordinator()
+//    VoiceSearchView(voiceSearchModel: VoiceSearchModel(privacyService: PrivacyService(), speechService: SpeechRecognitionService()))
+//        .environment(coordinator)
+// }
