@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=경고.png",
+      "filename" : "Group 48655.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=경고@2x.png",
+      "filename" : "Group 48655@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=경고@3x.png",
+      "filename" : "Group 48655@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
