@@ -17,31 +17,54 @@ struct FfipToolTipModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         ZStack {
-            content
-                .onTapGesture {
-                    withAnimation(.easeInOut) {
-                        isVisible = true
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                        withAnimation(.easeInOut) {
-                            isVisible = false
-                        }
-                    }
+            switch position {
+            case .top:
+                VStack(spacing: 0) {
+                    FfipToolTip(message: message, position: position)
+                        .padding(.bottom, spacing)
+                        .scaleEffect(isVisible ? 1 : 0.2, anchor: .bottom)
+                        .opacity(isVisible ? 1 : 0)
+                    content
                 }
-            
-            if isVisible {
-                FfipToolTip(message: message, position: position)
-                    .offset(offsetValue)
+            case .bottom:
+                VStack(spacing: 0) {
+                    content
+                    FfipToolTip(message: message, position: position)
+                        .padding(.top, spacing)
+                        .scaleEffect(isVisible ? 1 : 0.2, anchor: .top)
+                        .opacity(isVisible ? 1 : 0)
+                }
+                
+            case .leading:
+                HStack(spacing: 0) {
+                    FfipToolTip(message: message, position: position)
+                        .padding(.trailing, spacing)
+                        .scaleEffect(isVisible ? 1 : 0.2, anchor: .trailing)
+                        .opacity(isVisible ? 1 : 0)
+                    
+                    content
+                }
+            case .trailing:
+                HStack(spacing: 0) {
+                    content
+                    FfipToolTip(message: message, position: position)
+                        .padding(.leading, spacing)
+                        .scaleEffect(isVisible ? 1 : 0.2, anchor: .leading)
+                        .opacity(isVisible ? 1 : 0)
+                }
             }
         }
-    }
-    
-    private var offsetValue: CGSize {
-        switch position {
-        case .top: return CGSize(width: 0, height: -spacing)
-        case .bottom: return CGSize(width: 0, height: spacing)
-        case .leading: return CGSize(width: -spacing, height: 0)
-        case .trailing: return CGSize(width: spacing, height: 0)
+        .onTapGesture {
+            guard !isVisible else { return }
+            withAnimation(.easeInOut) {
+                isVisible = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                guard isVisible else { return }
+                withAnimation(.easeInOut) {
+                    isVisible = false
+                }
+            }
         }
     }
 }

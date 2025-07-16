@@ -16,8 +16,27 @@ struct FfipToolTip: View {
     let position: FfipToolTipPosition
     
     var body: some View {
-        Group {
-            if position == .top || position == .bottom {
+        switch position {
+        case .top:
+            VStack(spacing: 0) {
+                Text(message)
+                    .font(.captionMedium12)
+                    .foregroundColor(.ffipBackground1Main)
+                    .padding(12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.ffipGrayscale1)
+                    )
+                
+                if position == .top {
+                    Triangle()
+                        .fill(Color.ffipGrayscale1)
+                        .rotationEffect(.degrees(180))
+                        .frame(width: 10, height: 6)
+                }
+            }
+        case .bottom:
+            VStack(spacing: 0) {
                 VStack(spacing: 0) {
                     if position == .bottom {
                         Triangle()
@@ -34,44 +53,48 @@ struct FfipToolTip: View {
                             RoundedRectangle(cornerRadius: 4)
                                 .fill(Color.ffipGrayscale1)
                         )
-                    
-                    if position == .top {
+                }
+            }
+        case .leading:
+            Text(message)
+                .font(.captionMedium12)
+                .foregroundColor(.ffipBackground1Main)
+                .padding(10)
+                .background(
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.ffipGrayscale1)
+                )
+                .overlay(
+                    Group {
                         Triangle()
                             .fill(Color.ffipGrayscale1)
-                            .rotationEffect(.degrees(180))
+                            .rotationEffect(.degrees(90))
                             .frame(width: 10, height: 6)
-                    }
-                }
-            } else {
-                Text(message)
-                    .font(.captionMedium12)
-                    .foregroundColor(.ffipBackground1Main)
-                    .padding(10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
+                            .offset(x: 8)
+                    },
+                    alignment: .trailing
+                )
+        case .trailing:
+            Text(message)
+                .font(.captionMedium12)
+                .foregroundColor(.ffipBackground1Main)
+                .padding(10)
+                .background(
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.ffipGrayscale1)
+                )
+                .overlay(
+                    Group {
+                        Triangle()
                             .fill(Color.ffipGrayscale1)
-                    )
-                    .overlay(
-                        Group {
-                            if position == .leading {
-                                Triangle()
-                                    .fill(Color.ffipGrayscale1)
-                                    .rotationEffect(.degrees(90))
-                                    .frame(width: 10, height: 6)
-                                    .offset(x: 8)
-                            } else if position == .trailing {
-                                Triangle()
-                                    .fill(Color.ffipGrayscale1)
-                                    .rotationEffect(.degrees(-90))
-                                    .frame(width: 10, height: 6)
-                                    .offset(x: -8)
-                            }
-                        },
-                        alignment: position == .leading ? .trailing : .leading
-                    )
-            }
+                            .rotationEffect(.degrees(-90))
+                            .frame(width: 10, height: 6)
+                            .offset(x: -8)
+                        
+                    },
+                    alignment: .leading
+                )
         }
-        .transition(.opacity.combined(with: .scale))
     }
 }
 
@@ -89,33 +112,31 @@ struct Triangle: Shape {
 }
 
 // MARK: - Preview
-#Preview {
-    VStack(spacing: 50) {
-        Text("Top")
-            .padding()
-            .background(Color.blue)
-            .cornerRadius(10)
-            .ffipToolTip(message: "Top에 표시됩니다.", position: .top, spacing: 10)
-        
-        Text("Bottom")
-            .padding()
-            .background(Color.green)
-            .cornerRadius(10)
-            .ffipToolTip(message: "Bottom에 표시됩니다.", position: .bottom, spacing: 20)
-        
-        HStack {
-            Text("Leading")
-                .padding()
-                .background(Color.orange)
-                .cornerRadius(10)
-                .ffipToolTip(message: "왼쪽에 표시됩니다.", position: .leading, spacing: 30)
-            
-            Text("Trailing")
-                .padding()
-                .background(Color.purple)
-                .cornerRadius(10)
-                .ffipToolTip(message: "입력한 텍스트와 연관된\n모든 항목을 탐색합니다.", position: .trailing, spacing: 40)
-        }
-    }
-    .padding()
-}
+// #Preview {
+//    VStack(spacing: 50) {
+//        Text("Top")
+//            .padding()
+//            .background(Color.blue)
+//            .cornerRadius(10)
+//            .ffipToolTip(message: "Top에 표시됩니다.", position: .top, spacing: 10)
+//        
+//        Text("Bottom")
+//            .padding()
+//            .background(Color.green)
+//            .cornerRadius(10)
+//            .ffipToolTip(message: "Bottom에 표시됩니다.", position: .bottom, spacing: 12)
+//        
+//        Text("Leading")
+//            .padding()
+//            .background(Color.orange)
+//            .cornerRadius(10)
+//            .ffipToolTip(message: "왼쪽에 표시됩니다.", position: .leading, spacing: 10)
+//        
+//        Text("Trailing")
+//            .padding()
+//            .background(Color.purple)
+//            .cornerRadius(10)
+//            .ffipToolTip(message: "입력한 텍스트와 연관된\n모든 항목을 탐색합니다.", position: .trailing, spacing: 12)
+//    }
+//    .padding()
+// }
