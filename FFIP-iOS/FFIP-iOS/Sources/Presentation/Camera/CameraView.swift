@@ -18,28 +18,33 @@ struct CameraView: View {
 
     var body: some View {
         ZStack {
-            FrameView(image: cameraModel.frameToDisplay)
-                .gesture(
-                    MagnificationGesture()
-                        .onChanged { value in
-                            handleZoomGestureChanged(value)
-                        }
-                        .onEnded { _ in
-                            zoomGestureValue = 1.0
-                        }
-                )
-                .gesture(
-                    DragGesture(minimumDistance: 0)
-                        .onEnded { _ in
+            VStack {
+                ZStack {
+                    FrameView(image: cameraModel.frameToDisplay)
+                        .gesture(
+                            MagnificationGesture()
+                                .onChanged { value in
+                                    handleZoomGestureChanged(value)
+                                }
+                                .onEnded { _ in
+                                    zoomGestureValue = 1.0
+                                }
+                        )
+                        .onTapGesture(count: 2, perform: {
                             toggleCameraPauseAndShowLock()
-                        }
-                )
+                        })
 
-            // TODO: - 박스 영역 디자인 완료 후 수정
-            ForEach(cameraModel.matchedObservations, id: \.self) { observation in
-                Box(observation: observation)
-                    .stroke(.red, lineWidth: 1)
+                    // TODO: - 박스 영역 디자인 완료 후 수정
+                    ForEach(cameraModel.matchedObservations, id: \.self) { observation in
+                        Box(observation: observation)
+                            .stroke(.red, lineWidth: 1)
+                    }
+                }
+                .frame(width: screenHeight * 3 / 4, height: screenHeight)
+                .clipped()
             }
+            .ignoresSafeArea(.all)
+            .frame(width: screenWidth, height: screenHeight)
 
             CameraLockIcon(
                 isPaused: cameraModel.isCameraPaused,

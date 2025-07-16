@@ -22,7 +22,7 @@ actor VideoCaptureService {
         guard let videoInput = try? AVCaptureDeviceInput(device: device) else {
             return
         }
-        
+
         if session.canAddInput(videoInput) {
             session.addInput(videoInput)
         }
@@ -32,9 +32,13 @@ actor VideoCaptureService {
             session.addOutput(videoOutput)
         }
 
+        if session.canSetSessionPreset(.photo) {
+            session.sessionPreset = .photo
+        }
+
         if let connection = videoOutput.connection(with: .video) {
             connection.videoRotationAngle = 90
-            
+
             if connection.isVideoStabilizationSupported {
                 connection.preferredVideoStabilizationMode = .standard
             }
