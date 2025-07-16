@@ -3,6 +3,16 @@
     {
       "filename" : "settings_voice.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "settings_voice 1.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

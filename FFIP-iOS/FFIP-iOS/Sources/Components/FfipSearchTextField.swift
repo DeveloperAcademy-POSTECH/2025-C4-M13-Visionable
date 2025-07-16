@@ -9,43 +9,78 @@ import SwiftUI
 
 struct FfipSearchTextField: View {
     @Binding var text: String
+    
+    private let isExistVoiceSeachButton: Bool
+    private let placeholder: String
+    private let onVoiceSearch: (() -> Void)?
+    private let onSubmit: (() -> Void)?
+    private let onEmptySubmit: (() -> Void)?
+    
+    public init(
+        text: Binding<String>,
+        isExistVoiceSeachButton: Bool,
+        placeholder: String,
+        onVoiceSearch: (() -> Void)? = nil,
+        onSubmit: (() -> Void)? = nil,
+        onEmptySubmit: (() -> Void)? = nil
+    ) {
+        self._text = text
+        self.isExistVoiceSeachButton = isExistVoiceSeachButton
+        self.placeholder = placeholder
+        self.onVoiceSearch = onVoiceSearch
+        self.onSubmit = onSubmit
+        self.onEmptySubmit = onEmptySubmit
+    }
+    
     private var isTextEmpty: Bool {
         text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-    var placeholder: String
-    var onVoiceSearch: () -> Void
-    var onSubmit: () -> Void
-    var onEmptySubmit: () -> Void
     
     var body: some View {
-        HStack {
-            TextField(placeholder, text: $text)
-                .padding(.vertical, 16)
-                .submitLabel(.search)
-                .onSubmit {
+        HStack(spacing: 4) {
+            HStack(spacing: 12) {
+                ZStack(alignment: .leading) {
+                    TextField("", text: $text)
+                        .foregroundStyle(.ffipGrayscale1)
+                        .font(.bodyMedium16)
+                        .padding(.vertical, 18)
+                        .padding(.leading, 20)
+                        .submitLabel(.search)
+                        .onSubmit {
+                            isTextEmpty ? onEmptySubmit?() : onSubmit?()
+                        }
+                    
                     if isTextEmpty {
-                        onEmptySubmit()
-                    } else {
-                        onSubmit()
+                        Text(placeholder)
+                            .foregroundStyle(.ffipGrayscale4)
+                            .font(.bodyMedium16)
+                            .padding(.horizontal, 20)
                     }
                 }
-            Button {
-                if isTextEmpty {
-                    onVoiceSearch()
-                } else {
-                    text = ""
+                
+                if !isExistVoiceSeachButton && !isTextEmpty {
+                    Button {
+                        text = ""
+                    } label: {
+                        Image(.icnXButton)
+                    }
+                    .padding(.trailing, 20)
                 }
-            } label: {
-                Image(systemName: isTextEmpty ? "mic.fill" : "xmark.circle.fill")
             }
-            .tint(.black)
+            .background(.ffipGrayscale5)
+            .cornerRadius(50)
+            
+            if isExistVoiceSeachButton {
+                Button {
+                    onVoiceSearch?()
+                } label: {
+                    Image(.icnSettingsVoice)
+                        .tint(.ffipGrayscale1)
+                        .padding(17)
+                        .background(.ffipGrayscale5)
+                        .clipShape(Circle())
+                }
+            }
         }
-        .padding(.horizontal, 20)
-        .background(.gray.opacity(0.2))
     }
 }
-
-// #Preview {
-//    @Previewable @State var text = "검색어"
-//    FfipTextField(placeholder: "placeholder", text: $text, onVoiceSearch: {})
-// }

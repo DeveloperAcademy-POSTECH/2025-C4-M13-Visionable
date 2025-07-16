@@ -36,8 +36,9 @@ struct SearchView: View {
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
             
-            FfipTextField(
+            FfipSearchTextField(
                 text: $searchText,
+                isExistVoiceSeachButton: focusState == .home,
                 placeholder: String(localized: "searchPlaceholder"),
                 onVoiceSearch: {
                     coordinator.push(.voiceSearch)
@@ -54,7 +55,7 @@ struct SearchView: View {
             if focusState == .home {
                 VStack(alignment: .leading, spacing: 16) {
                     ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
-                        RecentSearchCapsule(
+                        FfipRecentSearchCapsule(
                             keyword: keyword,
                             onTap: {
                                 searchModel.addRecentSearchKeyword(keyword)

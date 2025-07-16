@@ -42,7 +42,7 @@ public enum FfipToastType {
     var iconImage: Image {
         switch self {
         case .warning: return Image(.icnToastWarning)
-        case .check: return Image(.icnToastCheck)
+        case .check: return Image(.icnToastChecking)
         }
     }
 }
