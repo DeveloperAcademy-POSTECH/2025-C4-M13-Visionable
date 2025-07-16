@@ -8,8 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showToast: Bool = false
+    @State private var isSheetPresented = false
+    @State private var selectedMode: FfipSearchMode = .designated
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            VStack {
+                Button("Show toast") {
+                    showToast = true
+                }
+                Button("Show sheet") {
+                    isSheetPresented = true
+                }
+            }
+            
+        }
+        .showFfipToastMessage(toastType: .check, toastTitle: "저장완료이다 이놈들아!", isToastVisible: $showToast)
+        .ffipSheet(isPresented: $isSheetPresented, selectedMode: $selectedMode)
     }
 }
 
