@@ -7,69 +7,79 @@
 
 import SwiftUI
 
-struct FfipSheetModifier: ViewModifier {
-    @Binding var isPresented: Bool
-    @Binding var selectedMode: FfipSearchMode
-
+struct FfipSheetModifier<SheetContent: View>: ViewModifier {
     @State private var offsetY: CGFloat = 0
-
+    
+    @Binding var isPresented: Bool
+    private let sheetContent: SheetContent
+    private let onDismiss: (() -> Void)?
+    
+    init(
+        isPresented: Binding<Bool>,
+        onDismiss: (() -> Void)? = nil,
+        @ViewBuilder content: () -> SheetContent
+    ) {
+        self._isPresented = isPresented
+        self.onDismiss = onDismiss
+        self.sheetContent = content()
+    }
+    
     func body(content: Content) -> some View {
-        ZStack(alignment: .bottom) {
+        ZStack {
             content
-
+            
             if isPresented {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
                     .onTapGesture {
-                        dismiss()
+                        withAnimation { isPresented = false }
+                        onDismiss?()
                     }
-
-                FfipSheet(selectedMode: $selectedMode) { mode in
-                    selectedMode = mode
-                    dismiss()
-                }
-                .offset(y: offsetY)
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            if value.translation.height > 0 {
-                                offsetY = value.translation.height
+                
+                VStack {
+                    Spacer()
+                    FfipBottomSheet {
+                        sheetContent
+                    }
+                    .offset(y: offsetY)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                if value.translation.height > 0 {
+                                    offsetY = value.translation.height
+                                }
                             }
-                        }
-                        .onEnded { value in
-                            if value.translation.height > 100 {
-                                dismiss()
-                            } else {
-                                withAnimation { offsetY = 0 }
+                            .onEnded { value in
+                                if value.translation.height > 100 {
+                                    isPresented = false
+                                    onDismiss?()
+                                }
+                                offsetY = 0
                             }
-                        }
-                )
-                .onAppear {
-                    offsetY = 230
-                    withAnimation { offsetY = 0 }
+                    )
                 }
-                .ignoresSafeArea(edges: .bottom)
+                .ignoresSafeArea()
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .animation(.easeInOut, value: isPresented)
             }
         }
-    }
-
-    private func dismiss() {
-        withAnimation {
-            offsetY = 230
-            isPresented = false
+        .onChange(of: isPresented) { _, isPresented in
+            if !isPresented { onDismiss?() }
         }
     }
 }
 
 extension View {
-    func ffipSheet(
+    func ffipSheet<SheetContent: View>(
         isPresented: Binding<Bool>,
-        selectedMode: Binding<FfipSearchMode>
+        onDismiss: (() -> Void)? = nil,
+        @ViewBuilder content: @escaping () -> SheetContent
     ) -> some View {
         self.modifier(
             FfipSheetModifier(
                 isPresented: isPresented,
-                selectedMode: selectedMode
+                onDismiss: onDismiss,
+                content: content
             )
         )
     }
