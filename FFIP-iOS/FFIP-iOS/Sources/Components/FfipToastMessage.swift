@@ -30,7 +30,7 @@ struct FfipToastMessage: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(Color.ffipBackground3Pop)
+        .background(.ffipBackground3Pop)
         .cornerRadius(100)
     }
 }

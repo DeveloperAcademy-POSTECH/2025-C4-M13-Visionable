@@ -38,7 +38,7 @@ struct FfipBoundingBox: View {
             
             // 라인
             Box(observation: observation)
-                .stroke(Color.ffipPointGreen1, lineWidth: 1.5)
+                .stroke(.ffipPointGreen1, lineWidth: 1.5)
             
             // 왼쪽 위 사각형
             Rectangle()

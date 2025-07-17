@@ -25,12 +25,12 @@ struct FfipToolTip: View {
                     .padding(12)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.ffipGrayscale1)
+                            .fill(.ffipGrayscale1)
                     )
                 
                 if position == .top {
                     Triangle()
-                        .fill(Color.ffipGrayscale1)
+                        .fill(.ffipGrayscale1)
                         .rotationEffect(.degrees(180))
                         .frame(width: 10, height: 6)
                 }
@@ -40,7 +40,7 @@ struct FfipToolTip: View {
                 VStack(spacing: 0) {
                     if position == .bottom {
                         Triangle()
-                            .fill(Color.ffipGrayscale1)
+                            .fill(.ffipGrayscale1)
                             .rotationEffect(.degrees(0))
                             .frame(width: 10, height: 6)
                     }
@@ -51,7 +51,7 @@ struct FfipToolTip: View {
                         .padding(12)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
-                                .fill(Color.ffipGrayscale1)
+                                .fill(.ffipGrayscale1)
                         )
                 }
             }
@@ -62,16 +62,15 @@ struct FfipToolTip: View {
                 .padding(10)
                 .background(
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.ffipGrayscale1)
+                        .fill(.ffipGrayscale1)
                 )
                 .overlay(
-                    Group {
-                        Triangle()
-                            .fill(Color.ffipGrayscale1)
-                            .rotationEffect(.degrees(90))
-                            .frame(width: 10, height: 6)
-                            .offset(x: 8)
-                    },
+                    Triangle()
+                        .fill(.ffipGrayscale1)
+                        .rotationEffect(.degrees(90))
+                        .frame(width: 10, height: 6)
+                        .offset(x: 8)
+                    ,
                     alignment: .trailing
                 )
         case .trailing:
@@ -81,17 +80,15 @@ struct FfipToolTip: View {
                 .padding(10)
                 .background(
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.ffipGrayscale1)
+                        .fill(.ffipGrayscale1)
                 )
                 .overlay(
-                    Group {
-                        Triangle()
-                            .fill(Color.ffipGrayscale1)
-                            .rotationEffect(.degrees(-90))
-                            .frame(width: 10, height: 6)
-                            .offset(x: -8)
-                        
-                    },
+                    Triangle()
+                        .fill(.ffipGrayscale1)
+                        .rotationEffect(.degrees(-90))
+                        .frame(width: 10, height: 6)
+                        .offset(x: -8)
+                    ,
                     alignment: .leading
                 )
         }
@@ -119,19 +116,19 @@ struct Triangle: Shape {
 //            .background(Color.blue)
 //            .cornerRadius(10)
 //            .ffipToolTip(message: "Top에 표시됩니다.", position: .top, spacing: 10)
-//        
+//
 //        Text("Bottom")
 //            .padding()
 //            .background(Color.green)
 //            .cornerRadius(10)
 //            .ffipToolTip(message: "Bottom에 표시됩니다.", position: .bottom, spacing: 12)
-//        
+//
 //        Text("Leading")
 //            .padding()
 //            .background(Color.orange)
 //            .cornerRadius(10)
 //            .ffipToolTip(message: "왼쪽에 표시됩니다.", position: .leading, spacing: 10)
-//        
+//
 //        Text("Trailing")
 //            .padding()
 //            .background(Color.purple)

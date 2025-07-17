@@ -28,7 +28,7 @@ struct FfipBottomSheet<Content: View>: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.ffipBackground2Modal)
+                .fill(.ffipBackground2Modal)
         )
     }
 }

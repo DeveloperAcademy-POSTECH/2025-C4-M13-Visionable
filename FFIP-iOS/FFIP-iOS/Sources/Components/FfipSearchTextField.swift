@@ -39,23 +39,20 @@ struct FfipSearchTextField: View {
     var body: some View {
         HStack(spacing: 4) {
             HStack(spacing: 12) {
-                ZStack(alignment: .leading) {
-                    TextField("", text: $text)
-                        .foregroundStyle(.ffipGrayscale1)
+                TextField(
+                    "",
+                    text: $text,
+                    prompt: Text(placeholder)
+                        .foregroundStyle(.ffipGrayscale4)
                         .font(.bodyMedium16)
-                        .padding(.vertical, 18)
-                        .padding(.leading, 20)
-                        .submitLabel(.search)
-                        .onSubmit {
-                            isTextEmpty ? onEmptySubmit?() : onSubmit?()
-                        }
-                    
-                    if isTextEmpty {
-                        Text(placeholder)
-                            .foregroundStyle(.ffipGrayscale4)
-                            .font(.bodyMedium16)
-                            .padding(.horizontal, 20)
-                    }
+                )
+                .foregroundStyle(.ffipGrayscale1)
+                .font(.bodyMedium16)
+                .padding(.vertical, 18)
+                .padding(.leading, 20)
+                .submitLabel(.search)
+                .onSubmit {
+                    isTextEmpty ? onEmptySubmit?() : onSubmit?()
                 }
                 
                 if !isExistVoiceSeachButton && !isTextEmpty {
@@ -76,11 +73,18 @@ struct FfipSearchTextField: View {
                 } label: {
                     Image(.icnSettingsVoice)
                         .tint(.ffipGrayscale1)
-                        .padding(17)
-                        .background(.ffipGrayscale5)
-                        .clipShape(Circle())
+                        .frame(width: 55, height: 55)
+                        .background(Circle().fill(.ffipGrayscale5))
                 }
             }
         }
     }
+}
+
+#Preview {
+    FfipSearchTextField(
+        text: .constant(""),
+        isExistVoiceSeachButton: true,
+        placeholder: "어쩌구저쩌구 플레이스홀더"
+    )
 }

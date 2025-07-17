@@ -28,15 +28,11 @@ struct FfipRecentSearchCapsule: View {
         .background(
             RoundedRectangle(cornerRadius: 50)
                 .fill(.clear)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 50)
-                        .stroke(.ffipGrayscale4, lineWidth: 1)
-                )
+                .stroke(.ffipGrayscale4, lineWidth: 1)
         )
         .onTapGesture {
             onTap()
         }
-        
     }
 }
 
