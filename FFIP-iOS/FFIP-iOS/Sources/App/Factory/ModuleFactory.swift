@@ -28,6 +28,7 @@ final class ModuleFactory: ModuleFactoryProtocol {
             captureService: captureService, deviceService: deviceService, visionService: visionService
         )
         let view = CameraView(cameraModel: model)
+
         return view
     }
     

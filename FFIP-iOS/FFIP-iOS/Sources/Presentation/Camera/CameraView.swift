@@ -13,65 +13,49 @@ struct CameraView: View {
     @Bindable var cameraModel: CameraModel
 
     @State private var zoomGestureValue: CGFloat = 1.0
-    @State private var focusPoint: CGPoint = .zero
-    @State private var showFocusRectangle = false
-    @State private var focusTask: Task<Void, Never>?
-    
+    @State private var showLockIcon: Bool = false
+    @State private var showLockTask: Task<Void, Never>?
+
     var body: some View {
         ZStack {
-            GeometryReader { geometry in
-                FrameView(image: cameraModel.frameToDisplay)
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { value in
-                                showFocusRectangle = true
-                                focusPoint = value.location
-                            }
-                            .onEnded { value in
-                                focusTask?.cancel()
-                                focusTask = Task {
-                                    await handleFocus(at: value.location, in: geometry)
+            VStack {
+                ZStack {
+                    FrameView(image: cameraModel.frameToDisplay)
+                        .gesture(
+                            MagnificationGesture()
+                                .onChanged { value in
+                                    handleZoomGestureChanged(value)
                                 }
-                            }
-                    )
-                    .gesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                showFocusRectangle = false
-                                handleZoomGestureChanged(value)
-                            }
-                            .onEnded { _ in
-                                zoomGestureValue = 1.0
-                            }
-                    )
-                
-                if showFocusRectangle {
-                    Rectangle()
-                        .stroke(Color.green, lineWidth: 2)
-                        .frame(width: 64, height: 64)
-                        .position(focusPoint)
-                        .opacity(0.8)
-                        .shadow(radius: 1)
-                        .clipped()
+                                .onEnded { _ in
+                                    zoomGestureValue = 1.0
+                                }
+                        )
+                        .onTapGesture(count: 2, perform: {
+                            toggleCameraPauseAndShowLock()
+                        })
+
+                    // TODO: - 박스 영역 디자인 완료 후 수정
+                    ForEach(cameraModel.matchedObservations, id: \.self) { observation in
+                        Box(observation: observation)
+                            .stroke(.red, lineWidth: 1)
+                    }
                 }
-            }
-            
+                .frame(width: screenHeight * 3 / 4, height: screenHeight)
+                .clipped()
+            }            
             ForEach(cameraModel.matchedObservations, id: \.self) { observation in
                 FfipBoundingBox(observation: observation)
             }
+            .ignoresSafeArea(.all)
+            .frame(width: screenWidth, height: screenHeight)
+
+            CameraLockIcon(
+                isPaused: cameraModel.isCameraPaused,
+                show: showLockIcon
+            )
 
             VStack {
-                HStack {
-                    TorchButton(
-                        isTorchOn: cameraModel.isTorchOn,
-                        action: {
-                            Task {
-                                await cameraModel.toggleTorch()
-                            }
-                        }
-                    )
-                    .padding(16)
-                    
+                HStack(alignment: .center) {
                     ZoomButton(
                         zoomFactor: cameraModel.zoomFactor,
                         action: {
@@ -80,13 +64,35 @@ struct CameraView: View {
                             }
                         }
                     )
-                    
+
                     Spacer()
+
+                    TorchButton(
+                        isTorchOn: cameraModel.isTorchOn,
+                        action: {
+                            Task {
+                                await cameraModel.toggleTorch()
+                            }
+                        }
+                    )
+
+                    Spacer()
+
+                    CloseButton {
+                        Task {
+                            await cameraModel.stop()
+                            coordinator.pop()
+                        }
+                    }
                 }
-                
+                .padding(.horizontal, 16)
+
                 Spacer()
             }
+            .padding(.top, safeAreaInset(.top))
         }
+        .ignoresSafeArea(.all)
+        .navigationBarBackButtonHidden(true)
         .onChange(of: cameraModel.matchedObservations) { _, newObservations in
             if !newObservations.isEmpty { triggerHapticFeedback() }
         }
@@ -97,7 +103,7 @@ struct CameraView: View {
             Task { await cameraModel.distributeAnalyzeFrames() }
         }
     }
-    
+
     // TODO: Hi-Fi 디자인 이후 수정
     private struct TorchButton: View {
         let isTorchOn: Bool
@@ -111,11 +117,13 @@ struct CameraView: View {
                     .frame(width: 32, height: 32)
                     .background(
                         Circle()
-                            .fill(.black.opacity(0.8)))
+                            .fill(.black.opacity(0.8))
+                    )
             }
+            .frame(maxWidth: 80)
         }
     }
-    
+
     // TODO: Hi-Fi 디자인 이후 수정
     private struct ZoomButton: View {
         let zoomFactor: CGFloat
@@ -123,19 +131,56 @@ struct CameraView: View {
 
         var body: some View {
             Button(action: action) {
-                Text(String(format: "%.1fx", zoomFactor/2))
+                Text(String(format: "%.1fx", zoomFactor / 2))
                     .foregroundColor(.white)
                     .font(.system(size: 16, weight: .bold))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(
-                    Capsule()
-                        .fill(.black.opacity(0.8))
-                )
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        Capsule()
+                            .fill(.black.opacity(0.8))
+                    )
             }
+            .frame(maxWidth: 80)
         }
     }
-    
+
+    // TODO: Hi-Fi 디자인 이후 수정
+    private struct CloseButton: View {
+        let action: () -> Void
+
+        var body: some View {
+            Button(action: action) {
+                Image(systemName: "xmark")
+                    .foregroundColor(.white)
+                    .font(.system(size: 16))
+                    .frame(width: 32, height: 32)
+                    .background(
+                        Circle()
+                            .fill(.black.opacity(0.8))
+                    )
+            }
+            .frame(maxWidth: 80)
+        }
+    }
+
+    private struct CameraLockIcon: View {
+        let isPaused: Bool
+        let show: Bool
+
+        var body: some View {
+            Image(systemName: isPaused ? "lock.fill" : "lock.open.fill")
+                .foregroundColor(.white)
+                .font(.system(size: 16, weight: .bold))
+                .padding(16)
+                .background(
+                    Circle()
+                        .fill(.black.opacity(0.4))
+                )
+                .opacity(show ? 1 : 0)
+        }
+    }
+
     private func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue
         zoomGestureValue = value
@@ -144,7 +189,7 @@ struct CameraView: View {
             await cameraModel.zoom(to: zoomFactor * delta)
         }
     }
-    
+
     private func handleZoomButtonTapped() async {
         if cameraModel.zoomFactor >= 4.0 {
             await cameraModel.zoom(to: 1.0)
@@ -154,14 +199,26 @@ struct CameraView: View {
             await cameraModel.zoom(to: 2.0)
         }
     }
-    
-    private func handleFocus(at point: CGPoint, in geometry: GeometryProxy) async {
-        focusPoint = point
-        let computedPoint = CGPoint(x: point.y / geometry.size.height, y: 1 - point.x / geometry.size.width)
-        await cameraModel.focus(at: computedPoint)
-        try? await Task.sleep(for: Duration.seconds(1))
-        if Task.isCancelled { return }
-        showFocusRectangle = false
+
+    private func toggleCameraPauseAndShowLock() {
+        if cameraModel.isCameraPaused {
+            cameraModel.resumeCamera()
+        } else {
+            cameraModel.pauseCamera()
+        }
+        showLockTask?.cancel()
+        withAnimation {
+            showLockIcon = true
+        }
+        showLockTask = Task {
+            try? await Task.sleep(
+                for: .seconds(cameraModel.isCameraPaused ? 1 : 0.8)
+            )
+            if Task.isCancelled { return }
+            withAnimation {
+                showLockIcon = false
+            }
+        }
     }
 }
 
