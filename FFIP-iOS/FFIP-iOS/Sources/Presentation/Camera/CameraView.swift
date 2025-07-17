@@ -34,10 +34,8 @@ struct CameraView: View {
                             toggleCameraPauseAndShowLock()
                         })
 
-                    // TODO: - 박스 영역 디자인 완료 후 수정
                     ForEach(cameraModel.matchedObservations, id: \.self) { observation in
-                        Box(observation: observation)
-                            .stroke(.red, lineWidth: 1)
+                        FfipBoundingBox(observation: observation)
                     }
                 }
                 .frame(width: screenHeight * 3 / 4, height: screenHeight)

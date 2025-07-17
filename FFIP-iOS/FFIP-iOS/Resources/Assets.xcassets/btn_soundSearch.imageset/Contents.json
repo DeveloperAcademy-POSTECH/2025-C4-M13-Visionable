@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "btn_soundSearch.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
