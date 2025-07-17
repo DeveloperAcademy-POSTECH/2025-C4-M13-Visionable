@@ -23,14 +23,14 @@ actor SpeechRecognitionService {
     
     private var transcript: String = ""
     
-    private let recognizer: SFSpeechRecognizer?
+    private let speechRecognizer: SFSpeechRecognizer?
     private(set) var audioEngine: AVAudioEngine?
-    private(set) var request: SFSpeechAudioBufferRecognitionRequest?
-    private(set) var task: SFSpeechRecognitionTask?
+    private(set) var audioBufferRequest: SFSpeechAudioBufferRecognitionRequest?
+    private(set) var recognitionTask: SFSpeechRecognitionTask?
     
     public init() {
-        recognizer = SFSpeechRecognizer()
-        if recognizer == nil {
+        speechRecognizer = SFSpeechRecognizer()
+        if speechRecognizer == nil {
             Task { await self.transcribe(RecognizerError.nilRecognizer) }
         }
     }
@@ -48,16 +48,16 @@ actor SpeechRecognitionService {
     }
     
     private func transcribe() async {
-        guard let recognizer, recognizer.isAvailable else {
+        guard let speechRecognizer, speechRecognizer.isAvailable else {
             self.transcribe(RecognizerError.recognizerIsUnavailable)
             return
         }
         
         do {
-            let (audioEngine, request) = try Self.prepareEngine()
+            let (audioEngine, request) = try Self.prepareRecordingEngine()
             self.audioEngine = audioEngine
-            self.request = request
-            task = recognizer.recognitionTask(with: request, resultHandler: { [weak self] result, error in
+            self.audioBufferRequest = request
+            recognitionTask = speechRecognizer.recognitionTask(with: request, resultHandler: { [weak self] result, error in
                 guard let self else { return }
                 self.recognitionHandler(audioEngine: audioEngine, result: result, error: error)
             })
@@ -68,14 +68,14 @@ actor SpeechRecognitionService {
     }
     
     private func reset() async {
-        task?.cancel()
+        recognitionTask?.cancel()
         audioEngine?.stop()
         audioEngine = nil
-        request = nil
-        task = nil
+        audioBufferRequest = nil
+        recognitionTask = nil
     }
     
-    private static func prepareEngine() throws -> (AVAudioEngine, SFSpeechAudioBufferRecognitionRequest) {
+    private static func prepareRecordingEngine() throws -> (AVAudioEngine, SFSpeechAudioBufferRecognitionRequest) {
         let audioEngine = AVAudioEngine()
         
         let request = SFSpeechAudioBufferRecognitionRequest()
@@ -87,7 +87,7 @@ actor SpeechRecognitionService {
         let inputNode = audioEngine.inputNode
         
         let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, _: AVAudioTime) in
             request.append(buffer)
         }
         audioEngine.prepare()
