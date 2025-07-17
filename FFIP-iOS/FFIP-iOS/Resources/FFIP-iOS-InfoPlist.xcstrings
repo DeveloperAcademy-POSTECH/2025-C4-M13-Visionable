@@ -36,7 +36,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP needs access to your microphone so you can speak your search"
+            "value" : "FFIP needs microphone access for voice search."
           }
         },
         "ko" : {
