@@ -36,14 +36,19 @@ struct ExactCameraView: View {
                                 toggleCameraPauseAndShowLock()
                             }
                         )
-
-                    ForEach(mediator.matchedObservations, id: \.self) { observation in
+                    
+                    ForEach(mediator.matchedObservations, id: \.self) {
+                        observation in
                         FfipBoundingBox(observation: observation)
                     }
                 }
                 .frame(width: screenHeight * 3 / 4, height: screenHeight)
                 .clipped()
+            }
+            .ignoresSafeArea(.all)
+            .frame(width: screenWidth, height: screenHeight)
 
+            VStack {
                 FfipCameraHeaderBar(
                     zoomFactor: mediator.zoomFactor,
                     onZoom: { Task { await handleZoomButtonTapped() } },
@@ -60,10 +65,9 @@ struct ExactCameraView: View {
 
                 Spacer()
             }
-            .ignoresSafeArea(.all)
-            .frame(width: screenWidth, height: screenHeight)
+            .padding(.top, safeAreaInset(.top))
 
-            CameraLockIcon(
+            FfipCameraLockIcon(
                 isPaused: mediator.isCameraPaused,
                 show: showLockIcon
             )
@@ -75,23 +79,6 @@ struct ExactCameraView: View {
         }
         .task {
             await mediator.start()
-        }
-    }
-
-    private struct CameraLockIcon: View {
-        let isPaused: Bool
-        let show: Bool
-
-        var body: some View {
-            Image(systemName: isPaused ? "lock.fill" : "lock.open.fill")
-                .foregroundColor(.white)
-                .font(.system(size: 16, weight: .bold))
-                .padding(16)
-                .background(
-                    Circle()
-                        .fill(.black.opacity(0.4))
-                )
-                .opacity(show ? 1 : 0)
         }
     }
 
