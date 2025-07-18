@@ -15,7 +15,7 @@ struct CameraView: View {
     @State private var zoomGestureValue: CGFloat = 1.0
     @State private var showLockIcon: Bool = false
     @State private var showLockTask: Task<Void, Never>?
-
+ 
     var body: some View {
         ZStack {
             VStack {
