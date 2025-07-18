@@ -30,9 +30,12 @@ struct ExactCameraView: View {
                                     zoomGestureValue = 1.0
                                 }
                         )
-                        .onTapGesture(count: 2, perform: {
-                            toggleCameraPauseAndShowLock()
-                        })
+                        .onTapGesture(
+                            count: 2,
+                            perform: {
+                                toggleCameraPauseAndShowLock()
+                            }
+                        )
 
                     ForEach(mediator.matchedObservations, id: \.self) { observation in
                         FfipBoundingBox(observation: observation)
@@ -40,6 +43,22 @@ struct ExactCameraView: View {
                 }
                 .frame(width: screenHeight * 3 / 4, height: screenHeight)
                 .clipped()
+
+                FfipCameraHeaderBar(
+                    zoomFactor: mediator.zoomFactor,
+                    onZoom: { Task { await handleZoomButtonTapped() } },
+                    isTorchOn: mediator.isTorchOn,
+                    onToggleTorch: { Task { await mediator.toggleTorch() } },
+                    onInfo: {},
+                    onClose: {
+                        Task {
+                            await mediator.stop()
+                            coordinator.pop()
+                        }
+                    }
+                )
+
+                Spacer()
             }
             .ignoresSafeArea(.all)
             .frame(width: screenWidth, height: screenHeight)
@@ -48,43 +67,6 @@ struct ExactCameraView: View {
                 isPaused: mediator.isCameraPaused,
                 show: showLockIcon
             )
-
-            VStack {
-                HStack(alignment: .center) {
-                    ZoomButton(
-                        zoomFactor: mediator.zoomFactor,
-                        action: {
-                            Task {
-                                await handleZoomButtonTapped()
-                            }
-                        }
-                    )
-
-                    Spacer()
-
-                    TorchButton(
-                        isTorchOn: mediator.isTorchOn,
-                        action: {
-                            Task {
-                                await mediator.toggleTorch()
-                            }
-                        }
-                    )
-
-                    Spacer()
-
-                    CloseButton {
-                        Task {
-                            await mediator.stop()
-                            coordinator.pop()
-                        }
-                    }
-                }
-                .padding(.horizontal, 16)
-
-                Spacer()
-            }
-            .padding(.top, safeAreaInset(.top))
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
@@ -93,66 +75,6 @@ struct ExactCameraView: View {
         }
         .task {
             await mediator.start()
-        }
-    }
-
-    // TODO: Hi-Fi 디자인 이후 수정
-    private struct TorchButton: View {
-        let isTorchOn: Bool
-        let action: () -> Void
-
-        var body: some View {
-            Button(action: action) {
-                Image(systemName: isTorchOn ? "bolt.fill" : "bolt.slash")
-                    .foregroundColor(isTorchOn ? .yellow : .white)
-                    .font(.system(size: 16))
-                    .frame(width: 32, height: 32)
-                    .background(
-                        Circle()
-                            .fill(.black.opacity(0.8))
-                    )
-            }
-            .frame(maxWidth: 80)
-        }
-    }
-
-    // TODO: Hi-Fi 디자인 이후 수정
-    private struct ZoomButton: View {
-        let zoomFactor: CGFloat
-        let action: () -> Void
-
-        var body: some View {
-            Button(action: action) {
-                Text(String(format: "%.1fx", zoomFactor / 2))
-                    .foregroundColor(.white)
-                    .font(.system(size: 16, weight: .bold))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(
-                        Capsule()
-                            .fill(.black.opacity(0.8))
-                    )
-            }
-            .frame(maxWidth: 80)
-        }
-    }
-
-    // TODO: Hi-Fi 디자인 이후 수정
-    private struct CloseButton: View {
-        let action: () -> Void
-
-        var body: some View {
-            Button(action: action) {
-                Image(systemName: "xmark")
-                    .foregroundColor(.white)
-                    .font(.system(size: 16))
-                    .frame(width: 32, height: 32)
-                    .background(
-                        Circle()
-                            .fill(.black.opacity(0.8))
-                    )
-            }
-            .frame(maxWidth: 80)
         }
     }
 
