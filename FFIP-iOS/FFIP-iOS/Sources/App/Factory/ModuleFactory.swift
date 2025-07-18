@@ -8,7 +8,8 @@
 import SwiftUI
 
 protocol ModuleFactoryProtocol {
-    func makeCameraView(searchKeyword: String) -> CameraView
+    func makeExactCameraView(searchKeyword: String) -> ExactCameraView
+    func makeRelatedCameraView(searchKeyword: String) -> RelatedCameraView
     func makeSearchView() -> SearchView
     func makeVoiceSearchView() -> VoiceSearchView
 }
@@ -17,7 +18,7 @@ final class ModuleFactory: ModuleFactoryProtocol {
     static let shared = ModuleFactory()
     private init() {}
     
-    func makeCameraView(searchKeyword: String) -> CameraView {
+    func makeExactCameraView(searchKeyword: String) -> ExactCameraView {
         let privacyService = PrivacyService()
         let captureService = VideoCaptureService()
         let deviceService = VideoDeviceService()
@@ -27,7 +28,22 @@ final class ModuleFactory: ModuleFactoryProtocol {
             privacyService: privacyService,
             captureService: captureService, deviceService: deviceService, visionService: visionService
         )
-        let view = CameraView(cameraModel: model)
+        let view = ExactCameraView(cameraModel: model)
+
+        return view
+    }
+    
+    func makeRelatedCameraView(searchKeyword: String) -> RelatedCameraView {
+        let privacyService = PrivacyService()
+        let captureService = VideoCaptureService()
+        let deviceService = VideoDeviceService()
+        let visionService = VisionService()
+        let model = CameraModel(
+            searchKeyword: searchKeyword,
+            privacyService: privacyService,
+            captureService: captureService, deviceService: deviceService, visionService: visionService
+        )
+        let view = RelatedCameraView(cameraModel: model)
 
         return view
     }

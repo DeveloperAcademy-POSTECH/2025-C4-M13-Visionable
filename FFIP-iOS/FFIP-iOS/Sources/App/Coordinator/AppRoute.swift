@@ -8,7 +8,8 @@
 import Foundation
 
 enum AppRoute: Hashable {
-    case camera(searchKeyword: String)
+    case exactCamera(searchKeyword: String)
+    case relatedCamera(searchKeyword: String)
     case search
     case voiceSearch
 }

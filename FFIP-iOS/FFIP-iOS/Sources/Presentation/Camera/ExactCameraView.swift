@@ -1,5 +1,5 @@
 //
-//  CameraView.swift
+//  ExactCameraView.swift
 //  FFIP-iOS
 //
 //  Created by mini on 7/8/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Vision
 
-struct CameraView: View {
+struct ExactCameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var cameraModel: CameraModel
 
