@@ -1,5 +1,5 @@
 //
-//  CameraMediator.swift
+//  RelatedCameraMediator.swift
 //  FFIP-iOS
 //
 //  Created by SeanCho on 7/18/25.
@@ -10,6 +10,6 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class CameraMediator: NSObject {
+final class RelatedCameraMediator: NSObject {
     
 }

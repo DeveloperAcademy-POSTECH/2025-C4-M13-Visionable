@@ -22,28 +22,22 @@ final class ModuleFactory: ModuleFactoryProtocol {
         let privacyService = PrivacyService()
         let captureService = VideoCaptureService()
         let deviceService = VideoDeviceService()
-        let visionService = VisionService()
-        let model = CameraModel(
-            searchKeyword: searchKeyword,
+        let cameraModel = CameraModel(
             privacyService: privacyService,
-            captureService: captureService, deviceService: deviceService, visionService: visionService
+            captureService: captureService, deviceService: deviceService
         )
-        let view = ExactCameraView(cameraModel: model)
+        let visionService = VisionService()
+        let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
+        
+        let cameraMediator = ExactCameraMediator(cameraModel: cameraModel, visionModel: visionModel)
+        
+        let view = ExactCameraView(mediator: cameraMediator)
 
         return view
     }
     
     func makeRelatedCameraView(searchKeyword: String) -> RelatedCameraView {
-        let privacyService = PrivacyService()
-        let captureService = VideoCaptureService()
-        let deviceService = VideoDeviceService()
-        let visionService = VisionService()
-        let model = CameraModel(
-            searchKeyword: searchKeyword,
-            privacyService: privacyService,
-            captureService: captureService, deviceService: deviceService, visionService: visionService
-        )
-        let view = RelatedCameraView(cameraModel: model)
+        let view = RelatedCameraView()
 
         return view
     }

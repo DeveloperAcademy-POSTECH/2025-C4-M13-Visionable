@@ -1,5 +1,5 @@
 //
-//  ExactCameraView.swift
+//  CameraView.swift
 //  FFIP-iOS
 //
 //  Created by mini on 7/8/25.
@@ -10,7 +10,7 @@ import Vision
 
 struct ExactCameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
-    @Bindable var cameraModel: CameraModel
+    @Bindable var mediator: ExactCameraMediator
 
     @State private var zoomGestureValue: CGFloat = 1.0
     @State private var showLockIcon: Bool = false
@@ -20,7 +20,7 @@ struct ExactCameraView: View {
         ZStack {
             VStack {
                 ZStack {
-                    FrameView(image: cameraModel.frameToDisplay)
+                    FrameView(image: mediator.frame)
                         .gesture(
                             MagnificationGesture()
                                 .onChanged { value in
@@ -34,7 +34,7 @@ struct ExactCameraView: View {
                             toggleCameraPauseAndShowLock()
                         })
 
-                    ForEach(cameraModel.matchedObservations, id: \.self) { observation in
+                    ForEach(mediator.matchedObservations, id: \.self) { observation in
                         FfipBoundingBox(observation: observation)
                     }
                 }
@@ -45,14 +45,14 @@ struct ExactCameraView: View {
             .frame(width: screenWidth, height: screenHeight)
 
             CameraLockIcon(
-                isPaused: cameraModel.isCameraPaused,
+                isPaused: mediator.isCameraPaused,
                 show: showLockIcon
             )
 
             VStack {
                 HStack(alignment: .center) {
                     ZoomButton(
-                        zoomFactor: cameraModel.zoomFactor,
+                        zoomFactor: mediator.zoomFactor,
                         action: {
                             Task {
                                 await handleZoomButtonTapped()
@@ -63,10 +63,10 @@ struct ExactCameraView: View {
                     Spacer()
 
                     TorchButton(
-                        isTorchOn: cameraModel.isTorchOn,
+                        isTorchOn: mediator.isTorchOn,
                         action: {
                             Task {
-                                await cameraModel.toggleTorch()
+                                await mediator.toggleTorch()
                             }
                         }
                     )
@@ -75,7 +75,7 @@ struct ExactCameraView: View {
 
                     CloseButton {
                         Task {
-                            await cameraModel.stop()
+                            await mediator.stop()
                             coordinator.pop()
                         }
                     }
@@ -88,14 +88,11 @@ struct ExactCameraView: View {
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
-        .onChange(of: cameraModel.matchedObservations) { _, newObservations in
+        .onChange(of: mediator.matchedObservations) { _, newObservations in
             if !newObservations.isEmpty { triggerHapticFeedback() }
         }
         .task {
-            await cameraModel.start()
-
-            Task { await cameraModel.distributeDisplayFrames() }
-            Task { await cameraModel.distributeAnalyzeFrames() }
+            await mediator.start()
         }
     }
 
@@ -179,27 +176,27 @@ struct ExactCameraView: View {
     private func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue
         zoomGestureValue = value
-        let zoomFactor = cameraModel.zoomFactor
+        let zoomFactor = mediator.zoomFactor
         Task {
-            await cameraModel.zoom(to: zoomFactor * delta)
+            await mediator.zoom(to: zoomFactor * delta)
         }
     }
 
     private func handleZoomButtonTapped() async {
-        if cameraModel.zoomFactor >= 4.0 {
-            await cameraModel.zoom(to: 1.0)
-        } else if cameraModel.zoomFactor >= 2.0 {
-            await cameraModel.zoom(to: 4.0)
+        if mediator.zoomFactor >= 4.0 {
+            await mediator.zoom(to: 1.0)
+        } else if mediator.zoomFactor >= 2.0 {
+            await mediator.zoom(to: 4.0)
         } else {
-            await cameraModel.zoom(to: 2.0)
+            await mediator.zoom(to: 2.0)
         }
     }
 
     private func toggleCameraPauseAndShowLock() {
-        if cameraModel.isCameraPaused {
-            cameraModel.resumeCamera()
+        if mediator.isCameraPaused {
+            mediator.resumeCamera()
         } else {
-            cameraModel.pauseCamera()
+            mediator.pauseCamera()
         }
         showLockTask?.cancel()
         withAnimation {
@@ -207,7 +204,7 @@ struct ExactCameraView: View {
         }
         showLockTask = Task {
             try? await Task.sleep(
-                for: .seconds(cameraModel.isCameraPaused ? 1 : 0.8)
+                for: .seconds(mediator.isCameraPaused ? 1 : 0.8)
             )
             if Task.isCancelled { return }
             withAnimation {
@@ -218,5 +215,5 @@ struct ExactCameraView: View {
 }
 
 // #Preview {
-//    CameraView(cameraModel: CameraModel())
+//    CameraView(mediator: mediator())
 // }
