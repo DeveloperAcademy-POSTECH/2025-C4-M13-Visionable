@@ -36,13 +36,30 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP requires access to your microphone to search with voice."
+            "value" : "FFIP needs microphone access for voice search."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP 앱이 음성 검색을 위해 마이크 접근을 요청합니다."
+            "value" : "FFIP은 음성 검색을 위해 마이크 접근 권한이 필요합니다."
+          }
+        }
+      }
+    },
+    "NSSpeechRecognitionUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FFIP uses speech recognition to turn your voice into text within the app."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FFIP은 사용자의 음성을 텍스트로 변환하기 위해 음성 인식 기능을 사용합니다."
           }
         }
       }

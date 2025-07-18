@@ -40,7 +40,12 @@ final class ModuleFactory: ModuleFactoryProtocol {
     }
     
     func makeVoiceSearchView() -> VoiceSearchView {
-        let model = VoiceSearchModel()
+        let privacyService = PrivacyService()
+        let speeachService = SpeechRecognitionService()
+        let model = VoiceSearchModel(
+            privacyService: privacyService,
+            speechService: speeachService
+        )
         let view = VoiceSearchView(voiceSearchModel: model)
         return view
     }
