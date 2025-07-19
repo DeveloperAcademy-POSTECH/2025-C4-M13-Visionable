@@ -10,23 +10,26 @@ import SwiftUI
 struct FfipSearchTextField: View {
     @Binding var text: String
     
-    private let isExistVoiceSeachButton: Bool
+    private let isFocused: Bool
     private let placeholder: String
+    private let onTapBackButton: (() -> Void)?
     private let onVoiceSearch: (() -> Void)?
     private let onSubmit: (() -> Void)?
     private let onEmptySubmit: (() -> Void)?
     
     public init(
         text: Binding<String>,
-        isExistVoiceSeachButton: Bool,
+        isFocused: Bool,
         placeholder: String,
+        onTapBackButton: (() -> Void)? = nil,
         onVoiceSearch: (() -> Void)? = nil,
         onSubmit: (() -> Void)? = nil,
         onEmptySubmit: (() -> Void)? = nil
     ) {
         self._text = text
-        self.isExistVoiceSeachButton = isExistVoiceSeachButton
+        self.isFocused = isFocused
         self.placeholder = placeholder
+        self.onTapBackButton = onTapBackButton
         self.onVoiceSearch = onVoiceSearch
         self.onSubmit = onSubmit
         self.onEmptySubmit = onEmptySubmit
@@ -39,35 +42,44 @@ struct FfipSearchTextField: View {
     var body: some View {
         HStack(spacing: 4) {
             HStack(spacing: 12) {
-                TextField(
-                    "",
-                    text: $text,
-                    prompt: Text(placeholder)
-                        .foregroundStyle(.ffipGrayscale4)
-                        .font(.bodyMedium16)
-                )
-                .foregroundStyle(.ffipGrayscale1)
-                .font(.bodyMedium16)
-                .padding(.vertical, 18)
-                .padding(.leading, 20)
-                .submitLabel(.search)
-                .onSubmit {
-                    isTextEmpty ? onEmptySubmit?() : onSubmit?()
-                }
-                
-                if !isExistVoiceSeachButton && !isTextEmpty {
+                if isFocused {
                     Button {
-                        text = ""
+                        onTapBackButton?()
                     } label: {
-                        Image(.icnXButton)
+                        Image(.icnNavBack)
                     }
-                    .padding(.trailing, 20)
                 }
+                Group {
+                    TextField(
+                        "",
+                        text: $text,
+                        prompt: Text(placeholder)
+                            .foregroundStyle(.ffipGrayscale4)
+                            .font(.bodyMedium16)
+                    )
+                    .foregroundStyle(.ffipGrayscale1)
+                    .font(.bodyMedium16)
+                    .padding(.vertical, 18)
+                    .padding(.leading, 20)
+                    .submitLabel(.search)
+                    .onSubmit {
+                        isTextEmpty ? onEmptySubmit?() : onSubmit?()
+                    }
+                    
+                    if isFocused && !isTextEmpty {
+                        Button {
+                            text = ""
+                        } label: {
+                            Image(.icnXButton)
+                        }
+                        .padding(.trailing, 20)
+                    }
+                }
+                .background(.ffipGrayscale5)
+                .cornerRadius(50)
             }
-            .background(.ffipGrayscale5)
-            .cornerRadius(50)
-            
-            if isExistVoiceSeachButton {
+                        
+            if !isFocused {
                 Button {
                     onVoiceSearch?()
                 } label: {
@@ -81,10 +93,10 @@ struct FfipSearchTextField: View {
     }
 }
 
-#Preview {
-    FfipSearchTextField(
-        text: .constant(""),
-        isExistVoiceSeachButton: true,
-        placeholder: "어쩌구저쩌구 플레이스홀더"
-    )
-}
+// #Preview {
+//    FfipSearchTextField(
+//        text: .constant(""),
+//        isFocused: true,
+//        placeholder: "어쩌구저쩌구 플레이스홀더"
+//    )
+// }
