@@ -16,6 +16,15 @@ struct FFIP_iOSApp: App {
         WindowGroup {
             FFIPAppRootView(moduleFactory: ModuleFactory.shared)
                 .environment(coordinator)
+                .onOpenURL { url in
+                    switch url.host {
+                    case "search":
+                        coordinator.popToRoot()
+                    case "voiceSearch":
+                        coordinator.push(.voiceSearch)
+                    default: break
+                    }
+                }
         }
     }
 }

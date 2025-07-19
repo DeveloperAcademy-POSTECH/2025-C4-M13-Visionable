@@ -21,23 +21,7 @@ struct Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
         let entry = SimpleEntry(date: Date())
         completion(Timeline(entries: [entry], policy: .never))
-//        var entries: [SimpleEntry] = []
-//        
-//        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-//        let currentDate = Date()
-//        for hourOffset in 0 ..< 5 {
-//            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-//            let entry = SimpleEntry(date: entryDate)
-//            entries.append(entry)
-//        }
-//        
-//        let timeline = Timeline(entries: entries, policy: .atEnd)
-//        completion(timeline)
     }
-    
-    //    func relevances() async -> WidgetRelevances<Void> {
-    //        // Generate a list containing the contexts this widget is relevant in.
-    //    }
 }
 
 struct SimpleEntry: TimelineEntry {
@@ -54,15 +38,17 @@ struct FFIPWidgetEntryView: View {
     
     var body: some View {
         VStack(spacing: 13) {
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 100)
-                    .fill(.ffipGrayscale5)
-                    .frame(height: 55)
-                
-                Image(.ffipWidgetLogo)
-                    .padding(.leading, 16)
+            Link(destination: URL(string: URLLiterals.DeepLink.search)!) {
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 100)
+                        .fill(.ffipGrayscale5)
+                        .frame(height: 55)
+                    
+                    Image(.ffipWidgetLogo)
+                        .padding(.leading, 16)
+                }
             }
-            
+                        
             HStack(spacing: 14) {
                 VStack(alignment: .leading) {
                     HStack(spacing: 4) {
@@ -78,10 +64,12 @@ struct FFIPWidgetEntryView: View {
                 .font(.widgetSemiBold16)
                 .foregroundStyle(.ffipGrayscale2)
                 
-                Image(.icnSettingsVoice)
-                    .tint(.ffipGrayscale1)
-                    .frame(width: 55, height: 55)
-                    .background(Circle().fill(.ffipGrayscale5))
+                Link(destination: URL(string: URLLiterals.DeepLink.voiceSearch)!) {
+                    Image(.icnSettingsVoice)
+                        .tint(.ffipGrayscale1)
+                        .frame(width: 55, height: 55)
+                        .background(Circle().fill(.ffipGrayscale5))
+                }
             }
             .containerRelativeFrame([.horizontal])
         }
@@ -95,14 +83,9 @@ struct FFIPDesignatedSearchWidget: Widget {
     let kind: String = "FFIPDesignatedSearchWidget"
     
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(iOS 17.0, *) {
-                FFIPWidgetEntryView(widgetType: .designated)
-            } else {
-                FFIPWidgetEntryView(widgetType: .designated)
-                    .padding()
-                    .background()
-            }
+        StaticConfiguration(kind: kind, provider: Provider()) { _ in
+            FFIPWidgetEntryView(widgetType: .designated)
+            
         }
         .configurationDisplayName(String(localized: .designatedSearchWidgetConfigurationDisplayName))
         .description(String(localized: .designatedSearchWidgetDescription))
@@ -112,9 +95,9 @@ struct FFIPDesignatedSearchWidget: Widget {
 
 struct FFIPRelatedSearchWidget: Widget {
     let kind: String = "FFIPRelatedSearchWidget"
-
+    
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+        StaticConfiguration(kind: kind, provider: Provider()) { _ in
             FFIPWidgetEntryView(widgetType: .related)
         }
         .configurationDisplayName(String(localized: .relatedSearchWidgetConfigurationDisplayName))

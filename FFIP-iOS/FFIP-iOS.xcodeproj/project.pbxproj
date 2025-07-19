@@ -66,6 +66,7 @@
 				Resources/Assets.xcassets,
 				Resources/Colors.xcassets,
 				"Resources/Fonts/Pretendard-SemiBold.otf",
+				Resources/Literals/URL.swift,
 				Resources/Localizable.xcstrings,
 			);
 			target = 3DBE46152E28BA0E005B80D0 /* FFIPWidgetExtension */;
