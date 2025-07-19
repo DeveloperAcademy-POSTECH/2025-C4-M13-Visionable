@@ -15,7 +15,7 @@ struct FfipRecentSearchCapsule: View {
     var body: some View {
         HStack(spacing: 8) {
             Text(keyword)
-                .font(.labelMedium12)
+                .font(.labelMedium14)
                 .foregroundStyle(.ffipGrayscale1)
             
             Button(action: onTapDelete) {

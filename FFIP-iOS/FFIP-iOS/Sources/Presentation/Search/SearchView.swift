@@ -45,7 +45,7 @@ struct SearchView: View {
                 },
                 onSubmit: {
                     searchModel.addRecentSearchKeyword(searchText)
-                    coordinator.push(.camera(searchKeyword: searchText))
+                    coordinator.push(.exactCamera(searchKeyword: searchText))
                 },
                 onEmptySubmit: { }
             )
@@ -59,7 +59,7 @@ struct SearchView: View {
                             keyword: keyword,
                             onTap: {
                                 searchModel.addRecentSearchKeyword(keyword)
-                                coordinator.push(.camera(searchKeyword: keyword))
+                                coordinator.push(.exactCamera(searchKeyword: keyword))
                             },
                             onTapDelete: {
                                 searchModel.deleteRecentSearchKeyword(keyword)
@@ -80,7 +80,7 @@ struct SearchView: View {
                                 keyword: keyword,
                                 onTap: {
                                     searchModel.addRecentSearchKeyword(keyword)
-                                    coordinator.push(.camera(searchKeyword: keyword))
+                                    coordinator.push(.exactCamera(searchKeyword: keyword))
                                 },
                                 onTapDelete: {
                                     searchModel.deleteRecentSearchKeyword(keyword)
