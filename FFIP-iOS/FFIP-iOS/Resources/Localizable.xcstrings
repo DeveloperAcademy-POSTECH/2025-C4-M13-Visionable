@@ -55,9 +55,6 @@
         }
       }
     },
-    "RelatedCameraView" : {
-
-    },
     "searchPlaceholder" : {
       "extractionState" : "manual",
       "localizations" : {
