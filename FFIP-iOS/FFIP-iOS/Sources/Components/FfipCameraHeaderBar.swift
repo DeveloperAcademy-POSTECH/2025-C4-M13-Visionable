@@ -106,4 +106,3 @@ struct FfipCameraHeaderBar: View {
         }
     }
 }
-
