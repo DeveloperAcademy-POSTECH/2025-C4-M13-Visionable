@@ -8,9 +8,9 @@
 import SwiftUI
 import Vision
 
-struct RelatedCameraView: View {
+struct SemanticCameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
-    @Bindable var mediator: RelatedCameraMediator
+    @Bindable var mediator: SemanticCameraMediator
 
     @State private var zoomGestureValue: CGFloat = 1.0
     @State private var showLockIcon: Bool = false

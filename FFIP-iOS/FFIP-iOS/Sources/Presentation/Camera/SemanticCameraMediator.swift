@@ -11,7 +11,7 @@ import Vision
 
 @MainActor
 @Observable
-final class RelatedCameraMediator: NSObject {
+final class SemanticCameraMediator: NSObject {
     private(set) var frame: CVImageBuffer?
     private(set) var matchedObservations = [RecognizedTextObservation]()
 
