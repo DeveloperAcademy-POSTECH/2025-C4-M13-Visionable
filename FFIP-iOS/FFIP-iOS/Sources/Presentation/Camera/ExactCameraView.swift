@@ -37,8 +37,7 @@ struct ExactCameraView: View {
                             }
                         )
                     
-                    ForEach(mediator.matchedObservations, id: \.self) {
-                        observation in
+                    ForEach(mediator.matchedObservations, id: \.self) { observation in
                         FfipBoundingBox(observation: observation)
                     }
                 }
@@ -48,7 +47,7 @@ struct ExactCameraView: View {
             .ignoresSafeArea(.all)
             .frame(width: screenWidth, height: screenHeight)
 
-            VStack {
+            VStack(spacing: 0) {
                 FfipCameraHeaderBar(
                     zoomFactor: mediator.zoomFactor,
                     onZoom: { Task { await handleZoomButtonTapped() } },
@@ -62,10 +61,8 @@ struct ExactCameraView: View {
                         }
                     }
                 )
-
                 Spacer()
             }
-            .padding(.top, safeAreaInset(.top))
 
             FfipCameraLockIcon(
                 isPaused: mediator.isCameraPaused,
