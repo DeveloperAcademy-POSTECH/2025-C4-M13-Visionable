@@ -89,6 +89,23 @@
         }
       }
     },
+    "selectSearchMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select search mode"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "탐색 모드 선택"
+          }
+        }
+      }
+    },
     "semanticSearch" : {
       "extractionState" : "manual",
       "localizations" : {
