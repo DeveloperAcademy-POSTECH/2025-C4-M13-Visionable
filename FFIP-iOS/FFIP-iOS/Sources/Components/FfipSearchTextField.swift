@@ -10,7 +10,7 @@ import SwiftUI
 struct FfipSearchTextField: View {
     @Binding var text: String
     
-    private let isExistVoiceSeachButton: Bool
+    private let isFocused: Bool
     private let placeholder: String
     private let onVoiceSearch: (() -> Void)?
     private let onSubmit: (() -> Void)?
@@ -18,14 +18,14 @@ struct FfipSearchTextField: View {
     
     public init(
         text: Binding<String>,
-        isExistVoiceSeachButton: Bool,
+        isFocused: Bool,
         placeholder: String,
         onVoiceSearch: (() -> Void)? = nil,
         onSubmit: (() -> Void)? = nil,
         onEmptySubmit: (() -> Void)? = nil
     ) {
         self._text = text
-        self.isExistVoiceSeachButton = isExistVoiceSeachButton
+        self.isFocused = isFocused
         self.placeholder = placeholder
         self.onVoiceSearch = onVoiceSearch
         self.onSubmit = onSubmit
@@ -55,7 +55,7 @@ struct FfipSearchTextField: View {
                     isTextEmpty ? onEmptySubmit?() : onSubmit?()
                 }
                 
-                if !isExistVoiceSeachButton && !isTextEmpty {
+                if isFocused && !isTextEmpty {
                     Button {
                         text = ""
                     } label: {
@@ -67,7 +67,7 @@ struct FfipSearchTextField: View {
             .background(.ffipGrayscale5)
             .cornerRadius(50)
             
-            if isExistVoiceSeachButton {
+            if !isFocused {
                 Button {
                     onVoiceSearch?()
                 } label: {
@@ -81,10 +81,10 @@ struct FfipSearchTextField: View {
     }
 }
 
-#Preview {
+ #Preview {
     FfipSearchTextField(
-        text: .constant(""),
-        isExistVoiceSeachButton: true,
+        text: .constant("dd"),
+        isFocused: true,
         placeholder: "어쩌구저쩌구 플레이스홀더"
     )
-}
+ }
