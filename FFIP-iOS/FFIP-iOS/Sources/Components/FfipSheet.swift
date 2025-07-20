@@ -18,7 +18,7 @@ struct FfipBottomSheet<Content: View>: View {
         VStack(spacing: 0) {
             Capsule()
                 .fill(.ffipGrayscale4)
-                .frame(width: 49, height: 4)
+                .frame(width: 49, height: 3)
                 .padding(.top, 6)
 
             content

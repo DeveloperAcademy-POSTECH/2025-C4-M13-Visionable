@@ -25,7 +25,8 @@ struct FFIPAppRootView: View {
             moduleFactory.makeSearchView()
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
-                    case .camera(let searchKeyword): moduleFactory.makeCameraView(searchKeyword: searchKeyword)
+                    case .exactCamera(let searchKeyword): moduleFactory.makeExactCameraView(searchKeyword: searchKeyword)
+                    case .semanticCamera(let searchKeyword): moduleFactory.makeSemanticCameraView(searchKeyword: searchKeyword)
                     case .search: moduleFactory.makeSearchView()
                     case .voiceSearch: moduleFactory.makeVoiceSearchView()
                     }
