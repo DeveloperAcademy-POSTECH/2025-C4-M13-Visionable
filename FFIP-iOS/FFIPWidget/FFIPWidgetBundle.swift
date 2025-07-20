@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct FFIPWidgetBundle: WidgetBundle {
     var body: some Widget {
-        FFIPDesignatedSearchWidget()
-        FFIPRelatedSearchWidget()
+        FFIPExactSearchWidget()
+        FFIPSemanticSearchWidget()
     }
 }

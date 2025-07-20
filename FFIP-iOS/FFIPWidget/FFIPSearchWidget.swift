@@ -29,8 +29,8 @@ struct SimpleEntry: TimelineEntry {
 }
 
 enum FfipWidgetType: String {
-    case designated = "지정탐색"
-    case related = "연관탐색"
+    case exactSearch = "지정탐색"
+    case semanticSearch = "연관탐색"
 }
 
 struct FFIPWidgetEntryView: View {
@@ -57,7 +57,7 @@ struct FFIPWidgetEntryView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(height: 12)
-                            .opacity(widgetType == .related ? 1 : 0)
+                            .opacity(widgetType == .semanticSearch ? 1 : 0)
                     }
                     Text(widgetType.rawValue)
                 }
@@ -79,13 +79,12 @@ struct FFIPWidgetEntryView: View {
     }
 }
 
-struct FFIPDesignatedSearchWidget: Widget {
-    let kind: String = "FFIPDesignatedSearchWidget"
+struct FFIPExactSearchWidget: Widget {
+    let kind: String = "FFIPExactSearchWidget"
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { _ in
-            FFIPWidgetEntryView(widgetType: .designated)
-            
+            FFIPWidgetEntryView(widgetType: .exactSearch)
         }
         .configurationDisplayName(String(localized: .designatedSearchWidgetConfigurationDisplayName))
         .description(String(localized: .designatedSearchWidgetDescription))
@@ -93,12 +92,12 @@ struct FFIPDesignatedSearchWidget: Widget {
     }
 }
 
-struct FFIPRelatedSearchWidget: Widget {
+struct FFIPSemanticSearchWidget: Widget {
     let kind: String = "FFIPRelatedSearchWidget"
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { _ in
-            FFIPWidgetEntryView(widgetType: .related)
+            FFIPWidgetEntryView(widgetType: .semanticSearch)
         }
         .configurationDisplayName(String(localized: .relatedSearchWidgetConfigurationDisplayName))
         .description(String(localized: .relatedSearchWidgetDescription))
@@ -107,13 +106,13 @@ struct FFIPRelatedSearchWidget: Widget {
 }
 
 #Preview(as: .systemSmall) {
-    FFIPDesignatedSearchWidget()
+    FFIPExactSearchWidget()
 } timeline: {
     SimpleEntry(date: .now)
 }
 
 #Preview(as: .systemSmall) {
-    FFIPRelatedSearchWidget()
+    FFIPSemanticSearchWidget()
 } timeline: {
     SimpleEntry(date: .now)
 }
