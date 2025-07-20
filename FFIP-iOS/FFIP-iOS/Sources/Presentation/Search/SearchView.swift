@@ -40,27 +40,27 @@ struct SearchView: View {
                 }
                 .tint(.ffipGrayscale1)
                 .padding(.top, 90)
-                .opacity(isFocused ? 0 : 1)
             }
             
             HStack(spacing: 12) {
                 if focusState == .editing {
                     Button {
-                        isFocused = false
                         searchText = ""
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                focusState = .home
+                                isFocused = false
+                            }
+                        }
                     } label: {
                         Image(.icnNavBack)
                     }
                 }
+                
                 FfipSearchTextField(
                     text: $searchText,
                     isFocused: focusState == .editing,
                     placeholder: String(localized: selectedSearchType.placeholder),
-                    onTapBackButton: {
-                        withAnimation(.easeOut(duration: 0.15)) {
-                            isFocused = false
-                        }
-                    },
                     onVoiceSearch: {
                         coordinator.push(.voiceSearch)
                     },
@@ -101,7 +101,9 @@ struct SearchView: View {
                             coordinator.push(.camera(searchKeyword: keyword))
                         },
                         onTapDelete: { keyword in
-                            searchModel.deleteRecentSearchKeyword(keyword)
+                            withAnimation(.easeInOut(duration: 0.05)) {
+                                searchModel.deleteRecentSearchKeyword(keyword)
+                            }
                         }
                     )
                 }
@@ -112,18 +114,17 @@ struct SearchView: View {
         .padding(.horizontal, 20)
         .contentShape(Rectangle())
         .onTapGesture {
-            withAnimation(.easeOut(duration: 0.15)) {
                 isFocused = false
-            }
-            isSheetPresented = false
         }
         .onAppear {
             searchText = ""
         }
         .onChange(of: isFocused) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    focusState = isFocused ? .editing : .home
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    if isFocused {
+                        focusState = .editing
+                    }
                 }
             }
         }
