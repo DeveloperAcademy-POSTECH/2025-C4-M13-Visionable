@@ -34,14 +34,16 @@ struct FfipCameraHeaderBar: View {
         .padding(.bottom, 100)
         .background(
             LinearGradient(
-                colors: [Color(red: 0.04, green: 0.06, blue: 0.07), Color(red: 0.04, green: 0.06, blue: 0.07).opacity(0)],
+                colors: [
+                    Color(red: 0.04, green: 0.06, blue: 0.07),
+                    Color(red: 0.04, green: 0.06, blue: 0.07).opacity(0)
+                ],
                 startPoint: .top,
                 endPoint: .bottom
             )
         )
     }
 
-    // TODO: Hi-Fi 디자인 이후 수정
     private struct ZoomButton: View {
         let zoomFactor: CGFloat
         let action: () -> Void
@@ -62,14 +64,13 @@ struct FfipCameraHeaderBar: View {
         }
     }
 
-    // TODO: Hi-Fi 디자인 이후 수정
     private struct TorchButton: View {
         let isTorchOn: Bool
         let action: () -> Void
 
         var body: some View {
             Button(action: action) {
-                Image(isTorchOn ? "btn_camera_torch" : "btn_camera_torch_slash")
+                Image(isTorchOn ? .btnCameraTorch : .btnCameraTorchSlash)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 22, height: 22)
@@ -78,12 +79,11 @@ struct FfipCameraHeaderBar: View {
         }
     }
 
-    // TODO: Hi-Fi 디자인 이후 수정
     private struct InfoButton: View {
         let action: () -> Void
         var body: some View {
             Button(action: action) {
-                Image("btn_camera_info")
+                Image(.btnCameraInfo)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 22, height: 22)
@@ -91,13 +91,13 @@ struct FfipCameraHeaderBar: View {
             .frame(maxWidth: 50)
         }
     }
-    // TODO: Hi-Fi 디자인 이후 수정
+
     private struct CloseButton: View {
         let action: () -> Void
 
         var body: some View {
             Button(action: action) {
-                Image("btn_camera_close")
+                Image(.btnCameraClose)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 22, height: 22)

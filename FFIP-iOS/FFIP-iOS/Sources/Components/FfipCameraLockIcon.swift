@@ -12,7 +12,7 @@ struct FfipCameraLockIcon: View {
     let show: Bool
 
     var body: some View {
-        Image(isPaused ? "img_lock" : "img_lock_open")
+        Image(isPaused ? .imgLock : .imgLockOpen)
             .frame(width: 60, height: 60)
             .opacity(show ? 1 : 0)
     }
