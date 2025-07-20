@@ -93,6 +93,20 @@ struct SearchView: View {
                         Text(.recentSearchTitle)
                             .font(.caption)
                             .padding(.top, 20)
+                    VStack(alignment: .leading, spacing: 16) {
+                        ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
+                            RecentSearchRow(
+                                keyword: keyword,
+                                onTap: {
+                                    searchModel.addRecentSearchKeyword(keyword)
+                                    coordinator.push(.exactCamera(searchKeyword: keyword))
+                                },
+                                onTapDelete: {
+                                    searchModel.deleteRecentSearchKeyword(keyword)
+                                }
+                            )
+                        }
+
                     }
                     RecentSearchList(
                         keywords: searchModel.recentSearchKeywords,
