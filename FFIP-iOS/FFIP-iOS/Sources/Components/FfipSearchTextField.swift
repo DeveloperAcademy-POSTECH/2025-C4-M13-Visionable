@@ -12,7 +12,6 @@ struct FfipSearchTextField: View {
     
     private let isFocused: Bool
     private let placeholder: String
-    private let onTapBackButton: (() -> Void)?
     private let onVoiceSearch: (() -> Void)?
     private let onSubmit: (() -> Void)?
     private let onEmptySubmit: (() -> Void)?
@@ -21,7 +20,6 @@ struct FfipSearchTextField: View {
         text: Binding<String>,
         isFocused: Bool,
         placeholder: String,
-        onTapBackButton: (() -> Void)? = nil,
         onVoiceSearch: (() -> Void)? = nil,
         onSubmit: (() -> Void)? = nil,
         onEmptySubmit: (() -> Void)? = nil
@@ -29,7 +27,6 @@ struct FfipSearchTextField: View {
         self._text = text
         self.isFocused = isFocused
         self.placeholder = placeholder
-        self.onTapBackButton = onTapBackButton
         self.onVoiceSearch = onVoiceSearch
         self.onSubmit = onSubmit
         self.onEmptySubmit = onEmptySubmit
@@ -42,43 +39,34 @@ struct FfipSearchTextField: View {
     var body: some View {
         HStack(spacing: 4) {
             HStack(spacing: 12) {
-                if isFocused {
+                TextField(
+                    "",
+                    text: $text,
+                    prompt: Text(placeholder)
+                        .foregroundStyle(.ffipGrayscale4)
+                        .font(.bodyMedium16)
+                )
+                .foregroundStyle(.ffipGrayscale1)
+                .font(.bodyMedium16)
+                .padding(.vertical, 18)
+                .padding(.leading, 20)
+                .submitLabel(.search)
+                .onSubmit {
+                    isTextEmpty ? onEmptySubmit?() : onSubmit?()
+                }
+                
+                if isFocused && !isTextEmpty {
                     Button {
-                        onTapBackButton?()
+                        text = ""
                     } label: {
-                        Image(.icnNavBack)
+                        Image(.icnXButton)
                     }
+                    .padding(.trailing, 20)
                 }
-                Group {
-                    TextField(
-                        "",
-                        text: $text,
-                        prompt: Text(placeholder)
-                            .foregroundStyle(.ffipGrayscale4)
-                            .font(.bodyMedium16)
-                    )
-                    .foregroundStyle(.ffipGrayscale1)
-                    .font(.bodyMedium16)
-                    .padding(.vertical, 18)
-                    .padding(.leading, 20)
-                    .submitLabel(.search)
-                    .onSubmit {
-                        isTextEmpty ? onEmptySubmit?() : onSubmit?()
-                    }
-                    
-                    if isFocused && !isTextEmpty {
-                        Button {
-                            text = ""
-                        } label: {
-                            Image(.icnXButton)
-                        }
-                        .padding(.trailing, 20)
-                    }
-                }
-                .background(.ffipGrayscale5)
-                .cornerRadius(50)
             }
-                        
+            .background(.ffipGrayscale5)
+            .cornerRadius(50)
+            
             if !isFocused {
                 Button {
                     onVoiceSearch?()
@@ -93,10 +81,10 @@ struct FfipSearchTextField: View {
     }
 }
 
-// #Preview {
-//    FfipSearchTextField(
-//        text: .constant(""),
-//        isFocused: true,
-//        placeholder: "어쩌구저쩌구 플레이스홀더"
-//    )
-// }
+ #Preview {
+    FfipSearchTextField(
+        text: .constant("dd"),
+        isFocused: true,
+        placeholder: "어쩌구저쩌구 플레이스홀더"
+    )
+ }
