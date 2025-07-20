@@ -8,7 +8,8 @@
 import SwiftUI
 
 protocol ModuleFactoryProtocol {
-    func makeCameraView(searchKeyword: String) -> CameraView
+    func makeExactCameraView(searchKeyword: String) -> ExactCameraView
+    func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView
     func makeSearchView() -> SearchView
     func makeVoiceSearchView() -> VoiceSearchView
 }
@@ -17,22 +18,38 @@ final class ModuleFactory: ModuleFactoryProtocol {
     static let shared = ModuleFactory()
     private init() {}
     
-    func makeCameraView(searchKeyword: String) -> CameraView {
-        let foundationModelsService = FoundationModelsService()
+    func makeExactCameraView(searchKeyword: String) -> ExactCameraView {
         let privacyService = PrivacyService()
         let captureService = VideoCaptureService()
         let deviceService = VideoDeviceService()
-        let visionService = VisionService()
-        let model = CameraModel(
-            searchKeyword: searchKeyword,
-            foundationModelsService: foundationModelsService,
+        let cameraModel = CameraModel(
             privacyService: privacyService,
-            captureService: captureService,
-            deviceService: deviceService,
-            visionService: visionService
+            captureService: captureService, deviceService: deviceService
         )
-        let view = CameraView(cameraModel: model)
+        let visionService = VisionService()
+        let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
+        
+        let cameraMediator = ExactCameraMediator(cameraModel: cameraModel, visionModel: visionModel)
+        
+        let view = ExactCameraView(mediator: cameraMediator)
 
+        return view
+    }
+    
+    func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView {
+        let privacyService = PrivacyService()
+        let captureService = VideoCaptureService()
+        let deviceService = VideoDeviceService()
+        let cameraModel = CameraModel(
+            privacyService: privacyService,
+            captureService: captureService, deviceService: deviceService
+        )
+        let visionService = VisionService()
+        let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
+        
+        let cameraMediator = SemanticCameraMediator(cameraModel: cameraModel, visionModel: visionModel)
+        
+        let view = SemanticCameraView(mediator: cameraMediator)
         return view
     }
     
@@ -44,7 +61,12 @@ final class ModuleFactory: ModuleFactoryProtocol {
     }
     
     func makeVoiceSearchView() -> VoiceSearchView {
-        let model = VoiceSearchModel()
+        let privacyService = PrivacyService()
+        let speeachService = SpeechRecognitionService()
+        let model = VoiceSearchModel(
+            privacyService: privacyService,
+            speechService: speeachService
+        )
         let view = VoiceSearchView(voiceSearchModel: model)
         return view
     }

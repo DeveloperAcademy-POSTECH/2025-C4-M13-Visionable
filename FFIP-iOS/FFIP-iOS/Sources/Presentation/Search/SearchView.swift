@@ -36,15 +36,16 @@ struct SearchView: View {
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
             
-            FfipTextField(
+            FfipSearchTextField(
                 text: $searchText,
+                isExistVoiceSeachButton: focusState == .home,
                 placeholder: String(localized: "searchPlaceholder"),
                 onVoiceSearch: {
                     coordinator.push(.voiceSearch)
                 },
                 onSubmit: {
                     searchModel.addRecentSearchKeyword(searchText)
-                    coordinator.push(.camera(searchKeyword: searchText))
+                    coordinator.push(.exactCamera(searchKeyword: searchText))
                 },
                 onEmptySubmit: { }
             )
@@ -54,11 +55,11 @@ struct SearchView: View {
             if focusState == .home {
                 VStack(alignment: .leading, spacing: 16) {
                     ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
-                        RecentSearchCapsule(
+                        FfipRecentSearchCapsule(
                             keyword: keyword,
                             onTap: {
                                 searchModel.addRecentSearchKeyword(keyword)
-                                coordinator.push(.camera(searchKeyword: keyword))
+                                coordinator.push(.exactCamera(searchKeyword: keyword))
                             },
                             onTapDelete: {
                                 searchModel.deleteRecentSearchKeyword(keyword)
@@ -79,7 +80,7 @@ struct SearchView: View {
                                 keyword: keyword,
                                 onTap: {
                                     searchModel.addRecentSearchKeyword(keyword)
-                                    coordinator.push(.camera(searchKeyword: keyword))
+                                    coordinator.push(.exactCamera(searchKeyword: keyword))
                                 },
                                 onTapDelete: {
                                     searchModel.deleteRecentSearchKeyword(keyword)

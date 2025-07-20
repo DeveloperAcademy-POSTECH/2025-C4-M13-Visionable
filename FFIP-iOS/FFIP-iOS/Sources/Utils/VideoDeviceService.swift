@@ -27,10 +27,11 @@ actor VideoDeviceService {
             try videoDevice.lockForConfiguration()
             defer { videoDevice.unlockForConfiguration() }
 
-            let maxZoomFactor: CGFloat = 30
-            videoDevice.videoZoomFactor = max(1.0, min(factor, maxZoomFactor))
-
-            let zoomFactor = videoDevice.videoZoomFactor
+            let maxZoomFactor: CGFloat = 12
+            let zoomFactor = max(1.0, min(factor, maxZoomFactor))
+            
+            videoDevice.videoZoomFactor = zoomFactor
+            
             return zoomFactor
         } catch {
             print("Error setting zoom: \(error)")

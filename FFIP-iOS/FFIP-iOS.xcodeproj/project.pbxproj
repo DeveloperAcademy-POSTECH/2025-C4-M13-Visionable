@@ -8,17 +8,87 @@
 
 /* Begin PBXBuildFile section */
 		3DA2F8932E1CFB69003884E3 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 3DA2F8922E1CFB69003884E3 /* .swiftlint.yml */; };
+		3DBE46192E28BA0E005B80D0 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DBE46182E28BA0E005B80D0 /* WidgetKit.framework */; };
+		3DBE461B2E28BA0E005B80D0 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DBE461A2E28BA0E005B80D0 /* SwiftUI.framework */; };
+		3DBE46262E28BA10005B80D0 /* FFIPWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3DBE46162E28BA0E005B80D0 /* FFIPWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3DBE46242E28BA10005B80D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3DA2F81A2E1CC6F5003884E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DBE46152E28BA0E005B80D0;
+			remoteInfo = FFIPWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3DBE46272E28BA10005B80D0 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3DBE46262E28BA10005B80D0 /* FFIPWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3DA2F8222E1CC6F5003884E3 /* FFIP-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FFIP-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DA2F8922E1CFB69003884E3 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		3DBE46162E28BA0E005B80D0 /* FFIPWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FFIPWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DBE46182E28BA0E005B80D0 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		3DBE461A2E28BA0E005B80D0 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3D5C66D72E26A923000EDA97 /* Exceptions for "FFIP-iOS" folder in "FFIP-iOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3DA2F8212E1CC6F5003884E3 /* FFIP-iOS */;
+		};
+		3DBE462B2E28BA10005B80D0 /* Exceptions for "FFIPWidget" folder in "FFIPWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3DBE46152E28BA0E005B80D0 /* FFIPWidgetExtension */;
+		};
+		3DBE462D2E28BAE9005B80D0 /* Exceptions for "FFIP-iOS" folder in "FFIPWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Assets.xcassets,
+				Resources/Colors.xcassets,
+				"Resources/Fonts/Pretendard-SemiBold.otf",
+				Resources/Literals/URL.swift,
+				Resources/Localizable.xcstrings,
+			);
+			target = 3DBE46152E28BA0E005B80D0 /* FFIPWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3DA2F8242E1CC6F5003884E3 /* FFIP-iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3D5C66D72E26A923000EDA97 /* Exceptions for "FFIP-iOS" folder in "FFIP-iOS" target */,
+				3DBE462D2E28BAE9005B80D0 /* Exceptions for "FFIP-iOS" folder in "FFIPWidgetExtension" target */,
+			);
 			path = "FFIP-iOS";
+			sourceTree = "<group>";
+		};
+		3DBE461C2E28BA0E005B80D0 /* FFIPWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3DBE462B2E28BA10005B80D0 /* Exceptions for "FFIPWidget" folder in "FFIPWidgetExtension" target */,
+			);
+			path = FFIPWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -31,6 +101,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3DBE46132E28BA0E005B80D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DBE461B2E28BA0E005B80D0 /* SwiftUI.framework in Frameworks */,
+				3DBE46192E28BA0E005B80D0 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -39,6 +118,8 @@
 			children = (
 				3DA2F8922E1CFB69003884E3 /* .swiftlint.yml */,
 				3DA2F8242E1CC6F5003884E3 /* FFIP-iOS */,
+				3DBE461C2E28BA0E005B80D0 /* FFIPWidget */,
+				3DBE46172E28BA0E005B80D0 /* Frameworks */,
 				3DA2F8232E1CC6F5003884E3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,8 +128,18 @@
 			isa = PBXGroup;
 			children = (
 				3DA2F8222E1CC6F5003884E3 /* FFIP-iOS.app */,
+				3DBE46162E28BA0E005B80D0 /* FFIPWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3DBE46172E28BA0E005B80D0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3DBE46182E28BA0E005B80D0 /* WidgetKit.framework */,
+				3DBE461A2E28BA0E005B80D0 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -62,10 +153,12 @@
 				3DA2F81F2E1CC6F5003884E3 /* Frameworks */,
 				3DA2F8202E1CC6F5003884E3 /* Resources */,
 				3DA2F8962E1CFBA6003884E3 /* ShellScript */,
+				3DBE46272E28BA10005B80D0 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3DBE46252E28BA10005B80D0 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3DA2F8242E1CC6F5003884E3 /* FFIP-iOS */,
@@ -76,6 +169,28 @@
 			productName = "FFIP-iOS";
 			productReference = 3DA2F8222E1CC6F5003884E3 /* FFIP-iOS.app */;
 			productType = "com.apple.product-type.application";
+		};
+		3DBE46152E28BA0E005B80D0 /* FFIPWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DBE462A2E28BA10005B80D0 /* Build configuration list for PBXNativeTarget "FFIPWidgetExtension" */;
+			buildPhases = (
+				3DBE46122E28BA0E005B80D0 /* Sources */,
+				3DBE46132E28BA0E005B80D0 /* Frameworks */,
+				3DBE46142E28BA0E005B80D0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3DBE461C2E28BA0E005B80D0 /* FFIPWidget */,
+			);
+			name = FFIPWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = FFIPWidgetExtension;
+			productReference = 3DBE46162E28BA0E005B80D0 /* FFIPWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -88,6 +203,9 @@
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					3DA2F8212E1CC6F5003884E3 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					3DBE46152E28BA0E005B80D0 = {
 						CreatedOnToolsVersion = 26.0;
 					};
 				};
@@ -108,6 +226,7 @@
 			projectRoot = "";
 			targets = (
 				3DA2F8212E1CC6F5003884E3 /* FFIP-iOS */,
+				3DBE46152E28BA0E005B80D0 /* FFIPWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -118,6 +237,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DA2F8932E1CFB69003884E3 /* .swiftlint.yml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DBE46142E28BA0E005B80D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,7 +277,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3DBE46122E28BA0E005B80D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3DBE46252E28BA10005B80D0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3DBE46152E28BA0E005B80D0 /* FFIPWidgetExtension */;
+			targetProxy = 3DBE46242E28BA10005B80D0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3DA2F82D2E1CC6F7003884E3 /* Debug */ = {
@@ -284,12 +425,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JF6B89ULG6;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "FFIP-iOS/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FFIP requires access to your camera to capture photos.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FFIP requires access to your microphone to search with voice.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FFIP needs access to your microphone so you can speak your search.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "FFIP uses speech recognition to turn your voice into text within the app.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -318,12 +461,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = JF6B89ULG6;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "FFIP-iOS/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "FFIP requires access to your camera to capture photos.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FFIP requires access to your microphone to search with voice.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FFIP needs access to your microphone so you can speak your search.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "FFIP uses speech recognition to turn your voice into text within the app.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -345,6 +490,64 @@
 			};
 			name = Release;
 		};
+		3DBE46282E28BA10005B80D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JF6B89ULG6;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FFIPWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FFIPWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.TeamVisonable.FFIP-iOS.FFIPWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3DBE46292E28BA10005B80D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JF6B89ULG6;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FFIPWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FFIPWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.TeamVisonable.FFIP-iOS.FFIPWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -362,6 +565,15 @@
 			buildConfigurations = (
 				3DA2F8302E1CC6F7003884E3 /* Debug */,
 				3DA2F8312E1CC6F7003884E3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DBE462A2E28BA10005B80D0 /* Build configuration list for PBXNativeTarget "FFIPWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DBE46282E28BA10005B80D0 /* Debug */,
+				3DBE46292E28BA10005B80D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
