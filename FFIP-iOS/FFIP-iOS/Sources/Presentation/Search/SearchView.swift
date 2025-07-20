@@ -7,41 +7,12 @@
 
 import SwiftUI
 
-enum SearchType: String, CaseIterable, Identifiable {
-    case keyword
-    case semantic
-    
-    var id: String { rawValue }
-    
-    var title: LocalizedStringResource {
-        switch self {
-        case .keyword: return .exactSearch
-        case .semantic: return .semanticSearch
-        }
-    }
-    
-    var placeholder: LocalizedStringResource {
-        switch self {
-        case .keyword: return .exactSearchPlaceholder
-        case .semantic: return .semantictSearchPlaceholder
-        }
-    }
-    
-    var tagIcon: ImageResource? {
-        switch self {
-        case .keyword:
-            return nil
-        case .semantic:
-            return .icnAImark
-        }
-    }
+public enum SearchFocusState {
+    case home
+    case editing
 }
 
 struct SearchView: View {
-    private enum SearchFocusState {
-        case home
-        case editing
-    }
     
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
@@ -53,26 +24,34 @@ struct SearchView: View {
     @State private var hasSearchTypeChanged: Bool = false
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack(alignment: .leading) {
-                if focusState == .home {
-                    Button {
-                        isSheetPresented.toggle()
-                    } label: {
-                        HStack(spacing: 8) {
-                            Text(selectedSearchType.title)
-                                .font(.titleBold24)
-                            Image(.icnKeyboardArrowDown)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 20)
-                        }
+        VStack(alignment: .leading) {
+            if focusState == .home {
+                Button {
+                    isSheetPresented = true
+                } label: {
+                    HStack(spacing: 8) {
+                        Text(selectedSearchType.title)
+                            .font(.titleBold24)
+                        Image(.icnKeyboardArrowDown)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20)
                     }
-                    .tint(.black)
-                    .padding(.top, 90)
-                    .opacity(isFocused ? 0 : 1)
                 }
-                
+                .tint(.ffipGrayscale1)
+                .padding(.top, 90)
+                .opacity(isFocused ? 0 : 1)
+            }
+            
+            HStack(spacing: 12) {
+                if focusState == .editing {
+                    Button {
+                        isFocused = false
+                        searchText = ""
+                    } label: {
+                        Image(.icnNavBack)
+                    }
+                }
                 FfipSearchTextField(
                     text: $searchText,
                     isFocused: focusState == .editing,
@@ -92,61 +71,44 @@ struct SearchView: View {
                     onEmptySubmit: { }
                 )
                 .focused($isFocused)
-                .padding(.vertical, 12)
-                
-                if focusState == .home {
-                    VStack(alignment: .leading, spacing: 16) {
-                        ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
-                            FfipRecentSearchCapsule(
-                                keyword: keyword,
-                                onTap: {
-                                    searchModel.addRecentSearchKeyword(keyword)
-                                    coordinator.push(.camera(searchKeyword: keyword))
-                                },
-                                onTapDelete: {
-                                    searchModel.deleteRecentSearchKeyword(keyword)
-                                }
-                            )
-                        }
+            }
+            .padding(.vertical, 12)
+            
+            if focusState == .home {
+                RecentSearchFlow(
+                    keywords: searchModel.recentSearchKeywords,
+                    onTap: { keyword in
+                        searchModel.addRecentSearchKeyword(keyword)
+                        coordinator.push(.camera(searchKeyword: keyword))
+                    },
+                    onTapDelete: { keyword in
+                        searchModel.deleteRecentSearchKeyword(keyword)
                     }
-                }
-                
-                if focusState == .editing {
-                    VStack(alignment: .leading, spacing: 20) {
-                        if !searchModel.recentSearchKeywords.isEmpty {
-                            Text(.recentSearchTitle)
-                                .font(.caption)
-                                .padding(.top, 20)
-                        }
-                        VStack(alignment: .leading, spacing: 16) {
-                            ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
-                                RecentSearchRow(
-                                    keyword: keyword,
-                                    onTap: {
-                                        searchModel.addRecentSearchKeyword(keyword)
-                                        coordinator.push(.camera(searchKeyword: keyword))
-                                    },
-                                    onTapDelete: {
-                                        searchModel.deleteRecentSearchKeyword(keyword)
-                                    }
-                                )
-                            }
-                        }
-                    }
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-                Spacer()
+                )
             }
             
-            if hasSearchTypeChanged {
-                FfipToastMessage(toastType: .check, toastTitle: String(localized: .searchModeUpdated))
-                    .padding(.bottom, 32)
-                    .ignoresSafeArea(.all, edges: .bottom)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .animation(.easeInOut, value: hasSearchTypeChanged)
+            if focusState == .editing {
+                VStack(alignment: .leading, spacing: 20) {
+                    if !searchModel.recentSearchKeywords.isEmpty {
+                        Text(.recentSearchTitle)
+                            .font(.caption)
+                            .padding(.top, 20)
+                    }
+                    RecentSearchList(
+                        keywords: searchModel.recentSearchKeywords,
+                        onTap: { keyword in
+                            searchModel.addRecentSearchKeyword(keyword)
+                            coordinator.push(.camera(searchKeyword: keyword))
+                        },
+                        onTapDelete: { keyword in
+                            searchModel.deleteRecentSearchKeyword(keyword)
+                        }
+                    )
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
+            Spacer()
         }
-        .edgesIgnoringSafeArea(.bottom)
         .padding(.horizontal, 20)
         .contentShape(Rectangle())
         .onTapGesture {
@@ -166,7 +128,9 @@ struct SearchView: View {
             }
         }
         .onChange(of: selectedSearchType) {
-            isSheetPresented = false
+            withAnimation {
+                isSheetPresented = false
+            }
             hasSearchTypeChanged = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 withAnimation {
@@ -176,11 +140,12 @@ struct SearchView: View {
         }
         .ffipSheet(isPresented: $isSheetPresented) {
             SearchTypeSelectionView(selectedType: $selectedSearchType)}
+        .showFfipToastMessage(toastType: .check, toastTitle: String(localized: .searchModeUpdated), isToastVisible: $hasSearchTypeChanged)
     }
 }
 
-// #Preview {
-//    let coordinator = AppCoordinator()
-//    SearchView(searchModel: SearchModel(recentSearchKeywords: ["ㅇㅇ"]))
-//        .environment(coordinator)
-// }
+#Preview {
+    let coordinator = AppCoordinator()
+    SearchView(searchModel: SearchModel(recentSearchKeywords: ["ㅇㅇ"]))
+        .environment(coordinator)
+}
