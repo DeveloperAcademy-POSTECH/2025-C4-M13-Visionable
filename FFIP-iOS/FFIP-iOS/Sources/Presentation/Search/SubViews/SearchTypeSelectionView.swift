@@ -7,7 +7,28 @@
 
 import SwiftUI
 
-struct SearchTypeRow: View {
+struct SearchTypeSelectionView: View {
+    @Binding var selectedType: SearchType
+    
+    var body: some View {
+        VStack(spacing: 32) {
+            VStack(spacing: 24) {
+                ForEach(SearchType.allCases) { type in
+                    SearchTypeRow(
+                        title: String(localized: type.title),
+                        tagImage: type.tagIcon,
+                        isSelected: selectedType == type,
+                        onTap: {
+                            selectedType = type
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+private struct SearchTypeRow: View {
     private let title: String
     private let tagImage: ImageResource?
     private let isSelected: Bool
@@ -41,27 +62,6 @@ struct SearchTypeRow: View {
         .contentShape(Rectangle())
         .onTapGesture {
             onTap()
-        }
-    }
-}
-
-struct SearchTypeSelectionView: View {
-    @Binding var selectedType: SearchType
-    
-    var body: some View {
-        VStack(spacing: 32) {
-            VStack(spacing: 24) {
-                ForEach(SearchType.allCases) { type in
-                    SearchTypeRow(
-                        title: String(localized: type.title),
-                        tagImage: type.tagIcon,
-                        isSelected: selectedType == type,
-                        onTap: {
-                            selectedType = type
-                        }
-                    )
-                }
-            }
         }
     }
 }
