@@ -2,7 +2,6 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
     },
     "appName" : {
       "extractionState" : "manual",
@@ -163,6 +162,22 @@
       }
     },
     "semantictSearchPlaceholder" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "Please enter a search keyword."
+            }
+          },
+          "ko" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "탐색어를 입력해주세요."
+            }
+          }
+        }
+      },
     "relatedSearchWidget_configurationDisplayName" : {
       "extractionState" : "manual",
       "localizations" : {

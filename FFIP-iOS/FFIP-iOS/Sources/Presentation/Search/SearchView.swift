@@ -66,7 +66,12 @@ struct SearchView: View {
                     },
                     onSubmit: {
                         searchModel.addRecentSearchKeyword(searchText)
-                        coordinator.push(.camera(searchKeyword: searchText))
+                        if selectedSearchType == .keyword {
+                            coordinator.push(.exactCamera(searchKeyword: searchText))
+                        } else {
+                            coordinator.push(.semanticCamera(searchKeyword: searchText))
+                        }
+                        
                     },
                     onEmptySubmit: { }
                 )
@@ -79,7 +84,11 @@ struct SearchView: View {
                     keywords: searchModel.recentSearchKeywords,
                     onTap: { keyword in
                         searchModel.addRecentSearchKeyword(keyword)
-                        coordinator.push(.camera(searchKeyword: keyword))
+                        if selectedSearchType == .keyword {
+                            coordinator.push(.exactCamera(searchKeyword: searchText))
+                        } else {
+                            coordinator.push(.semanticCamera(searchKeyword: searchText))
+                        }
                     },
                     onTapDelete: { keyword in
                         searchModel.deleteRecentSearchKeyword(keyword)
@@ -93,42 +102,32 @@ struct SearchView: View {
                         Text(.recentSearchTitle)
                             .font(.caption)
                             .padding(.top, 20)
-                    VStack(alignment: .leading, spacing: 16) {
-                        ForEach(searchModel.recentSearchKeywords, id: \.self) { keyword in
-                            RecentSearchRow(
-                                keyword: keyword,
-                                onTap: {
-                                    searchModel.addRecentSearchKeyword(keyword)
-                                    coordinator.push(.exactCamera(searchKeyword: keyword))
-                                },
-                                onTapDelete: {
+                        RecentSearchList(
+                            keywords: searchModel.recentSearchKeywords,
+                            onTap: { keyword in
+                                searchModel.addRecentSearchKeyword(keyword)
+                                if selectedSearchType == .keyword {
+                                    coordinator.push(.exactCamera(searchKeyword: searchText))
+                                } else {
+                                    coordinator.push(.semanticCamera(searchKeyword: searchText))
+                                }
+                            },
+                            onTapDelete: { keyword in
+                                withAnimation(.easeInOut(duration: 0.05)) {
                                     searchModel.deleteRecentSearchKeyword(keyword)
                                 }
-                            )
-                        }
-
-                    }
-                    RecentSearchList(
-                        keywords: searchModel.recentSearchKeywords,
-                        onTap: { keyword in
-                            searchModel.addRecentSearchKeyword(keyword)
-                            coordinator.push(.camera(searchKeyword: keyword))
-                        },
-                        onTapDelete: { keyword in
-                            withAnimation(.easeInOut(duration: 0.05)) {
-                                searchModel.deleteRecentSearchKeyword(keyword)
                             }
-                        }
-                    )
+                        )
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }   
                 }
-                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             Spacer()
         }
         .padding(.horizontal, 20)
         .contentShape(Rectangle())
         .onTapGesture {
-                isFocused = false
+            isFocused = false
         }
         .onAppear {
             searchText = ""
@@ -159,8 +158,8 @@ struct SearchView: View {
     }
 }
 
-#Preview {
-    let coordinator = AppCoordinator()
-    SearchView(searchModel: SearchModel(recentSearchKeywords: ["ㅇㅇ"]))
-        .environment(coordinator)
-}
+// #Preview {
+//    let coordinator = AppCoordinator()
+//    SearchView(searchModel: SearchModel(recentSearchKeywords: ["ㅇㅇ"]))
+//        .environment(coordinator)
+// }
