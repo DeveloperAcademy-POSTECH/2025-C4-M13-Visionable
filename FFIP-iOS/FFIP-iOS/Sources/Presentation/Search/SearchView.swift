@@ -24,8 +24,11 @@ struct SearchView: View {
     @State private var hasSearchTypeChanged: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             if focusState == .home {
+                Image(.logoFfip)
+                    .padding(.top, 12)
+                
                 Button {
                     isSheetPresented = true
                 } label: {
@@ -39,7 +42,7 @@ struct SearchView: View {
                     }
                 }
                 .tint(.ffipGrayscale1)
-                .padding(.top, 90)
+                .padding(.top, 75)
             }
             
             HStack(spacing: 12) {
@@ -77,32 +80,17 @@ struct SearchView: View {
                 )
                 .focused($isFocused)
             }
-            .padding(.vertical, 12)
+            .padding(.top, 16)
             
-            if focusState == .home {
-                RecentSearchFlow(
-                    keywords: searchModel.recentSearchKeywords,
-                    onTap: { keyword in
-                        searchModel.addRecentSearchKeyword(keyword)
-                        if selectedSearchType == .keyword {
-                            coordinator.push(.exactCamera(searchKeyword: searchText))
-                        } else {
-                            coordinator.push(.semanticCamera(searchKeyword: searchText))
-                        }
-                    },
-                    onTapDelete: { keyword in
-                        searchModel.deleteRecentSearchKeyword(keyword)
-                    }
-                )
-            }
-            
-            if focusState == .editing {
-                VStack(alignment: .leading, spacing: 20) {
-                    if !searchModel.recentSearchKeywords.isEmpty {
+            if focusState == .home && selectedSearchType == .keyword {
+                if !searchModel.recentSearchKeywords.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
                         Text(.recentSearchTitle)
-                            .font(.caption)
-                            .padding(.top, 20)
-                        RecentSearchList(
+                            .font(.labelMedium12)
+                            .foregroundStyle(.ffipGrayscale2)
+                            .padding(.top, 32)
+                        
+                        RecentSearchFlow(
                             keywords: searchModel.recentSearchKeywords,
                             onTap: { keyword in
                                 searchModel.addRecentSearchKeyword(keyword)
@@ -113,13 +101,56 @@ struct SearchView: View {
                                 }
                             },
                             onTapDelete: { keyword in
-                                withAnimation(.easeInOut(duration: 0.05)) {
-                                    searchModel.deleteRecentSearchKeyword(keyword)
-                                }
+                                searchModel.deleteRecentSearchKeyword(keyword)
                             }
                         )
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                    }   
+                    }
+                }
+            }
+            
+            if focusState == .editing {
+                if !searchModel.recentSearchKeywords.isEmpty {
+                    VStack(alignment: .trailing, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 20) {
+                            Text(.recentSearchTitle)
+                                .font(.labelMedium14)
+                                .foregroundStyle(.ffipGrayscale3)
+                            
+                            RecentSearchList(
+                                keywords: searchModel.recentSearchKeywords,
+                                onTap: { keyword in
+                                    searchModel.addRecentSearchKeyword(keyword)
+                                    if selectedSearchType == .keyword {
+                                        coordinator.push(.exactCamera(searchKeyword: searchText))
+                                    } else {
+                                        coordinator.push(.semanticCamera(searchKeyword: searchText))
+                                    }
+                                },
+                                onTapDelete: { keyword in
+                                    withAnimation(.easeInOut(duration: 0.05)) {
+                                        searchModel.deleteRecentSearchKeyword(keyword)
+                                    }
+                                }
+                            )
+                        }
+                        Text(.recentSearchesCleared)
+                            .font(.labelMedium14)
+                            .foregroundStyle(.ffipGrayscale2)
+                            .onTapGesture {
+                                searchModel.deleteAllRecentSearchKeyword()
+                            }
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .padding(.top, 26)
+                } else {
+                    VStack {
+                        Spacer()
+                            .frame(height: 147)
+                        Text(.noRecentSearchesMessage)
+                            .font(.bodyMedium16)
+                            .foregroundStyle(.ffipGrayscale3)
+                    }
+                    .frame(maxWidth: .infinity)
                 }
             }
             Spacer()
