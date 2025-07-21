@@ -20,7 +20,7 @@ struct SemanticCameraView: View {
     @State private var showLockTask: Task<Void, Never>?
     @State private var textField: String = "어쩔"
     
-    @Query(sort: \SemanticCameraCapturedImage.createdAt, order: .reverse)
+    @Query(sort: \SemanticCameraCapturedImage.createdAt, order: .forward)
     private var capturedImages: [SemanticCameraCapturedImage]
     
     var body: some View {
@@ -76,6 +76,9 @@ struct SemanticCameraView: View {
                 HStack {
                     Spacer()
                     CapturedImageStackView(capturedImages: Array(capturedImages.prefix(5)))
+                        .onTapGesture {
+                            coordinator.push(.photoDetail)
+                        }
                 }
                 .padding(.bottom, 12)
                 .padding(.trailing, 20)
@@ -98,9 +101,9 @@ struct SemanticCameraView: View {
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
-        .onDisappear {
-            deleteAllCapturedImages()
-        }
+//        .onDisappear {
+//            deleteAllCapturedImages()
+//        }
         .onChange(of: mediator.matchedObservations) { _, newObservations in
             if !newObservations.isEmpty { triggerHapticFeedback() }
         }
@@ -151,8 +154,6 @@ struct SemanticCameraView: View {
                 }
             }
         }
-        
-
     }
     
     private func deleteAllCapturedImages() {

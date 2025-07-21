@@ -21,13 +21,17 @@ final class SemanticCameraMediator: NSObject {
 
     private let cameraModel: CameraModel
     private let visionModel: VisionModel
+    private let languageModel: LanguageModel
 
     init(
         cameraModel: CameraModel,
-        visionModel: VisionModel
+        visionModel: VisionModel,
+        languageModel: LanguageModel
+        
     ) {
         self.cameraModel = cameraModel
         self.visionModel = visionModel
+        self.languageModel = languageModel
     }
 
     func start() async {

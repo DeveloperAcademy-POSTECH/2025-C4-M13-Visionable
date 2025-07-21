@@ -47,10 +47,18 @@ final class ModuleFactory: ModuleFactoryProtocol {
             captureService: captureService,
             deviceService: deviceService
         )
+        
         let visionService = VisionService()
         let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
         
-        let cameraMediator = SemanticCameraMediator(cameraModel: cameraModel, visionModel: visionModel)
+        let foundationModelsService = FoundationModelsService()
+        let languageModel = LanguageModel(foundationModelsService: foundationModelsService)
+        
+        let cameraMediator = SemanticCameraMediator(
+            cameraModel: cameraModel,
+            visionModel: visionModel,
+            languageModel: languageModel
+        )
         
         let view = SemanticCameraView(mediator: cameraMediator)
         return view

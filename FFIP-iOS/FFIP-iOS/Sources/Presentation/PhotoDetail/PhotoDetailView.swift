@@ -15,66 +15,37 @@ struct PhotoDetailView: View {
     private var capturedImages: [SemanticCameraCapturedImage]
 
     @State private var selectedIndex: Int = 0
+    @State private var isGridMode: Bool = false
     
     var body: some View {
         VStack {
             FfipNavigationBar(
                 leadingType: .back(action: { coordinator.pop() }),
-                centerType: .title(title: "어어어"),
-                trailingType: .grid(action: { })
+                centerType: isGridMode ? .none : .title(title: "어어어"),
+                trailingType: isGridMode ? .none : .grid(action: { isGridMode = true })
             )
             
-            TabView(selection: $selectedIndex) {
-                ForEach(capturedImages.indices, id: \.self) { index in
-                    if let image = uiImage(for: index) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                            .tag(index)
-                    }
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            
-            ScrollViewReader { proxy in
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(capturedImages.indices, id: \.self) { index in
-                            if let thumbnail = uiImage(for: index) {
-                                Image(uiImage: thumbnail)
-                                    .resizable()
-                                    .aspectRatio(1, contentMode: .fill)
-                                    .frame(
-                                        width: index == selectedIndex ? 35 : 25,
-                                        height: 35
-                                    )
-                                    .cornerRadius(6)
-                                    .id(index)
-                                    .onTapGesture {
-                                        withAnimation {
-                                            selectedIndex = index
-                                        }
-                                    }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, UIScreen.main.bounds.width / 2 - 15)
-                    .padding(.vertical, 12)
-                }
-                .onChange(of: selectedIndex) { _, newValue in
+            if isGridMode {
+                PhotoGridView(images: capturedImages) { index in
                     withAnimation {
-                        proxy.scrollTo(newValue, anchor: .center)
+                        selectedIndex = index
+                        isGridMode = false
                     }
                 }
+            } else {
+                PhotoPagerView(
+                    images: capturedImages,
+                    selectedIndex: $selectedIndex
+                )
             }
         }
         .navigationBarBackButtonHidden(true)
     }
     
-    private func uiImage(for index: Int) -> UIImage? {
-        guard capturedImages.indices.contains(index) else { return nil }
-        return UIImage(data: capturedImages[index].imageData)
-    }
+//    private func uiImage(for index: Int) -> UIImage? {
+//        guard capturedImages.indices.contains(index) else { return nil }
+//        return UIImage(data: capturedImages[index].imageData)
+//    }
 }
 
 // #Preview {
