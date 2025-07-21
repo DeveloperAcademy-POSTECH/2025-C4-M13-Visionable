@@ -24,7 +24,8 @@ final class ModuleFactory: ModuleFactoryProtocol {
         let deviceService = VideoDeviceService()
         let cameraModel = CameraModel(
             privacyService: privacyService,
-            captureService: captureService, deviceService: deviceService
+            captureService: captureService,
+            deviceService: deviceService
         )
         let visionService = VisionService()
         let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
@@ -42,7 +43,8 @@ final class ModuleFactory: ModuleFactoryProtocol {
         let deviceService = VideoDeviceService()
         let cameraModel = CameraModel(
             privacyService: privacyService,
-            captureService: captureService, deviceService: deviceService
+            captureService: captureService,
+            deviceService: deviceService
         )
         let visionService = VisionService()
         let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
