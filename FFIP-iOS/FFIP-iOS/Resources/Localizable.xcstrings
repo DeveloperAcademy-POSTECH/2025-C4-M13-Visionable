@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
+
     },
     "appName" : {
       "extractionState" : "manual",
@@ -16,6 +17,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "FF!p"
+          }
+        }
+      }
+    },
+    "cameraTip1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색어가 감지되면\n진동으로 알 수 있어요."
+          }
+        }
+      }
+    },
+    "cameraTip2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색을 잠시 멈추려면\n화면을 두 번 탭하세요."
+          }
+        }
+      }
+    },
+    "cameraTipGreen1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "진동"
+          }
+        }
+      }
+    },
+    "cameraTipGreen2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두 번 탭"
           }
         }
       }
@@ -38,6 +83,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "탐색어가 내 주변에 있는지 빠르게 찾아보세요."
+          }
+        }
+      }
+    },
+    "dontShowAgain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 보지 않기"
           }
         }
       }
@@ -110,6 +166,28 @@
         }
       }
     },
+    "relatedSearchWidget_configurationDisplayName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "연관탐색"
+          }
+        }
+      }
+    },
+    "relatedSearchWidget_description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색어 관련 정보가 내 주변에 있는지 간편하게 찾아보세요."
+          }
+        }
+      }
+    },
     "searchModeUpdated" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -123,6 +201,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "탐색 모드를 전환했습니다."
+          }
+        }
+      }
+    },
+    "searchPlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter your search query."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색할 내용을 입력해주세요."
           }
         }
       }
@@ -162,58 +257,18 @@
       }
     },
     "semantictSearchPlaceholder" : {
-        "extractionState" : "manual",
-        "localizations" : {
-          "en" : {
-            "stringUnit" : {
-              "state" : "translated",
-              "value" : "Please enter a search keyword."
-            }
-          },
-          "ko" : {
-            "stringUnit" : {
-              "state" : "translated",
-              "value" : "탐색어를 입력해주세요."
-            }
-          }
-        }
-      },
-    "relatedSearchWidget_configurationDisplayName" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "연관탐색"
-          }
-        }
-      }
-    },
-    "relatedSearchWidget_description" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "탐색어 관련 정보가 내 주변에 있는지 간편하게 찾아보세요."
-          }
-        }
-      }
-    },
-    "searchPlaceholder" : {
-
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please enter your search query."
+            "value" : "Please enter a search keyword."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색할 내용을 입력해주세요."
+            "value" : "탐색어를 입력해주세요."
           }
         }
       }

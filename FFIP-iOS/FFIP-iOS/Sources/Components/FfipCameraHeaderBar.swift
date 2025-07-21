@@ -27,7 +27,7 @@ struct FfipCameraHeaderBar: View {
             Spacer()
             InfoButton(action: onInfo)
             Spacer()
-            CloseButton(action: onClose)
+            FfipCloseButton(action: onClose)
         }
         .padding(.horizontal, 20)
         .padding(.top, 67)
@@ -84,20 +84,6 @@ struct FfipCameraHeaderBar: View {
         var body: some View {
             Button(action: action) {
                 Image(.btnCameraInfo)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 22, height: 22)
-            }
-            .frame(maxWidth: 50)
-        }
-    }
-
-    private struct CloseButton: View {
-        let action: () -> Void
-
-        var body: some View {
-            Button(action: action) {
-                Image(.btnCameraClose)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 22, height: 22)
