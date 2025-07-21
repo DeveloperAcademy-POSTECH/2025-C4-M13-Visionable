@@ -18,7 +18,6 @@ struct SemanticCameraView: View {
     @State private var zoomGestureValue: CGFloat = 1.0
     @State private var showLockIcon: Bool = false
     @State private var showLockTask: Task<Void, Never>?
-    @State private var textField: String = "어쩔"
     
     @Query(sort: \SemanticCameraCapturedImage.createdAt, order: .forward)
     private var capturedImages: [SemanticCameraCapturedImage]
@@ -84,9 +83,9 @@ struct SemanticCameraView: View {
                 .padding(.trailing, 20)
                 
                 FfipSearchTextField(
-                    text: $textField,
-                    isExistVoiceSeachButton: false,
-                    placeholder: textField
+                    text: $mediator.visionModel.searchKeyword,
+                    isFocused: true,
+                    placeholder: mediator.visionModel.searchKeyword
                 )
                 .padding(.bottom, 12)
                 .padding(.horizontal, 20)

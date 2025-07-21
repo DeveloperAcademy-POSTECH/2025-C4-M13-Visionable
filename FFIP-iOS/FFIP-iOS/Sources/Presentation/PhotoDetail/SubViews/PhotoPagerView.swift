@@ -10,7 +10,7 @@ import SwiftUI
 struct PhotoPagerView: View {
     let images: [SemanticCameraCapturedImage]
     @Binding var selectedIndex: Int
-
+    
     var body: some View {
         VStack(spacing: 0) {
             TabView(selection: $selectedIndex) {
@@ -24,7 +24,7 @@ struct PhotoPagerView: View {
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-
+            
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {

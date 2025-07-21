@@ -20,14 +20,13 @@ final class SemanticCameraMediator: NSObject {
     private(set) var isTorchOn: Bool = false
 
     private let cameraModel: CameraModel
-    private let visionModel: VisionModel
+    var visionModel: VisionModel
     private let languageModel: LanguageModel
 
     init(
         cameraModel: CameraModel,
         visionModel: VisionModel,
         languageModel: LanguageModel
-        
     ) {
         self.cameraModel = cameraModel
         self.visionModel = visionModel
@@ -44,12 +43,12 @@ final class SemanticCameraMediator: NSObject {
             }
         }
 
-        Task {
-            for await imageBuffer in framesStream {
-                await visionModel.processFrame(imageBuffer)
-                matchedObservations = visionModel.matchedObservations
-            }
-        }
+//        Task {
+//            for await imageBuffer in framesStream {
+//                await visionModel.processFrame(imageBuffer)
+//                matchedObservations = visionModel.matchedObservations
+//            }
+//        }
     }
 
     func stop() async {

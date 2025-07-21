@@ -21,4 +21,8 @@ actor VisionService {
         recognizeTextRequest.customWords.append(customWords)
         return try await recognizeTextRequest.perform(on: image)
     }
+    
+    func recognizedTexts(observations: [RecognizedTextObservation]) -> [String] {
+        observations.map { $0.transcript }
+    }
 }

@@ -33,7 +33,7 @@ struct FfipNavigationBar: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color.white)
+            .background(.ffipBackground1Main)
         }
     }
 }

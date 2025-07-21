@@ -18,28 +18,33 @@ struct PhotoDetailView: View {
     @State private var isGridMode: Bool = false
     
     var body: some View {
-        VStack {
-            FfipNavigationBar(
-                leadingType: .back(action: { coordinator.pop() }),
-                centerType: isGridMode ? .none : .title(title: "어어어"),
-                trailingType: isGridMode ? .none : .grid(action: { isGridMode = true })
-            )
+        ZStack {
+            Color.ffipBackground1Main
+                .ignoresSafeArea()
             
-            if isGridMode {
-                PhotoGridView(images: capturedImages) { index in
-                    withAnimation {
-                        selectedIndex = index
-                        isGridMode = false
-                    }
-                }
-            } else {
-                PhotoPagerView(
-                    images: capturedImages,
-                    selectedIndex: $selectedIndex
+            VStack {
+                FfipNavigationBar(
+                    leadingType: .back(action: { coordinator.pop() }),
+                    centerType: isGridMode ? .none : .title(title: "어어어"),
+                    trailingType: isGridMode ? .none : .grid(action: { isGridMode = true })
                 )
+                
+                if isGridMode {
+                    PhotoGridView(images: capturedImages) { index in
+                        withAnimation {
+                            selectedIndex = index
+                            isGridMode = false
+                        }
+                    }
+                } else {
+                    PhotoPagerView(
+                        images: capturedImages,
+                        selectedIndex: $selectedIndex
+                    )
+                }
             }
+            .navigationBarBackButtonHidden(true)
         }
-        .navigationBarBackButtonHidden(true)
     }
     
 //    private func uiImage(for index: Int) -> UIImage? {

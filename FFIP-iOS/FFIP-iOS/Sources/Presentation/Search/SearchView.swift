@@ -27,7 +27,9 @@ struct SearchView: View {
         VStack(alignment: .leading) {
             if focusState == .home {
                 Button {
-                    isSheetPresented = true
+                    withAnimation {
+                        isSheetPresented = true
+                    }
                 } label: {
                     HStack(spacing: 8) {
                         Text(selectedSearchType.title)
