@@ -16,7 +16,7 @@ struct ExactCameraView: View {
     @State private var showLockIcon: Bool = false
     @State private var showLockTask: Task<Void, Never>?
 
-    @AppStorage("dontShowTipAgain") private var dontShowTipAgain: Bool = false
+    @AppStorage("dontShowExactTipAgain") private var dontShowTipAgain: Bool = false
     @State private var showTip = true
 
     var body: some View {
@@ -74,7 +74,7 @@ struct ExactCameraView: View {
             )
 
             if showTip && !dontShowTipAgain {
-                CameraTipOverlay(
+                FfipCameraTipOverlay(
                     showTip: $showTip,
                     dontShowTipAgain: $dontShowTipAgain,
                     tipText1: tipText1,
@@ -167,55 +167,6 @@ struct ExactCameraView: View {
             if Task.isCancelled { return }
             withAnimation {
                 showLockIcon = false
-            }
-        }
-    }
-}
-
-private struct CameraTipOverlay: View {
-    @Binding var showTip: Bool
-    @Binding var dontShowTipAgain: Bool
-    let tipText1: AttributedString
-    let tipText2: AttributedString
-    let dontShowAgainText: AttributedString
-
-    var body: some View {
-        ZStack {
-            Color.black.opacity(0.8)
-            VStack {
-                HStack {
-                    Spacer()
-                    FfipCloseButton(action: { showTip = false })
-                        .padding(.trailing, 20)
-                        .padding(.top, 67)
-                }
-                Spacer()
-            }
-
-            VStack(spacing: 12) {
-                Image(.imgTipHaptic)
-
-                Text(tipText1)
-                    .font(.labelMedium16)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.ffipGrayScaleDefault2)
-
-                Spacer()
-                    .frame(height: 24)
-
-                Image(.imgTipTap)
-
-                Text(tipText2)
-
-                Spacer()
-                    .frame(height: 80)
-
-                Button {
-                    showTip = false
-                    dontShowTipAgain = true
-                } label: {
-                    Text(dontShowAgainText)
-                }
             }
         }
     }
