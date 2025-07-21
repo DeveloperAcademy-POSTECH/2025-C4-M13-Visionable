@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
+
     },
     "appName" : {
       "extractionState" : "manual",
@@ -93,6 +94,40 @@
         }
       }
     },
+    "noRecentSearchesMessage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No recent searches."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 탐색어가 없습니다."
+          }
+        }
+      }
+    },
+    "recentSearchesCleared" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear All"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 삭제"
+          }
+        }
+      }
+    },
     "recentSearchTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -106,6 +141,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최근 검색어"
+          }
+        }
+      }
+    },
+    "relatedSearchWidget_configurationDisplayName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "연관탐색"
+          }
+        }
+      }
+    },
+    "relatedSearchWidget_description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색어 관련 정보가 내 주변에 있는지 간편하게 찾아보세요."
           }
         }
       }
@@ -127,6 +184,23 @@
         }
       }
     },
+    "searchPlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter your search query."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색할 내용을 입력해주세요."
+          }
+        }
+      }
+    },
     "selectSearchMode" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -138,7 +212,7 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "탐색 모드 선택"
           }
         }
@@ -162,58 +236,18 @@
       }
     },
     "semantictSearchPlaceholder" : {
-        "extractionState" : "manual",
-        "localizations" : {
-          "en" : {
-            "stringUnit" : {
-              "state" : "translated",
-              "value" : "Please enter a search keyword."
-            }
-          },
-          "ko" : {
-            "stringUnit" : {
-              "state" : "translated",
-              "value" : "탐색어를 입력해주세요."
-            }
-          }
-        }
-      },
-    "relatedSearchWidget_configurationDisplayName" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "연관탐색"
-          }
-        }
-      }
-    },
-    "relatedSearchWidget_description" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "탐색어 관련 정보가 내 주변에 있는지 간편하게 찾아보세요."
-          }
-        }
-      }
-    },
-    "searchPlaceholder" : {
-
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please enter your search query."
+            "value" : "Please enter a search keyword."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색할 내용을 입력해주세요."
+            "value" : "탐색어를 입력해주세요."
           }
         }
       }
