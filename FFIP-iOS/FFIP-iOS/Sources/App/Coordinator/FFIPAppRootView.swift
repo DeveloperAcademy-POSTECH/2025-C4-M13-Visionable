@@ -29,6 +29,7 @@ struct FFIPAppRootView: View {
                     case .semanticCamera(let searchKeyword): moduleFactory.makeSemanticCameraView(searchKeyword: searchKeyword)
                     case .search: moduleFactory.makeSearchView()
                     case .voiceSearch: moduleFactory.makeVoiceSearchView()
+                    case .photoDetail: moduleFactory.makePhotoDetailView()
                     }
                 }
         }

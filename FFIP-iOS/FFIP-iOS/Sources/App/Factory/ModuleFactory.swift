@@ -12,6 +12,7 @@ protocol ModuleFactoryProtocol {
     func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView
     func makeSearchView() -> SearchView
     func makeVoiceSearchView() -> VoiceSearchView
+    func makePhotoDetailView() -> PhotoDetailView
 }
 
 final class ModuleFactory: ModuleFactoryProtocol {
@@ -70,6 +71,11 @@ final class ModuleFactory: ModuleFactoryProtocol {
             speechService: speeachService
         )
         let view = VoiceSearchView(voiceSearchModel: model)
+        return view
+    }
+    
+    func makePhotoDetailView() -> PhotoDetailView {
+        let view = PhotoDetailView()
         return view
     }
 }
