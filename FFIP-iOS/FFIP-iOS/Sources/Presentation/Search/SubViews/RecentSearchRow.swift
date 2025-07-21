@@ -16,12 +16,14 @@ struct RecentSearchRow: View {
         HStack {
             Text(keyword)
                 .foregroundStyle(.black)
+                .lineLimit(1)
             
             Spacer()
             
             Button(action: onTapDelete) {
                 Image(systemName: "xmark")
             }
+            .frame(width: 20, height: 20)
             .tint(.gray)
         }
         .contentShape(Rectangle())
@@ -31,6 +33,6 @@ struct RecentSearchRow: View {
     }
 }
 
-#Preview {
-    RecentSearchRow(keyword: "최근 검색어", onTap: { print("클릭") }, onTapDelete: {})
-}
+// #Preview {
+//    RecentSearchRow(keyword: "검색어최근 검색어최근 검색어최근 검색어최근 검색어최근 검색어", onTap: { print("클릭") }, onTapDelete: {})
+// }

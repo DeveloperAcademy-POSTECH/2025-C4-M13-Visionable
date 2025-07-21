@@ -2,7 +2,6 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
     },
     "appName" : {
       "extractionState" : "manual",
@@ -55,7 +54,24 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "정확 검색"
+            "value" : "지정 탐색"
+          }
+        }
+      }
+    },
+    "exactSearchPlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a search keyword."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색어를 입력해주세요."
           }
         }
       }
@@ -94,6 +110,74 @@
         }
       }
     },
+    "searchModeUpdated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search mode updated."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색 모드를 전환했습니다."
+          }
+        }
+      }
+    },
+    "selectSearchMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select search mode"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "탐색 모드 선택"
+          }
+        }
+      }
+    },
+    "semanticSearch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semantic Search"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "연관 탐색"
+          }
+        }
+      }
+    },
+    "semantictSearchPlaceholder" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "Please enter a search keyword."
+            }
+          },
+          "ko" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "탐색어를 입력해주세요."
+            }
+          }
+        }
+      },
     "relatedSearchWidget_configurationDisplayName" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -117,18 +201,19 @@
       }
     },
     "searchPlaceholder" : {
+
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "What are you looking for?"
+            "value" : "Please enter your search query."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "검색어를 입력해주세요"
+            "value" : "탐색할 내용을 입력해주세요."
           }
         }
       }
