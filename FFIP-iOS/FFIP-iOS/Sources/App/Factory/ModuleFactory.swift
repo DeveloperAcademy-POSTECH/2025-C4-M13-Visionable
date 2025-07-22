@@ -31,7 +31,7 @@ final class ModuleFactory: ModuleFactoryProtocol {
         
         let cameraMediator = ExactCameraMediator(cameraModel: cameraModel, visionModel: visionModel)
         
-        let view = ExactCameraView(mediator: cameraMediator)
+        let view = ExactCameraView(mediator: cameraMediator, searchText: searchKeyword)
 
         return view
     }

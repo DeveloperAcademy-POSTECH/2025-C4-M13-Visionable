@@ -28,6 +28,10 @@ final class VisionModel: NSObject {
 }
 
 extension VisionModel {
+    func changeSearchKeyword(keyword: String) {
+        searchKeyword = keyword
+    }
+
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
             let textRects = try await visionService.performTextRecognition(

@@ -19,6 +19,10 @@ struct ExactCameraView: View {
     @AppStorage("dontShowExactTipAgain") private var dontShowTipAgain: Bool = false
     @State private var showTip = true
 
+    @State var searchText: String
+    @State private var lastSearchText: String = ""
+    @FocusState private var isTextFieldFocused: Bool
+
     var body: some View {
         ZStack {
             VStack {
@@ -40,8 +44,7 @@ struct ExactCameraView: View {
                             }
                         )
 
-                    ForEach(mediator.matchedObservations, id: \.self) {
-                        observation in
+                    ForEach(mediator.matchedObservations, id: \.self) { observation in
                         FfipBoundingBox(observation: observation)
                     }
                 }
@@ -73,6 +76,31 @@ struct ExactCameraView: View {
                 show: showLockIcon
             )
 
+            Color.black.opacity(0.4)
+                .onTapGesture {
+                    isTextFieldFocused = false
+                }
+
+            VStack {
+                Spacer()
+                FfipSearchTextField(
+                    text: $searchText,
+                    isFocused: isTextFieldFocused,
+                    placeholder: String(
+                        localized: .searchPlaceholder
+                    ),
+                    onSubmit: {
+                        lastSearchText = searchText
+                        mediator.changeSearchKeyword(keyword: searchText)
+                    },
+                    onEmptySubmit: { () },
+                    withVoiceSearch: false
+                )
+                .focused($isTextFieldFocused)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 55)
+            }
+
             if showTip && !dontShowTipAgain {
                 FfipCameraTipOverlay(
                     showTip: $showTip,
@@ -89,10 +117,17 @@ struct ExactCameraView: View {
             if !newObservations.isEmpty { triggerHapticFeedback() }
         }
         .task {
+            self.lastSearchText = searchText
             await mediator.start()
         }
+        .onChange(of: isTextFieldFocused) {
+            Task {
+                try? await Task.sleep(for: .milliseconds(100))
+                searchText = lastSearchText
+            }
+        }
     }
-    
+
     private var tipText1: AttributedString {
         var str = AttributedString(
             localized: .cameraTip1
