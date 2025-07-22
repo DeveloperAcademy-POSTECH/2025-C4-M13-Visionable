@@ -26,11 +26,12 @@ struct SearchView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if focusState == .home {
-                Image(.logoFfip)
-                    .padding(.top, 12)
+                FfipNavigationBar(leadingType: .logo, centerType: .none, trailingType: .none)
                 
                 Button {
-                    isSheetPresented = true
+                    withAnimation {
+                        isSheetPresented = true
+                    }
                 } label: {
                     HStack(spacing: 8) {
                         Text(selectedSearchType.title)
@@ -44,7 +45,7 @@ struct SearchView: View {
                 .tint(.ffipGrayscale1)
                 .padding(.top, 75)
             }
-            
+
             HStack(spacing: 12) {
                 if focusState == .editing {
                     Button {
@@ -95,9 +96,9 @@ struct SearchView: View {
                             onTap: { keyword in
                                 searchModel.addRecentSearchKeyword(keyword)
                                 if selectedSearchType == .keyword {
-                                    coordinator.push(.exactCamera(searchKeyword: searchText))
+                                    coordinator.push(.exactCamera(searchKeyword: keyword))
                                 } else {
-                                    coordinator.push(.semanticCamera(searchKeyword: searchText))
+                                    coordinator.push(.semanticCamera(searchKeyword: keyword))
                                 }
                             },
                             onTapDelete: { keyword in
@@ -121,9 +122,9 @@ struct SearchView: View {
                                 onTap: { keyword in
                                     searchModel.addRecentSearchKeyword(keyword)
                                     if selectedSearchType == .keyword {
-                                        coordinator.push(.exactCamera(searchKeyword: searchText))
+                                        coordinator.push(.exactCamera(searchKeyword: keyword))
                                     } else {
-                                        coordinator.push(.semanticCamera(searchKeyword: searchText))
+                                        coordinator.push(.semanticCamera(searchKeyword: keyword))
                                     }
                                 },
                                 onTapDelete: { keyword in
