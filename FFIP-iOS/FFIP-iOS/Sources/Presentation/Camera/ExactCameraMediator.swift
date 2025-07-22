@@ -32,6 +32,7 @@ final class ExactCameraMediator: NSObject {
 
     func start() async {
         await cameraModel.start()
+        await visionModel.prepare()
 
         guard let framesStream = cameraModel.framesStream else { return }
         Task {

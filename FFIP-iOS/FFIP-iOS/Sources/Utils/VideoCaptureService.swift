@@ -32,8 +32,8 @@ actor VideoCaptureService {
             session.addOutput(videoOutput)
         }
 
-        if session.canSetSessionPreset(.photo) {
-            session.sessionPreset = .photo
+        if session.canSetSessionPreset(.hd1920x1080) {
+            session.sessionPreset = .hd1920x1080
         }
 
         if let connection = videoOutput.connection(with: .video) {

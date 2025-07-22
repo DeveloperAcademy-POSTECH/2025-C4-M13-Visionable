@@ -41,7 +41,7 @@ struct SemanticCameraView: View {
                         FfipBoundingBox(observation: observation)
                     }
                 }
-                .frame(width: screenHeight * 3 / 4, height: screenHeight)
+                .frame(width: screenHeight * 9 / 16, height: screenHeight)
                 .clipped()
             }
             .ignoresSafeArea(.all)
