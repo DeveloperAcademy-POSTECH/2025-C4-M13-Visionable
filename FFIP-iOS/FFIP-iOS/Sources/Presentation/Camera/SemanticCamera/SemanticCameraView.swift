@@ -17,42 +17,51 @@ struct SemanticCameraView: View {
     @FocusState private var isFfipTextFieldFocused: Bool
     @State private var showFlash: Bool = false
     @State private var zoomGestureValue: CGFloat = 1.0
-    @State private var showLockIcon: Bool = false
-    @State private var showLockTask: Task<Void, Never>?
+    @State private var animateCapture: Bool = false
     
-    @Query(sort: \SemanticCameraCapturedImage.createdAt, order: .forward)
+    @State private var capturedImageRect: CGRect = .zero
+    @State private var capturedImageStackPosition: CGPoint = .zero
+    
+    @State private var imageToAnimate: UIImage?
+    
+    @Query(sort: \SemanticCameraCapturedImage.createdAt, order: .reverse)
     private var capturedImages: [SemanticCameraCapturedImage]
     
     var body: some View {
         ZStack {
             VStack {
                 ZStack {
-                    FrameView(image: mediator.frame)
-                        .gesture(
-                            MagnificationGesture()
-                                .onChanged { value in
-                                    handleZoomGestureChanged(value)
+                    GeometryReader { geometry in
+                        FrameView(image: mediator.frame)
+                            .background(
+                                GeometryReader { proxy in
+                                    Color.clear
+                                        .onAppear {
+                                            DispatchQueue.main.async {
+                                                capturedImageRect = proxy.frame(in: .global)
+                                            }
+                                        }
                                 }
-                                .onEnded { _ in
-                                    zoomGestureValue = 1.0
-                                }
-                        )
-                        .onTapGesture(
-                            count: 2,
-                            perform: {
+                            )
+                            .gesture(
+                                MagnificationGesture()
+                                    .onChanged { value in
+                                        handleZoomGestureChanged(value)
+                                    }
+                                    .onEnded { _ in
+                                        zoomGestureValue = 1.0
+                                    }
+                            )
+                            .onTapGesture(count: 2) {
                                 captureFrameAndSave()
                             }
-                        )
-                    
-                    ForEach(mediator.matchedObservations, id: \.self) { observation in
-                        FfipBoundingBox(observation: observation)
+                        
+                        ForEach(mediator.matchedObservations, id: \.self) { observation in
+                            FfipBoundingBox(observation: observation)
+                        }
                     }
                 }
-                .frame(width: screenHeight * 3 / 4, height: screenHeight)
-                .clipped()
             }
-            .ignoresSafeArea(.all)
-            .frame(width: screenWidth, height: screenHeight)
             
             VStack(spacing: 0) {
                 FfipCameraHeaderBar(
@@ -65,6 +74,7 @@ struct SemanticCameraView: View {
                         Task {
                             await mediator.stop()
                             coordinator.pop()
+                            deleteAllCapturedImages()
                         }
                     }
                 )
@@ -76,6 +86,16 @@ struct SemanticCameraView: View {
                 HStack {
                     Spacer()
                     CapturedImageStackView(capturedImages: Array(capturedImages.prefix(5)))
+                        .background(
+                            GeometryReader { proxy in
+                                Color.clear
+                                    .onAppear {
+                                        DispatchQueue.main.async {
+                                            capturedImageStackPosition = proxy.frame(in: .global).center
+                                        }
+                                    }
+                            }
+                        )
                         .onTapGesture {
                             coordinator.push(.photoDetail)
                         }
@@ -99,12 +119,25 @@ struct SemanticCameraView: View {
                     .ignoresSafeArea()
                     .transition(.opacity)
             }
+            
+            if animateCapture, let uiImage = imageToAnimate {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: capturedImageRect.width, height: capturedImageRect.height)
+                    .position(x: capturedImageRect.midX, y: capturedImageRect.midY)
+                    .clipped()
+                    .modifier(
+                        CaptureToStackAnimationModifier(
+                            startRect: capturedImageRect,
+                            endPoint: capturedImageStackPosition
+                        )
+                    )
+                    .transition(.identity)
+            }
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
-//        .onDisappear {
-//            deleteAllCapturedImages()
-//        }
         .onChange(of: mediator.matchedObservations) { _, newObservations in
             if !newObservations.isEmpty { triggerHapticFeedback() }
         }
@@ -112,8 +145,10 @@ struct SemanticCameraView: View {
             await mediator.start()
         }
     }
-    
-    private func handleZoomGestureChanged(_ value: CGFloat) {
+}
+
+private extension SemanticCameraView {
+    func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue
         zoomGestureValue = value
         let zoomFactor = mediator.zoomFactor
@@ -122,7 +157,7 @@ struct SemanticCameraView: View {
         }
     }
     
-    private func handleZoomButtonTapped() async {
+    func handleZoomButtonTapped() async {
         if mediator.zoomFactor >= 4.0 {
             await mediator.zoom(to: 1.0)
         } else if mediator.zoomFactor >= 2.0 {
@@ -132,36 +167,39 @@ struct SemanticCameraView: View {
         }
     }
     
-    private func captureFrameAndSave() {
+    func captureFrameAndSave() {
         guard let captureFrame = mediator.frame else { return }
         
         withAnimation(.easeIn(duration: 0.1)) {
             showFlash = true
         }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             withAnimation(.easeOut(duration: 0.3)) {
                 showFlash = false
+            }
+            
+            let ciImage = CIImage(cvImageBuffer: captureFrame)
+            let context = CIContext()
+            
+            if let jpegData = context.jpegRepresentation(of: ciImage, colorSpace: CGColorSpaceCreateDeviceRGB()),
+               let uiImage = UIImage(data: jpegData) {
+                imageToAnimate = uiImage
+                animateCapture = true
                 
-                let ciImage = CIImage(cvImageBuffer: captureFrame)
-                let context = CIContext()
-                
-                if let jpegData = context.jpegRepresentation(
-                    of: ciImage,
-                    colorSpace: CGColorSpaceCreateDeviceRGB()
-                ) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     let capturedImage = SemanticCameraCapturedImage(imageData: jpegData)
                     modelContext.insert(capturedImage)
+                    animateCapture = false
                 }
             }
         }
     }
     
-    private func deleteAllCapturedImages() {
+    func deleteAllCapturedImages() {
         for image in capturedImages {
             modelContext.delete(image)
         }
-        
         do {
             try modelContext.save()
         } catch {
