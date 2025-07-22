@@ -14,6 +14,7 @@ struct SemanticCameraView: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var mediator: SemanticCameraMediator
     
+    @FocusState private var isFfipTextFieldFocused: Bool
     @State private var showFlash: Bool = false
     @State private var zoomGestureValue: CGFloat = 1.0
     @State private var showLockIcon: Bool = false
@@ -87,7 +88,8 @@ struct SemanticCameraView: View {
                     isFocused: true,
                     placeholder: mediator.visionModel.searchKeyword
                 )
-                .padding(.bottom, 12)
+                .focused($isFfipTextFieldFocused)
+                .padding(.bottom, isFfipTextFieldFocused ? 12 : 12 + safeAreaInset(.bottom))
                 .padding(.horizontal, 20)
             }
             .ffipKeyboardAdaptive()
