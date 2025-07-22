@@ -29,6 +29,7 @@ extension Font {
     static let labelMedium12: Font = .custom(FontName.pretendardMedium.rawValue, size: 12)
 
     // Caption
+    static let captionBold16: Font = .custom(FontName.pretendardBold.rawValue, size: 16)
     static let captionSemiBold14: Font = .custom(FontName.pretendardSemiBold.rawValue, size: 14)
     static let captionMedium12: Font = .custom(FontName.pretendardMedium.rawValue, size: 12)
 }
