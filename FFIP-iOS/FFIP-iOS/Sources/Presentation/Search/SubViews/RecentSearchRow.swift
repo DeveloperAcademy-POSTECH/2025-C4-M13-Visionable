@@ -15,7 +15,7 @@ struct RecentSearchRow: View {
     var body: some View {
         HStack {
             Text(keyword)
-                .foregroundStyle(.black)
+                .foregroundStyle(.ffipGrayscale1)
                 .lineLimit(1)
             
             Spacer()

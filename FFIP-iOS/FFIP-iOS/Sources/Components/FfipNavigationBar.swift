@@ -31,7 +31,6 @@ struct FfipNavigationBar: View {
                 Spacer()
                 navigationTrailingView()
             }
-            .padding(.horizontal, 16)
             .padding(.vertical, 12)
             .background(.ffipBackground1Main)
         }

@@ -29,11 +29,19 @@ final class VisionModel: NSObject {
 }
 
 extension VisionModel {
+    func prepare() async {
+        await visionService.prepareTextRecognition(searchKeyword: searchKeyword)
+    }
+    
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
+            let aestheticScore = try await visionService.calculateAestheticScore(from: buffer)
+            guard aestheticScore > 0 else {
+                return
+            }
+            
             let textRects = try await visionService.performTextRecognition(
-                image: buffer,
-                customWords: searchKeyword
+                image: buffer
             )
 
             self.recognizedTextObservations = textRects

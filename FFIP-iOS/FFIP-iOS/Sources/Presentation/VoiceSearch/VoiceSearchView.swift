@@ -10,16 +10,20 @@ import SwiftUI
 struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
-    
+
     @State private var isListening = false
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text(voiceSearchModel.transcript)
                 .font(.title2)
                 .multilineTextAlignment(.center)
                 .padding()
-            
+
+            VoiceListenerView(
+                isListening: $isListening,
+            )
+
             Button {
                 Task {
                     if isListening {
