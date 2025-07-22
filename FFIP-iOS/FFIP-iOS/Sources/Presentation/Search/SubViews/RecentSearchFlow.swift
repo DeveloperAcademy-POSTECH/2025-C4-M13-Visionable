@@ -13,7 +13,7 @@ struct RecentSearchFlow: View {
     let onTapDelete: (String) -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        HFlowLayout(spacing: 6, lineSpacing: 6) {
             ForEach(keywords, id: \.self) { keyword in
                 FfipRecentSearchCapsule(
                     keyword: keyword,
@@ -25,6 +25,6 @@ struct RecentSearchFlow: View {
     }
 }
 
-#Preview {
-    RecentSearchFlow(keywords: ["1", "2"], onTap: { _ in }, onTapDelete: { _ in })
-}
+// #Preview {
+//    RecentSearchFlow(keywords: ["1dd2dddddddddddddddddddd2dddddddddddddddddddddddddd", "2dddddddd", "2dddddddddddddddddddd2dddddddddddddddddddd2dddddddddddddddddddd"], onTap: { _ in }, onTapDelete: { _ in })
+// }

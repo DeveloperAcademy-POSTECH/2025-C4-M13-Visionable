@@ -21,6 +21,7 @@ struct RecentSearchList: View {
                     onTapDelete: { onTapDelete(keyword) }
                 )
             }
+            Divider()
         }
     }
 }

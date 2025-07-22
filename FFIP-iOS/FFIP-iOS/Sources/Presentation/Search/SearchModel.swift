@@ -27,4 +27,9 @@ final class SearchModel {
         recentSearchKeywords.removeAll(where: { $0 == keyword })
         UserDefaults.standard.set(recentSearchKeywords, forKey: UserDefaultsKey.recentSearch)
     }
+    
+    func deleteAllRecentSearchKeyword() {
+        recentSearchKeywords.removeAll()
+        UserDefaults.standard.set(recentSearchKeywords, forKey: UserDefaultsKey.recentSearch)
+    }
 }

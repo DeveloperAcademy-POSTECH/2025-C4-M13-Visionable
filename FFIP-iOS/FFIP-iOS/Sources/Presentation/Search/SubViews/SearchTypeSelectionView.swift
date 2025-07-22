@@ -11,7 +11,11 @@ struct SearchTypeSelectionView: View {
     @Binding var selectedType: SearchType
     
     var body: some View {
-        VStack(spacing: 32) {
+        VStack(alignment: .leading, spacing: 32) {
+            Text(.selectSearchMode)
+                .font(.titleBold20)
+                .foregroundStyle(.ffipGrayscale1)
+            
             VStack(spacing: 24) {
                 ForEach(SearchType.allCases) { type in
                     SearchTypeRow(

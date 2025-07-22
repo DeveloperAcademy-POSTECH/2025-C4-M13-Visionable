@@ -17,6 +17,7 @@ extension Font {
     // Title
     static let titleBold24: Font = .custom(FontName.pretendardBold.rawValue, size: 24)
     static let titleBold20: Font = .custom(FontName.pretendardBold.rawValue, size: 20)
+    static let titleSemiBold16: Font = .custom(FontName.pretendardSemiBold.rawValue, size: 16)
 
     // Body
     static let bodyMedium16: Font = .custom(FontName.pretendardMedium.rawValue, size: 16)
