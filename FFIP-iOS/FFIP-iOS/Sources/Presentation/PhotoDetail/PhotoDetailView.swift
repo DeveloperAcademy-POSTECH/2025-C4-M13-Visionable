@@ -28,6 +28,7 @@ struct PhotoDetailView: View {
                     centerType: isGridMode ? .none : .title(title: "어어어"),
                     trailingType: isGridMode ? .none : .grid(action: { isGridMode = true })
                 )
+                .padding(.horizontal, 16)
                 
                 if isGridMode {
                     PhotoGridView(images: capturedImages) { index in

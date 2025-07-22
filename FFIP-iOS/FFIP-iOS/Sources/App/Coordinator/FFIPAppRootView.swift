@@ -23,6 +23,7 @@ struct FFIPAppRootView: View {
             )
         ) {
             moduleFactory.makeSearchView()
+                .navigationBarBackButtonHidden(true)
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .exactCamera(let searchKeyword): moduleFactory.makeExactCameraView(searchKeyword: searchKeyword)
