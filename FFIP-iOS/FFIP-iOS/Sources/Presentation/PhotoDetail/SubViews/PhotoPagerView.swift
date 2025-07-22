@@ -49,6 +49,22 @@ struct PhotoPagerView: View {
                     }
                     .padding(.horizontal, UIScreen.main.bounds.width / 2 - 15)
                     .padding(.vertical, 12)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                if value.translation.width < -10 {
+                                    if selectedIndex < images.count - 1 {
+                                        selectedIndex += 1
+                                        triggerHapticFeedback()
+                                    }
+                                } else if value.translation.width > 10 {
+                                    if selectedIndex > 0 {
+                                        selectedIndex -= 1
+                                        triggerHapticFeedback()
+                                    }
+                                }
+                            }
+                    )
                 }
                 .onAppear {
                     DispatchQueue.main.async {
