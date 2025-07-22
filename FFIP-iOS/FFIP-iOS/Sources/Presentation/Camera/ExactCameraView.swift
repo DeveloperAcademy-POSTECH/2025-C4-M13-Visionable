@@ -76,7 +76,7 @@ struct ExactCameraView: View {
                 show: showLockIcon
             )
 
-            Color.black.opacity(0.4)
+            Color.black.opacity(isTextFieldFocused ? 0.4 : 0)
                 .onTapGesture {
                     isTextFieldFocused = false
                 }
@@ -126,6 +126,7 @@ struct ExactCameraView: View {
                 searchText = lastSearchText
             }
         }
+        .animation(.default, value: isTextFieldFocused)
     }
 
     private var tipText1: AttributedString {
