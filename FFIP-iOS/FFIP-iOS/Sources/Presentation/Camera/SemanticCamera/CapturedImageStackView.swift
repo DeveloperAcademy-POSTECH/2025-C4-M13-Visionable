@@ -41,14 +41,14 @@ struct CapturedImageStackView: View {
     }
 }
 
-#Preview {
-    let sampleImage = UIImage(resource: .mock)
-    let sampleData = sampleImage.jpegData(compressionQuality: 1.0)!
-    
-    CapturedImageStackView(capturedImages: [
-        SemanticCameraCapturedImage(imageData: sampleData),
-        SemanticCameraCapturedImage(imageData: sampleData),
-        SemanticCameraCapturedImage(imageData: sampleData),
-        SemanticCameraCapturedImage(imageData: sampleData)
-    ])
-}
+// #Preview {
+//    let sampleImage = UIImage(resource: .mock)
+//    let sampleData = sampleImage.jpegData(compressionQuality: 1.0)!
+//    
+//    CapturedImageStackView(capturedImages: [
+//        SemanticCameraCapturedImage(imageData: sampleData),
+//        SemanticCameraCapturedImage(imageData: sampleData),
+//        SemanticCameraCapturedImage(imageData: sampleData),
+//        SemanticCameraCapturedImage(imageData: sampleData)
+//    ])
+// }

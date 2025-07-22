@@ -46,11 +46,6 @@ struct PhotoDetailView: View {
             .navigationBarBackButtonHidden(true)
         }
     }
-    
-//    private func uiImage(for index: Int) -> UIImage? {
-//        guard capturedImages.indices.contains(index) else { return nil }
-//        return UIImage(data: capturedImages[index].imageData)
-//    }
 }
 
 // #Preview {
