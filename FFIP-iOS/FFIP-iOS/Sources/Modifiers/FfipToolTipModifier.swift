@@ -62,19 +62,6 @@ struct FfipToolTipModifier: ViewModifier {
                 }
             }
         }
-
-//        .onTapGesture {
-//            guard !isToolTipVisible else { return }
-//            withAnimation(.easeInOut) {
-//                isToolTipVisible = true
-//            }
-//            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-//                guard isToolTipVisible else { return }
-//                withAnimation(.easeInOut) {
-//                    isToolTipVisible = false
-//                }
-//            }
-//        }
     }
 }
 
