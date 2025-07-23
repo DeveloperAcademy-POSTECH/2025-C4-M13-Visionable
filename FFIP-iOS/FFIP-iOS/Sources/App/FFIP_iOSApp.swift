@@ -26,5 +26,6 @@ struct FFIP_iOSApp: App {
                     }
                 }
         }
+        .modelContainer(for: [SemanticCameraCapturedImage.self])
     }
 }

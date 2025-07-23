@@ -17,6 +17,7 @@ struct FfipRecentSearchCapsule: View {
             Text(keyword)
                 .font(.labelMedium14)
                 .foregroundStyle(.ffipGrayscale1)
+                .lineLimit(1)
             
             Button(action: onTapDelete) {
                 Image(.btnClose)
@@ -37,5 +38,5 @@ struct FfipRecentSearchCapsule: View {
 }
 
 // #Preview {
-//    FfipRecentSearchCapsule(keyword: "텍스트가 들어갑니다", onTap: {}, onTapDelete: {})
+//    FfipRecentSearchCapsule(keyword: "텍스트가 들어갑니다텍스트가 들어갑니다텍스트가 들어갑니다텍스트가 들어갑니다", onTap: {}, onTapDelete: {})
 // }

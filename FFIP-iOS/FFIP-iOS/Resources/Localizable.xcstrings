@@ -149,6 +149,40 @@
         }
       }
     },
+    "noRecentSearchesMessage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No recent searches."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 탐색어가 없습니다."
+          }
+        }
+      }
+    },
+    "recentSearchesCleared" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear All"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 삭제"
+          }
+        }
+      }
+    },
     "recentSearchTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -233,7 +267,7 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "탐색 모드 선택"
           }
         }

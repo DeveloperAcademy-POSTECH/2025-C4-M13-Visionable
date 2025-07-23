@@ -10,10 +10,11 @@ import Photos
 import SwiftUI
 import Vision
 
+@Observable
 final class VisionModel: NSObject {
     private let visionService: VisionService
 
-    private(set) var searchKeyword: String
+    var searchKeyword: String
 
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     private(set) var matchedObservations = [RecognizedTextObservation]()
@@ -32,11 +33,14 @@ extension VisionModel {
         searchKeyword = keyword
     }
 
+    func prepare() async {
+        await visionService.prepareTextRecognition(searchKeyword: searchKeyword)
+    }
+    
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
             let textRects = try await visionService.performTextRecognition(
-                image: buffer,
-                customWords: searchKeyword
+                image: buffer
             )
 
             self.recognizedTextObservations = textRects

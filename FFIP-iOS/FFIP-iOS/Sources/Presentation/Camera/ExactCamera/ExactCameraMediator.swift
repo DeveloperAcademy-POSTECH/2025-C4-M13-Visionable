@@ -1,5 +1,5 @@
 //
-//  RelatedCameraMediator.swift
+//  ExactCameraMediator.swift
 //  FFIP-iOS
 //
 //  Created by SeanCho on 7/18/25.
@@ -11,7 +11,7 @@ import Vision
 
 @MainActor
 @Observable
-final class SemanticCameraMediator: NSObject {
+final class ExactCameraMediator: NSObject {
     private(set) var frame: CVImageBuffer?
     private(set) var matchedObservations = [RecognizedTextObservation]()
 
@@ -32,6 +32,7 @@ final class SemanticCameraMediator: NSObject {
 
     func start() async {
         await cameraModel.start()
+        await visionModel.prepare()
 
         guard let framesStream = cameraModel.framesStream else { return }
         Task {
@@ -72,5 +73,9 @@ final class SemanticCameraMediator: NSObject {
         } else {
             isTorchOn = await cameraModel.turnOnTorch()
         }
+    }
+
+    func changeSearchKeyword(keyword: String) {
+        visionModel.changeSearchKeyword(keyword: keyword)
     }
 }
