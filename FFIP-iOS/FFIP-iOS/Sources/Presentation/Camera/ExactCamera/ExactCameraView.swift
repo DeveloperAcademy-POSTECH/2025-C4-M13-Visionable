@@ -105,9 +105,17 @@ struct ExactCameraView: View {
                 FfipCameraTipOverlay(
                     showTip: $showTip,
                     dontShowTipAgain: $dontShowTipAgain,
-                    tipText1: tipText1,
-                    tipText2: tipText2,
-                    dontShowAgainText: dontShowAgainText
+                    tipText1: String(localized: .cameraTip1)
+                        .asHighlight(
+                            highlightedString: String(localized: .cameraTipGreen1),
+                            highlightColor: .ffipPointGreen1
+                        ),
+                    tipText2: String(localized: .cameraTip1)
+                        .asHighlight(
+                            highlightedString: String(localized: .cameraTipGreen1),
+                            highlightColor: .ffipPointGreen1
+                        ),
+                    dontShowAgainText: String(localized: .dontShowAgain)
                 )
             }
         }
@@ -127,44 +135,6 @@ struct ExactCameraView: View {
             }
         }
         .animation(.default, value: isTextFieldFocused)
-    }
-
-    private var tipText1: AttributedString {
-        var str = AttributedString(
-            localized: .cameraTip1
-        )
-        str.font = .labelMedium16
-        str.alignment = .center
-        str.foregroundColor = .ffipGrayScaleDefault2
-        if let first = str.range(of: String(localized: .cameraTipGreen1)) {
-            str[first].foregroundColor = .ffipPointGreen1
-        }
-        return str
-    }
-
-    private var tipText2: AttributedString {
-        var str = AttributedString(
-            localized: .cameraTip2
-        )
-        str.font = .labelMedium16
-        str.alignment = .center
-        str.foregroundColor = .ffipGrayScaleDefault2
-        if let first = str.range(of: String(localized: .cameraTipGreen2)) {
-            str[first].foregroundColor = .ffipPointGreen1
-        }
-        return str
-    }
-
-    private var dontShowAgainText: AttributedString {
-        var str = AttributedString(
-            localized: .dontShowAgain
-        )
-        str.font = .labelMedium14
-        str.underlineStyle = .single
-        str.alignment = .center
-        str.foregroundColor = .white.opacity(0.8)
-
-        return str
     }
 
     private func handleZoomGestureChanged(_ value: CGFloat) {

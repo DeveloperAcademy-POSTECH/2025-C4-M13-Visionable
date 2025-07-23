@@ -12,7 +12,7 @@ struct FfipCameraTipOverlay: View {
     @Binding var dontShowTipAgain: Bool
     let tipText1: AttributedString
     let tipText2: AttributedString
-    let dontShowAgainText: AttributedString
+    let dontShowAgainText: String
 
     var body: some View {
         ZStack {
@@ -41,6 +41,9 @@ struct FfipCameraTipOverlay: View {
                 Image(.imgTipTap)
 
                 Text(tipText2)
+                    .font(.labelMedium16)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.ffipGrayScaleDefault2)
 
                 Spacer()
                     .frame(height: 80)
@@ -50,6 +53,10 @@ struct FfipCameraTipOverlay: View {
                     dontShowTipAgain = true
                 } label: {
                     Text(dontShowAgainText)
+                        .font(.labelMedium14)
+                        .underline(true, pattern: .solid)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.white.opacity(0.8))
                 }
             }
         }
