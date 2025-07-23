@@ -55,10 +55,6 @@ struct SemanticCameraView: View {
                             .onTapGesture(count: 2) {
                                 captureFrameAndSave()
                             }
-                        
-                        ForEach(mediator.matchedObservations, id: \.self) { observation in
-                            FfipBoundingBox(observation: observation)
-                        }
                     }
                 }
             }
@@ -138,9 +134,6 @@ struct SemanticCameraView: View {
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
-        .onChange(of: mediator.matchedObservations) { _, newObservations in
-            if !newObservations.isEmpty { triggerHapticFeedback() }
-        }
         .task {
             await mediator.start()
         }
@@ -173,7 +166,7 @@ private extension SemanticCameraView {
         withAnimation(.easeIn(duration: 0.1)) {
             showFlash = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             withAnimation(.easeOut(duration: 0.3)) {
                 showFlash = false
@@ -188,9 +181,17 @@ private extension SemanticCameraView {
                 animateCapture = true
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                    let capturedImage = SemanticCameraCapturedImage(imageData: jpegData)
-                    modelContext.insert(capturedImage)
-                    animateCapture = false
+                    Task {
+                        let analyzeResult = await mediator.analyzeCapturedImage(captureFrame)
+                        
+                        let capturedImage = SemanticCameraCapturedImage(
+                            imageData: jpegData,
+                            similarKeyword: analyzeResult?.keyword ?? "",
+                            similarity: analyzeResult?.similarity ?? 0.0
+                        )
+                        modelContext.insert(capturedImage)
+                        animateCapture = false
+                    }
                 }
             }
         }

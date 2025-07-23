@@ -44,7 +44,7 @@ final class ExactCameraMediator: NSObject {
         Task {
             for await imageBuffer in framesStream {
                 await visionModel.processFrame(imageBuffer)
-                matchedObservations = visionModel.matchedObservations
+                matchedObservations = visionModel.filterMatchedObservations()
             }
         }
     }
