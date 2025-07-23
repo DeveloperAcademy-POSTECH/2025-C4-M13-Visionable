@@ -35,11 +35,6 @@ extension VisionModel {
     
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
-            let aestheticScore = try await visionService.calculateAestheticScore(from: buffer)
-            guard aestheticScore > 0 else {
-                return
-            }
-            
             let textRects = try await visionService.performTextRecognition(
                 image: buffer
             )

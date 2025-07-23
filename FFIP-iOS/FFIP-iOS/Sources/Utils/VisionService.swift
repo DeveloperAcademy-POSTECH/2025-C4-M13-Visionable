@@ -9,8 +9,7 @@ import Vision
 
 actor VisionService {
     private var recognizeTextRequest = RecognizeTextRequest()
-    private var aestheticRequest = CalculateImageAestheticsScoresRequest()
-    
+
     func prepareTextRecognition(searchKeyword: String) {
         recognizeTextRequest.minimumTextHeightFraction = 0.01
         recognizeTextRequest.automaticallyDetectsLanguage = false
@@ -20,18 +19,11 @@ actor VisionService {
         ]
         recognizeTextRequest.customWords.append(searchKeyword)
     }
-    
+
     func performTextRecognition(
         image: CVImageBuffer
     ) async throws -> [RecognizedTextObservation] {
         return try await recognizeTextRequest.perform(on: image)
-    }
-    
-    func calculateAestheticScore(from buffer: CVImageBuffer) async throws
-    -> Float {
-        let observation = try await aestheticRequest.perform(on: buffer)
-        let score = observation.overallScore
-        return score
     }
     
     func recognizedTexts(observations: [RecognizedTextObservation]) -> [String] {
