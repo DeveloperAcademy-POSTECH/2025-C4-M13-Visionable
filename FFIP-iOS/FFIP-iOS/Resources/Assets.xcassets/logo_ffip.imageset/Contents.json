@@ -3,6 +3,16 @@
     {
       "filename" : "logo_ffip.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Group 48609.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

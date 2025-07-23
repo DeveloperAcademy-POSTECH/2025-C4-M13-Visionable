@@ -32,7 +32,7 @@ struct VoiceListenerView: View {
                                     .fill(.ffipPointGreen1)
                             } else {
                                 Rectangle()
-                                    .fill(.ffipBackground3Pop)
+                                    .fill(.ffipGrayscale1)
                             }
                         }
                         .frame(
