@@ -12,4 +12,5 @@ enum AppRoute: Hashable {
     case semanticCamera(searchKeyword: String)
     case search
     case voiceSearch
+    case photoDetail
 }
