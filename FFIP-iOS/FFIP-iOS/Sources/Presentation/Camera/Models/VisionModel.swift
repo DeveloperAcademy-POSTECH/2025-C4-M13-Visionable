@@ -10,10 +10,11 @@ import Photos
 import SwiftUI
 import Vision
 
+@Observable
 final class VisionModel: NSObject {
     private let visionService: VisionService
 
-    private(set) var searchKeyword: String
+    var searchKeyword: String
 
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
     private(set) var matchedObservations = [RecognizedTextObservation]()

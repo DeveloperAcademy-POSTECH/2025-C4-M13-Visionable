@@ -12,6 +12,7 @@ protocol ModuleFactoryProtocol {
     func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView
     func makeSearchView() -> SearchView
     func makeVoiceSearchView() -> VoiceSearchView
+    func makePhotoDetailView() -> PhotoDetailView
 }
 
 final class ModuleFactory: ModuleFactoryProtocol {
@@ -24,7 +25,8 @@ final class ModuleFactory: ModuleFactoryProtocol {
         let deviceService = VideoDeviceService()
         let cameraModel = CameraModel(
             privacyService: privacyService,
-            captureService: captureService, deviceService: deviceService
+            captureService: captureService,
+            deviceService: deviceService
         )
         let visionService = VisionService()
         let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
@@ -42,12 +44,21 @@ final class ModuleFactory: ModuleFactoryProtocol {
         let deviceService = VideoDeviceService()
         let cameraModel = CameraModel(
             privacyService: privacyService,
-            captureService: captureService, deviceService: deviceService
+            captureService: captureService,
+            deviceService: deviceService
         )
+        
         let visionService = VisionService()
         let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
         
-        let cameraMediator = SemanticCameraMediator(cameraModel: cameraModel, visionModel: visionModel)
+        let foundationModelsService = FoundationModelsService()
+        let languageModel = LanguageModel(foundationModelsService: foundationModelsService)
+        
+        let cameraMediator = SemanticCameraMediator(
+            cameraModel: cameraModel,
+            visionModel: visionModel,
+            languageModel: languageModel
+        )
         
         let view = SemanticCameraView(mediator: cameraMediator)
         return view
@@ -68,6 +79,11 @@ final class ModuleFactory: ModuleFactoryProtocol {
             speechService: speeachService
         )
         let view = VoiceSearchView(voiceSearchModel: model)
+        return view
+    }
+    
+    func makePhotoDetailView() -> PhotoDetailView {
+        let view = PhotoDetailView()
         return view
     }
 }

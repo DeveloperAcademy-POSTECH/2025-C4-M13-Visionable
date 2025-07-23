@@ -20,14 +20,17 @@ final class SemanticCameraMediator: NSObject {
     private(set) var isTorchOn: Bool = false
 
     private let cameraModel: CameraModel
-    private let visionModel: VisionModel
+    var visionModel: VisionModel
+    private let languageModel: LanguageModel
 
     init(
         cameraModel: CameraModel,
-        visionModel: VisionModel
+        visionModel: VisionModel,
+        languageModel: LanguageModel
     ) {
         self.cameraModel = cameraModel
         self.visionModel = visionModel
+        self.languageModel = languageModel
     }
 
     func start() async {
@@ -40,13 +43,12 @@ final class SemanticCameraMediator: NSObject {
                 frame = imageBuffer
             }
         }
+        
+        // TODO: - VisionModel에 현재 frame에서 추출한 String Array로 뽑기
+        
+        // TODO: - LangaugeModel에 추출한 String Array와 searchKeyword를 같이 요청 보내서 유사한 정보 받아오기
 
-        Task {
-            for await imageBuffer in framesStream {
-                await visionModel.processFrame(imageBuffer)
-                matchedObservations = visionModel.matchedObservations
-            }
-        }
+        // TODO: - matchedObservations와 비교해서 바운딩 박스 그리도록 준비하기
     }
 
     func stop() async {
