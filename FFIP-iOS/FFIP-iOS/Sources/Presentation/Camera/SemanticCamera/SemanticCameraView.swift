@@ -14,6 +14,9 @@ struct SemanticCameraView: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var mediator: SemanticCameraMediator
     
+    @AppStorage(AppStorageKey.dontShowSemanticTipAgain) private var dontShowSemanticCameraTipAgain: Bool = false
+    @State private var showTip = true
+    
     @FocusState private var isFfipTextFieldFocused: Bool
     @State private var showFlash: Bool = false
     @State private var zoomGestureValue: CGFloat = 1.0
@@ -113,6 +116,25 @@ struct SemanticCameraView: View {
                 .padding(.horizontal, 20)
             }
             .ffipKeyboardAdaptive()
+            
+            if showTip && !dontShowSemanticCameraTipAgain {
+                FfipCameraTipOverlay(
+                    showTip: $showTip,
+                    dontShowTipAgain: $dontShowSemanticCameraTipAgain,
+                    ffipCameraTipType: .exact,
+                    tipText1: String(localized: .semanticCameraTip1)
+                        .asHighlight(
+                            highlightedString: String(localized: .semanticCameraTipGreen1),
+                            highlightColor: .ffipPointGreen1
+                        ),
+                    tipText2: String(localized: .semanticCameraTip2)
+                        .asHighlight(
+                            highlightedString: String(localized: .semanticCameraTipGreen2),
+                            highlightColor: .ffipPointGreen1
+                        ),
+                    dontShowAgainText: String(localized: .dontShowAgain)
+                )
+            }
             
             if showFlash {
                 Color.white

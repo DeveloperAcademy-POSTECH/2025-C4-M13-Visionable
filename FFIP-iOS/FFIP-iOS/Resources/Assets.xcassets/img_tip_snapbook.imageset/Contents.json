@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Group 48643.png",
+      "filename" : "img_tip_snapbook.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Group 48643@2x.png",
+      "filename" : "img_tip_snapbook@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Group 48643@3x.png",
+      "filename" : "img_tip_snapbook@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -16,7 +16,7 @@ struct ExactCameraView: View {
     @State private var showLockIcon: Bool = false
     @State private var showLockTask: Task<Void, Never>?
 
-    @AppStorage("dontShowExactTipAgain") private var dontShowTipAgain: Bool = false
+    @AppStorage(AppStorageKey.dontShowExactTipAgain) private var dontShowExactCameraTipAgain: Bool = false
     @State private var showTip = true
 
     @State var searchText: String
@@ -101,18 +101,19 @@ struct ExactCameraView: View {
                 .padding(.bottom, 55)
             }
 
-            if showTip && !dontShowTipAgain {
+            if showTip && !dontShowExactCameraTipAgain {
                 FfipCameraTipOverlay(
                     showTip: $showTip,
-                    dontShowTipAgain: $dontShowTipAgain,
-                    tipText1: String(localized: .cameraTip1)
+                    dontShowTipAgain: $dontShowExactCameraTipAgain,
+                    ffipCameraTipType: .exact,
+                    tipText1: String(localized: .exactCameraTip1)
                         .asHighlight(
-                            highlightedString: String(localized: .cameraTipGreen1),
+                            highlightedString: String(localized: .exactCameraTipGreen1),
                             highlightColor: .ffipPointGreen1
                         ),
-                    tipText2: String(localized: .cameraTip1)
+                    tipText2: String(localized: .exactCameraTip2)
                         .asHighlight(
-                            highlightedString: String(localized: .cameraTipGreen1),
+                            highlightedString: String(localized: .exactCameraTipGreen2),
                             highlightColor: .ffipPointGreen1
                         ),
                     dontShowAgainText: String(localized: .dontShowAgain)

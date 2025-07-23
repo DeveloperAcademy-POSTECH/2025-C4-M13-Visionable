@@ -22,6 +22,7 @@ struct FfipToolTip: View {
                 Text(message)
                     .font(.captionMedium12)
                     .foregroundColor(.ffipBackground1Main)
+                    .multilineTextAlignment(.leading)
                     .padding(12)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
@@ -48,6 +49,7 @@ struct FfipToolTip: View {
                     Text(message)
                         .font(.captionMedium12)
                         .foregroundColor(.ffipBackground1Main)
+                        .multilineTextAlignment(.leading)
                         .padding(12)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
@@ -59,6 +61,7 @@ struct FfipToolTip: View {
             Text(message)
                 .font(.captionMedium12)
                 .foregroundColor(.ffipBackground1Main)
+                .multilineTextAlignment(.leading)
                 .padding(10)
                 .background(
                     RoundedRectangle(cornerRadius: 4)
@@ -77,6 +80,7 @@ struct FfipToolTip: View {
             Text(message)
                 .font(.captionMedium12)
                 .foregroundColor(.ffipBackground1Main)
+                .multilineTextAlignment(.leading)
                 .padding(10)
                 .background(
                     RoundedRectangle(cornerRadius: 4)
