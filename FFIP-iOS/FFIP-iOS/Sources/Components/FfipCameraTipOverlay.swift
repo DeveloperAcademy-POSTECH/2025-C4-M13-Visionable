@@ -10,6 +10,8 @@ import SwiftUI
 struct FfipCameraTipOverlay: View {
     @Binding var showTip: Bool
     @Binding var dontShowTipAgain: Bool
+    
+    let ffipCameraTipType: FfipCameraTipType
     let tipText1: AttributedString
     let tipText2: AttributedString
     let dontShowAgainText: String
@@ -28,7 +30,7 @@ struct FfipCameraTipOverlay: View {
             }
 
             VStack(spacing: 12) {
-                Image(.imgTipHaptic)
+                Image(ffipCameraTipType.firstTipImage)
 
                 Text(tipText1)
                     .font(.labelMedium16)
@@ -38,7 +40,7 @@ struct FfipCameraTipOverlay: View {
                 Spacer()
                     .frame(height: 24)
 
-                Image(.imgTipTap)
+                Image(ffipCameraTipType.secondTipImage)
 
                 Text(tipText2)
                     .font(.labelMedium16)
@@ -59,6 +61,25 @@ struct FfipCameraTipOverlay: View {
                         .foregroundColor(.white.opacity(0.8))
                 }
             }
+        }
+    }
+}
+
+// MARK: - Toast Type Enum
+public enum FfipCameraTipType {
+    case exact, semantic
+    
+    var firstTipImage: ImageResource {
+        switch self {
+        case .exact: .imgTipHaptic
+        case .semantic: .imgTipTap
+        }
+    }
+    
+    var secondTipImage: ImageResource {
+        switch self {
+        case .exact: .imgTipTap
+        case .semantic: .imgTipSnapbook
         }
     }
 }
