@@ -18,6 +18,7 @@ struct SearchView: View {
     @Bindable var searchModel: SearchModel
     @State private var selectedSearchType: SearchType = .keyword
     @FocusState private var isFocused: Bool
+    @State private var isToolTipPresented: Bool = false
     @State private var isSheetPresented: Bool = false
     @State private var focusState: SearchFocusState = .home
     @State private var searchText: String = ""
@@ -43,6 +44,13 @@ struct SearchView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 20)
+                                .ffipToolTip(
+                                    isToolTipVisible: $isToolTipPresented,
+                                    message: selectedSearchType == .keyword
+                                    ? String(localized: .exactSearchToolTip) : String(localized: .semanticSearchToolTip),
+                                    position: .trailing,
+                                    spacing: 9
+                                )
                         }
                     }
                     .tint(.ffipGrayscale1)
@@ -162,6 +170,11 @@ struct SearchView: View {
             .padding(.horizontal, 20)
         }
         .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                withAnimation {
+                    isToolTipPresented = true
+                }
+            }
             searchText = ""
         }
         .onChange(of: isFocused) {
@@ -174,8 +187,16 @@ struct SearchView: View {
             }
         }
         .onChange(of: selectedSearchType) {
+            if isToolTipPresented { isToolTipPresented = false }
+
             withAnimation {
                 isSheetPresented = false
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                withAnimation {
+                    isToolTipPresented = true
+                }
             }
             hasSearchTypeChanged = true
         }

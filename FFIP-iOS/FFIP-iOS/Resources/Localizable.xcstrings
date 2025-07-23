@@ -132,6 +132,17 @@
         }
       }
     },
+    "exactSearchToolTip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "입력한 텍스트와\n일치하는 항목만 탐색합니다."
+          }
+        }
+      }
+    },
     "helloWorld" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -286,6 +297,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "연관 탐색"
+          }
+        }
+      }
+    },
+    "semanticSearchToolTip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "입력한 텍스트와 연관된\n모든 항목을 탐색합니다."
           }
         }
       }
