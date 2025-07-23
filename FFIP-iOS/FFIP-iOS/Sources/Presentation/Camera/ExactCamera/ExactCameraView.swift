@@ -16,7 +16,7 @@ struct ExactCameraView: View {
     @State private var showLockIcon: Bool = false
     @State private var showLockTask: Task<Void, Never>?
 
-    @AppStorage("dontShowExactTipAgain") private var dontShowExactCameraTipAgain: Bool = false
+    @AppStorage(AppStorageKey.dontShowExactTipAgain) private var dontShowExactCameraTipAgain: Bool = false
     @State private var showTip = true
 
     @State var searchText: String

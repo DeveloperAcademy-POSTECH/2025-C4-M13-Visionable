@@ -14,7 +14,7 @@ struct SemanticCameraView: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var mediator: SemanticCameraMediator
     
-    @AppStorage("dontShowSemanticTipAgain") private var dontShowSemanticCameraTipAgain: Bool = false
+    @AppStorage(AppStorageKey.dontShowSemanticTipAgain) private var dontShowSemanticCameraTipAgain: Bool = false
     @State private var showTip = true
     
     @FocusState private var isFfipTextFieldFocused: Bool
