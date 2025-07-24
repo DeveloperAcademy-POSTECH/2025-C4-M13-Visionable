@@ -49,6 +49,13 @@ struct PhotoPagerView: View {
                                         width: index == selectedIndex ? 35 : 25,
                                         height: 35
                                     )
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 4)
+                                            .stroke(
+                                                images[index].recognizedTexts != nil ? .ffipPointGreen1 : .clear,
+                                                lineWidth: 1
+                                            )
+                                    }
                                     .cornerRadius(6)
                                     .id(index)
                                     .onTapGesture {
