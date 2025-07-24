@@ -55,11 +55,11 @@ actor SpeechTranscriptionService {
     func startTranscribing() async throws {
         try await prepareSpeechModules()
         try prepareAudioEngine()
-        
+
         Task {
             try await testSpeechTranscriber()
         }
-        
+
         Task {
             try await testSpeechDetector()
         }
@@ -69,16 +69,17 @@ actor SpeechTranscriptionService {
         guard let speechDetector else {
             return
         }
+        print("testSpeechDetector")
         for try await case let result in speechDetector.results {
             print("디텍터 \(result), \(Date.now)")
         }
     }
-    
+
     func testSpeechTranscriber() async throws {
         guard let speechTranscriber else {
             return
         }
-        
+        print("testSpeechTranscriber")
         for try await case let result in speechTranscriber.results {
             let text = result.text
             print("트랜스크라이버 \(text), \(Date.now)")
@@ -86,11 +87,9 @@ actor SpeechTranscriptionService {
     }
 
     func stopTranscribing() async {
-        //        recognitionTask?.cancel()
-        //        recognitionTask = nil
-        //        audioEngine?.stop()
-        //        inputBuilder?.finish()
-        //        try? await speechAnalyzer?.finalizeAndFinishThroughEndOfInput()
+        audioEngine?.stop()
+        speechStreamContinuation?.finish()
+        try? await speechAnalyzer?.finalizeAndFinishThroughEndOfInput()
     }
 
     private func prepareSpeechModules() async throws {
@@ -103,30 +102,15 @@ actor SpeechTranscriptionService {
             attributeOptions: []
         )
 
-        print("transriber: \(transcriber)")
-        
         let detector = SpeechDetector(
             detectionOptions: .init(sensitivityLevel: .high),
             reportResults: true
         )
-        
+
         self.speechTranscriber = transcriber
         self.speechDetector = detector
 
-//        let modules = [detector, transcriber]
-//        speechAnalyzer = SpeechAnalyzer(modules: modules)
-//        
-//        guard let speechAnalyzer else { return }
-//
-//        self.analyzerFormat = await SpeechAnalyzer.bestAvailableAudioFormat(
-//            compatibleWith: modules)
-
-        (speechStream, speechStreamContinuation) = AsyncStream<AnalyzerInput>
-            .makeStream()
-
-        guard let speechStream else { return }
-
-        print("speechStream: \(speechStream)")
+        let modules: [any SpeechModule] = [transcriber, detector]
 
         do {
             try await ensureModel(
@@ -138,28 +122,29 @@ actor SpeechTranscriptionService {
             return
         }
 
-        //        recognitionTask = Task {
-        //            do {
-        //                for try await case let result in transcriber.results {
-        //                    let text = result.text
-        //                    print("text \(text)")
-        //                }
-        //            } catch {
-        //                print("speech recognition failed")
-        //            }
-        //        }
+        speechAnalyzer = SpeechAnalyzer(modules: modules)
 
-        try await speechAnalyzer?.start(inputSequence: speechStream)
-        
-        // 에 잘넣기
-        // Mediator에서 잘 뽑기
+        guard let speechAnalyzer else { return }
+
+        self.analyzerFormat = await SpeechAnalyzer.bestAvailableAudioFormat(
+            compatibleWith: modules
+        )
+
+        print("analyzerFormat: \(String(describing: self.analyzerFormat))")
+
+        (speechStream, speechStreamContinuation) = AsyncStream<AnalyzerInput>
+            .makeStream()
+
+        guard let speechStream else { return }
+
+        try await speechAnalyzer.start(inputSequence: speechStream)
     }
 
     private func prepareAudioEngine() throws {
         print("preapreAudioEngine 시작")
         let audioEngine = AVAudioEngine()
 
-        guard let analyzerFormat else {
+        guard analyzerFormat != nil else {
             throw TranscriptionError.failedToSetupRecognitionStream
         }
 
@@ -190,12 +175,6 @@ actor SpeechTranscriptionService {
         self.audioEngine = audioEngine
     }
 
-    //    private func startRecognitionTask() {
-    //        recognitionTask = Task {
-    //            await processRecognition()
-    //        }
-    //    }
-
     private func sendBufferToAnalyzer(_ buffer: AVAudioPCMBuffer) async throws {
         guard let speechStreamContinuation, let analyzerFormat else {
             throw TranscriptionError.invalidAudioDataType
@@ -208,40 +187,9 @@ actor SpeechTranscriptionService {
         let input = AnalyzerInput(buffer: converted)
         speechStreamContinuation.yield(input)
     }
-    //
-    //    private func processRecognition() async {
-    //        guard let transcriber = speechTranscriber, let detector = speechDetector else { return }
-    //
-    //        let transcriberStream = Task {
-    //            for try await result in transcriber.results {
-    //                let text = result.text
-    //                await self.handleTranscriptUpdate(result: result, text: text)
-    //            }
-    //        }
-    //
-    //        let detectorStream = Task {
-    //            for try await result in detector.results {
-    //                await self.updateSpeechDetected(isDetected: result.speechDetected)
-    //            }
-    //        }
-    //
-    //        _ = try? await (transcriberStream.value, detectorStream.value)
-    //        }
-    //
-    //    private func handleTranscriptUpdate(result: SpeechTranscriber.Result, text: AttributedString) async {
-    //        print("handleTranscriptUpdate")
-    //        if result.isFinal {
-    //            self.transcript += text
-    //            self.transcript += " "
-    //        } else {
-    //            self.transcript = text
-    //        }
-    ////        transcriptStreamContinuation?.yield(self.transcript.description)
-    //    }
 
     private func updateSpeechDetected(isDetected: Bool) async {
         print("updateSpeechDetected")
-        //        speechDetectedStreamContinuation?.yield(isDetected)
     }
 }
 
@@ -351,3 +299,5 @@ final class BufferConverter {
         return conversionBuffer
     }
 }
+
+extension SpeechDetector: @unchecked Sendable, @retroactive SpeechModule {}

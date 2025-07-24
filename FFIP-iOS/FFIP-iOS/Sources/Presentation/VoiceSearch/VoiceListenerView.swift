@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VoiceListenerView: View {
-    @Binding var isListening: Bool
+    @State var isListening: Bool
 
     @State private var phase: Int = 0
     @State private var unDetectCount: Int = 0
