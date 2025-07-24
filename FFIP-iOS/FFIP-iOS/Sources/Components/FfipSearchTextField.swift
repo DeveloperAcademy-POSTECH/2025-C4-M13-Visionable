@@ -39,12 +39,10 @@ struct FfipSearchTextField: View {
     var body: some View {
         HStack(spacing: 4) {
             HStack(spacing: 12) {
-                TextField(
-                    "",
+                FfipUIKitTextField(
                     text: $text,
-                    prompt: Text(placeholder)
-                        .foregroundStyle(.ffipGrayscale4)
-                        .font(.bodyMedium16)
+                    placeholder: placeholder,
+                    isFirstResponder: isFocused
                 )
                 .foregroundStyle(.ffipGrayscale1)
                 .font(.bodyMedium16)
@@ -54,6 +52,7 @@ struct FfipSearchTextField: View {
                 .onSubmit {
                     isTextEmpty ? onEmptySubmit?() : onSubmit?()
                 }
+                .frame(height: 52)
                 
                 if isFocused && !isTextEmpty {
                     Button {
