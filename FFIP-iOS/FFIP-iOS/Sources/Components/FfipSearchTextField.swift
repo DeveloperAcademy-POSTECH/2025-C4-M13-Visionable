@@ -9,20 +9,22 @@ import SwiftUI
 
 struct FfipSearchTextField: View {
     @Binding var text: String
-    
+
     private let isFocused: Bool
     private let placeholder: String
     private let onVoiceSearch: (() -> Void)?
     private let onSubmit: (() -> Void)?
     private let onEmptySubmit: (() -> Void)?
-    
+    private let withVoiceSearch: Bool
+
     public init(
         text: Binding<String>,
         isFocused: Bool,
         placeholder: String,
         onVoiceSearch: (() -> Void)? = nil,
         onSubmit: (() -> Void)? = nil,
-        onEmptySubmit: (() -> Void)? = nil
+        onEmptySubmit: (() -> Void)? = nil,
+        withVoiceSearch: Bool = true
     ) {
         self._text = text
         self.isFocused = isFocused
@@ -30,12 +32,13 @@ struct FfipSearchTextField: View {
         self.onVoiceSearch = onVoiceSearch
         self.onSubmit = onSubmit
         self.onEmptySubmit = onEmptySubmit
+        self.withVoiceSearch = withVoiceSearch
     }
-    
+
     private var isTextEmpty: Bool {
         text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-    
+
     var body: some View {
         HStack(spacing: 4) {
             HStack(spacing: 12) {
@@ -54,7 +57,7 @@ struct FfipSearchTextField: View {
                 .onSubmit {
                     isTextEmpty ? onEmptySubmit?() : onSubmit?()
                 }
-                
+
                 if isFocused && !isTextEmpty {
                     Button {
                         text = ""
@@ -66,8 +69,8 @@ struct FfipSearchTextField: View {
             }
             .background(.ffipGrayscale5)
             .cornerRadius(50)
-            
-            if !isFocused {
+
+            if !isFocused && withVoiceSearch {
                 Button {
                     onVoiceSearch?()
                 } label: {
@@ -81,10 +84,10 @@ struct FfipSearchTextField: View {
     }
 }
 
- #Preview {
-    FfipSearchTextField(
-        text: .constant("dd"),
-        isFocused: true,
-        placeholder: "어쩌구저쩌구 플레이스홀더"
-    )
- }
+// #Preview {
+//    FfipSearchTextField(
+//        text: .constant("dd"),
+//        isFocused: true,
+//        placeholder: "어쩌구저쩌구 플레이스홀더"
+//    )
+// }
