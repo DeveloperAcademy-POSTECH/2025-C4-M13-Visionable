@@ -3,6 +3,16 @@
     {
       "filename" : "icnGrid.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Frame 48679.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

@@ -3,6 +3,16 @@
     {
       "filename" : "btn_soundSearch.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Frame 2085665722.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {
