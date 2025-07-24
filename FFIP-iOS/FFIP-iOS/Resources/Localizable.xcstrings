@@ -160,6 +160,9 @@
         }
       }
     },
+    "Key" : {
+      "extractionState" : "manual"
+    },
     "noRecentSearchesMessage" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -246,6 +249,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "탐색 모드를 전환했습니다."
+          }
+        }
+      }
+    },
+    "searchPlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter your search query."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색할 내용을 입력해주세요."
           }
         }
       }
