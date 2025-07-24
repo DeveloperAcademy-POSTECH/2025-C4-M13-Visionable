@@ -9,18 +9,22 @@ import FoundationModels
 
 actor FoundationModelsService {
     private(set) var relatedKeywords: RelatedKeywords?
-    private let session: LanguageModelSession
+    // private let session: LanguageModelSession
     
-    init() {
-        self.session = LanguageModelSession(
-            instructions: "너는 OCR로 인식된 텍스트와 사용자가 찾는 키워드를 비교해 가장 유사한 키워드를 찾아줘야해."
-        )
-    }
+//    init() {
+//        self.session = LanguageModelSession(
+//            instructions: "너는 OCR로 인식된 텍스트와 사용자가 찾는 키워드를 비교해 가장 유사한 키워드를 찾아줘야해."
+//        )
+//    }
     
     func findRelatedKeywords(
         searchKeyword: String,
         recognitionKeywords: [String]
     ) async throws {
+        let session = LanguageModelSession(
+            instructions: "너는 OCR로 인식된 텍스트와 사용자가 찾는 키워드를 비교해 가장 유사한 키워드를 찾아줘야해."
+        )
+        
         let response = try await session.respond(generating: RelatedKeywords.self) {
             """
             다음은 OCR로 추출되어 인식된 키워드들이 모여있는 배열이야.

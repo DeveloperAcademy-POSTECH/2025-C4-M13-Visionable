@@ -181,18 +181,34 @@ private extension SemanticCameraView {
                 animateCapture = true
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                    Task {
-                        let analyzeResult = await mediator.analyzeCapturedImage(captureFrame)
-                        
-                        let capturedImage = SemanticCameraCapturedImage(
-                            imageData: jpegData,
-                            similarKeyword: analyzeResult?.keyword ?? "",
-                            similarity: analyzeResult?.similarity ?? 0.0
-                        )
-                        modelContext.insert(capturedImage)
-                        animateCapture = false
+                    let capturedImage = SemanticCameraCapturedImage(imageData: jpegData)
+                    let capturedImageId = capturedImage.id
+                    modelContext.insert(capturedImage)
+
+                    Task.detached(priority: .background) {
+                        await analyzeAndUpdateCapturedImage(capturedImageId, buffer: captureFrame)
                     }
+                    animateCapture = false
                 }
+            }
+        }
+    }
+    
+    @MainActor
+    func analyzeAndUpdateCapturedImage(_ id: UUID, buffer: CVImageBuffer) async {
+        guard let result = await mediator.analyzeCapturedImage(buffer) else {
+            print("❌ 분석 실패")
+            return
+        }
+        
+        if let targetImage = capturedImages.first(where: { $0.id == id }) {
+            targetImage.similarKeyword = result.keyword
+            targetImage.similarity = result.similarity
+
+            do {
+                try modelContext.save()
+            } catch {
+                print("❌ 분석 후 저장 실패: \(error)")
             }
         }
     }
