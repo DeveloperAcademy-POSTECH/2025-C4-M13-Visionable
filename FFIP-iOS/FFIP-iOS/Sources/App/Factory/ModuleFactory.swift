@@ -62,7 +62,7 @@ final class ModuleFactory: ModuleFactoryProtocol {
     
     func makeVoiceSearchView() -> VoiceSearchView {
         let privacyService = PrivacyService()
-        let speeachService = SpeechRecognitionService()
+        let speeachService = SpeechTranscriptionService()
         let model = VoiceSearchModel(
             privacyService: privacyService,
             speechService: speeachService

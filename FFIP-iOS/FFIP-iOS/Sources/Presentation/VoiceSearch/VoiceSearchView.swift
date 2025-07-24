@@ -10,40 +10,35 @@ import SwiftUI
 struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
-
+    
     @State private var isListening = false
-
+    
     var body: some View {
-        VStack(spacing: 20) {
-            Text(voiceSearchModel.transcript)
-                .font(.title2)
-                .multilineTextAlignment(.center)
-                .padding()
-
-            VoiceListenerView(
-                isListening: $isListening,
-            )
-
-            Button {
-                Task {
-                    if isListening {
-                        await voiceSearchModel.stop()
-                        isListening = false
-                    } else {
-                        await voiceSearchModel.start()
-                        isListening = true
-                    }
-                }
-            } label: {
-                Image(systemName: isListening ? "mic.fill" : "mic")
-                    .font(.system(size: 40))
-                    .padding()
-                    .background(Circle().fill(isListening ? .red : .blue))
-                    .foregroundColor(.white)
+        VStack(spacing: 0) {
+            Spacer()
+                .frame(height: 58)
+            HStack {
+                Text("\"\(voiceSearchModel.transcript)\"")
+                    .font(.titleBold24)
+                    .foregroundStyle(.ffipGrayscale1)
+                Spacer()
             }
+            
+            Spacer()
+                .frame(height: 165)
+            
+            VoiceListenerView(
+                isListening: voiceSearchModel.isListening,
+            )
+            
+            Spacer()
         }
         .padding()
+        .task {
+            await voiceSearchModel.start()
+        }
     }
+    
 }
 
 // #Preview {

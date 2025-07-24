@@ -174,6 +174,7 @@ struct SearchView: View {
             }
         }
         .onChange(of: selectedSearchType) {
+            print(selectedSearchType)
             withAnimation {
                 isSheetPresented = false
             }
