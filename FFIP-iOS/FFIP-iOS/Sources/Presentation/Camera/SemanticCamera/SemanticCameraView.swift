@@ -200,16 +200,19 @@ private extension SemanticCameraView {
             print("❌ 분석 실패")
             return
         }
+        guard let targetImage = capturedImages.first(where: { $0.id == id }) else { return }
         
-        if let targetImage = capturedImages.first(where: { $0.id == id }) {
-            targetImage.similarKeyword = result.keyword
-            targetImage.similarity = result.similarity
+        let filteredRecognizedTexts = result.recognizedTexts.filter { observation in
+            observation.transcript == result.keyword && result.similarity >= 0.5
+        }
+        targetImage.similarKeyword = result.keyword
+        targetImage.similarity = result.similarity
+        targetImage.recognizedTexts = filteredRecognizedTexts
 
-            do {
-                try modelContext.save()
-            } catch {
-                print("❌ 분석 후 저장 실패: \(error)")
-            }
+        do {
+            try modelContext.save()
+        } catch {
+            print("❌ 분석 후 저장 실패: \(error)")
         }
     }
     

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import Vision
 
 @Model
 final class SemanticCameraCapturedImage {
@@ -15,8 +16,7 @@ final class SemanticCameraCapturedImage {
     var createdAt: Date
     var similarKeyword: String?
     var similarity: Double?
-    
-    @Relationship var recognizedTexts: [RecognizedText]
+    var recognizedTexts: [RecognizedTextObservation]?
 
     init(
         id: UUID = UUID(),
@@ -26,33 +26,5 @@ final class SemanticCameraCapturedImage {
         self.id = id
         self.imageData = imageData
         self.createdAt = createdAt
-        self.recognizedTexts = []
-    }
-}
-
-@Model
-final class RecognizedText {
-    var text: String
-    var boundingBox: BoundingBox
-    @Relationship var parentImage: SemanticCameraCapturedImage?
-
-    init(text: String, boundingBox: BoundingBox) {
-        self.text = text
-        self.boundingBox = boundingBox
-    }
-}
-
-@Model
-final class BoundingBox {
-    var x: Double
-    var y: Double
-    var width: Double
-    var height: Double
-    
-    init(rect: CGRect) {
-        self.x = rect.origin.x
-        self.y = rect.origin.y
-        self.width = rect.size.width
-        self.height = rect.size.height
     }
 }

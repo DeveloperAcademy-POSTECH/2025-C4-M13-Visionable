@@ -16,10 +16,22 @@ struct PhotoPagerView: View {
             TabView(selection: $selectedIndex) {
                 ForEach(images.indices, id: \.self) { index in
                     if let image = UIImage(data: images[index].imageData) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                            .tag(index)
+                        ZStack {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                            
+                            GeometryReader { geo in
+                                if let recognizedTexts = images[index].recognizedTexts {
+                                    ForEach(recognizedTexts, id: \.self) { text in
+                                        FfipBoundingBox(observation: text)
+                                            .frame(width: geo.size.width, height: geo.size.height)
+                                    }
+                                }
+                                
+                            }
+                        }
+                        .tag(index)
                     }
                 }
             }

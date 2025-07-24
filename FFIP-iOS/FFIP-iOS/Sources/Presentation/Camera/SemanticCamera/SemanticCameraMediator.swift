@@ -72,29 +72,21 @@ final class SemanticCameraMediator: NSObject {
     
     func analyzeCapturedImage(_ imageBuffer: CVImageBuffer) async -> CapturedImageAnalysisResultDTO? {
         await visionModel.processFrame(imageBuffer)
-        let recognizedTexts = visionModel.recognizedTextObservations.map {
-            CapturedImageAnalysisResultDTO.RecognizedTextItem(
-                text: $0.transcript,
-                boundingBox: $0.boundingBox
-            )
-        }
-        
+        let recognizedTexts = visionModel.recognizedTextObservations.map { $0.transcript }
         print("searchKeyword:", visionModel.searchKeyword)
         print("recognizedTexts:", recognizedTexts)
         
         guard let result = try? await languageModel.findMostSimilarKeywordWithScore(
             to: visionModel.searchKeyword,
-            from: recognizedTexts.map { $0.text }
+            from: recognizedTexts
         ) else {
             return nil
         }
-        
-        print("result: ", result)
-        
+                
         return CapturedImageAnalysisResultDTO(
             keyword: result.keyword,
             similarity: result.similarity,
-            recognized: recognizedTexts
+            recognizedTexts: visionModel.recognizedTextObservations
         )
     }
 }

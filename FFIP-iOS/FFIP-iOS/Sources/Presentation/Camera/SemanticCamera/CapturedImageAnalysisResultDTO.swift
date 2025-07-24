@@ -11,10 +11,5 @@ import Vision
 struct CapturedImageAnalysisResultDTO {
     let keyword: String
     let similarity: Double
-    let recognized: [RecognizedTextItem]
-    
-    struct RecognizedTextItem {
-        let text: String
-        let boundingBox: NormalizedRect
-    }
+    let recognizedTexts: [RecognizedTextObservation]
 }
