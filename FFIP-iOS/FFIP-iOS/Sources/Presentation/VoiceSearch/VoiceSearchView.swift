@@ -14,6 +14,7 @@ struct VoiceSearchView: View {
     
     @State private var transcript: String = ""
     @State private var isListening = false
+    @State private var isCameraPushNeeded: Bool = true
     
     var body: some View {
         VStack(spacing: 0) {
@@ -37,6 +38,8 @@ struct VoiceSearchView: View {
         }
         .padding()
         .task {
+            transcript = ""
+            
             await voiceSearchModel.start()
             
             guard let dictationTranscriber = voiceSearchModel.dictationTranscriber else { return }
@@ -47,14 +50,16 @@ struct VoiceSearchView: View {
                     let text = String(result.text.characters)
                     transcript = text
     
+                    await voiceSearchModel.stop()
+                    
                     try await Task.sleep(for: .seconds(1))
                     
-                    await voiceSearchModel.stop()
-                    coordinator.push(.exactCamera(searchKeyword: transcript))
-                
-                    try await Task.sleep(for: .seconds(1))
-                    transcript = ""
-                    break
+                    if isCameraPushNeeded {
+                        coordinator.push(.exactCamera(searchKeyword: transcript))
+                        isCameraPushNeeded = false
+                    } else {
+                        return
+                    }
                 }
             }
     
@@ -69,7 +74,6 @@ struct VoiceSearchView: View {
             }
         }
     }
-    
 }
 
 // #Preview {
