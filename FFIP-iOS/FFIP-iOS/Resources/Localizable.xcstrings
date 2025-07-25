@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "\"%@\"" : {
-
-    },
     "appName" : {
       "extractionState" : "manual",
       "localizations" : {

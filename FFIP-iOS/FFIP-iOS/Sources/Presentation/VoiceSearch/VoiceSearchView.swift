@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import Speech
 
 struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
     
+    @State private var transcript: String = ""
     @State private var isListening = false
     
     var body: some View {
@@ -18,7 +20,7 @@ struct VoiceSearchView: View {
             Spacer()
                 .frame(height: 58)
             HStack {
-                Text("\"\(voiceSearchModel.transcript)\"")
+                Text(transcript == "" ? String(localized: .searchPlaceholder) : "\"\(transcript)\"")
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
                 Spacer()
@@ -28,7 +30,7 @@ struct VoiceSearchView: View {
                 .frame(height: 165)
             
             VoiceListenerView(
-                isListening: voiceSearchModel.isListening,
+                isListening: voiceSearchModel.isUserSpeaking,
             )
             
             Spacer()
@@ -36,6 +38,35 @@ struct VoiceSearchView: View {
         .padding()
         .task {
             await voiceSearchModel.start()
+            
+            guard let dictationTranscriber = voiceSearchModel.dictationTranscriber else { return }
+            guard let detectorStream = voiceSearchModel.detectorStream else { return }
+            
+            Task {
+                for try await case let result in dictationTranscriber.results {
+                    let text = String(result.text.characters)
+                    transcript = text
+    
+                    try await Task.sleep(for: .seconds(1))
+                    
+                    await voiceSearchModel.stop()
+                    coordinator.push(.exactCamera(searchKeyword: transcript))
+                
+                    try await Task.sleep(for: .seconds(1))
+                    transcript = ""
+                    break
+                }
+            }
+    
+            Task {
+                for await db in detectorStream {
+                    if db > -40 {
+                        try await Task.sleep(for: .seconds(5))
+                    } else {
+                        try await Task.sleep(for: .seconds(5))
+                    }
+                }
+            }
         }
     }
     

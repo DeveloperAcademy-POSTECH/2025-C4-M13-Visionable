@@ -13,13 +13,13 @@ actor SpeechTranscriptionService {
     private var audioEngine: AVAudioEngine?
     private var analyzerFormat: AVAudioFormat?
 
-    private var dictationTranscriber: DictationTranscriber?
+    private(set) var dictationTranscriber: DictationTranscriber?
     private var speechDetector: SpeechDetector?
     private var speechAnalyzer: SpeechAnalyzer?
     private var speechStream: AsyncStream<AnalyzerInput>?
     private var speechStreamContinuation:
         AsyncStream<AnalyzerInput>.Continuation?
-    private var detectorStream: AsyncStream<Float>?
+    private(set) var detectorStream: AsyncStream<Float>?
     private var detectorStreamContinuation: AsyncStream<Float>.Continuation?
     private var recognitionTask: Task<Void, Never>?
 
@@ -30,16 +30,8 @@ actor SpeechTranscriptionService {
     func startTranscribing() async throws {
         try await prepareSpeechModules()
         try prepareAudioEngine()
-        
-        Task {
-            try await testDictationTranscriber()
-        }
 
-        Task {
-            try await testDetectorStream()
-        }
-
-        // 향후 애플이 업데이트하면 쓰면 돼요.
+        // 향후 애플이 업데이트하면 테스트하고 쓰면 돼요.
         //        Task {
         //            try await testSpeechDetector()
         //        }
@@ -191,9 +183,7 @@ actor SpeechTranscriptionService {
     }
 
     nonisolated private func calculateMicLevel(from buffer: AVAudioPCMBuffer)
-        -> Float
-    {
-        // Calculate and log mic input level in dB (RMS -> dB)
+        -> Float {
         guard let floatChannelData = buffer.floatChannelData?[0] else {
             return -70
         }
@@ -210,8 +200,7 @@ actor SpeechTranscriptionService {
 
 extension SpeechTranscriptionService {
     public func ensureModel(transcriber: DictationTranscriber, locale: Locale)
-        async throws
-    {
+        async throws {
 
         guard await supported(locale: locale) else { return }
 
@@ -269,8 +258,7 @@ final class BufferConverter {
     private var converter: AVAudioConverter?
 
     func convertBuffer(_ buffer: AVAudioPCMBuffer, to format: AVAudioFormat)
-        throws -> AVAudioPCMBuffer
-    {
+        throws -> AVAudioPCMBuffer {
         let inputFormat = buffer.format
         guard inputFormat != format else {
             return buffer
@@ -322,5 +310,4 @@ final class BufferConverter {
 }
 
 extension SpeechDetector: @retroactive SpeechModule,
-    @unchecked @retroactive Sendable
-{}
+    @unchecked @retroactive Sendable {}
