@@ -10,33 +10,6 @@ import Foundation
 import Speech
 
 actor SpeechTranscriptionService {
-    private enum TranscriptionError: Error {
-        case couldNotDownloadModel
-        case failedToSetupRecognitionStream
-        case invalidAudioDataType
-        case localeNotSupported
-        case noInternetForModelDownload
-        case audioFilePathNotFound
-
-        var descriptionString: String {
-            switch self {
-            case .couldNotDownloadModel:
-                return "Could not download the model."
-            case .failedToSetupRecognitionStream:
-                return "Could not set up the speech recognition stream."
-            case .invalidAudioDataType:
-                return "Unsupported audio format."
-            case .localeNotSupported:
-                return "This locale is not yet supported by SpeechAnalyzer."
-            case .noInternetForModelDownload:
-                return
-                    "The model could not be downloaded because the user is not connected to internet."
-            case .audioFilePathNotFound:
-                return "Couldn't write audio to file."
-            }
-        }
-    }
-
     private var audioEngine: AVAudioEngine?
     private var analyzerFormat: AVAudioFormat?
 
@@ -71,9 +44,7 @@ actor SpeechTranscriptionService {
     }
 
     func testSpeechTranscriber() async throws {
-        guard let speechTranscriber else {
-            return
-        }
+        guard let speechTranscriber else { return }
         print("testSpeechTranscriber")
         for try await case let result in speechTranscriber.results {
             let text = result.text
@@ -88,7 +59,7 @@ actor SpeechTranscriptionService {
         print("testDictationTranscriber")
         for try await case let result in dictationTranscriber.results {
             let text = result.text
-            print("딕테이션 \(result), \(Date.now)")
+            print("딕테이션 \(text), \(Date.now)")
         }
     }
     
@@ -131,15 +102,10 @@ actor SpeechTranscriptionService {
 
         let modules: [any SpeechModule] = [dictationTranscriber, detector]
 
-        do {
-            try await ensureModel(
-                transcriber: transcriber,
-                locale: selectedLocale
-            )
-        } catch let error as TranscriptionError {
-            print(error)
-            return
-        }
+        try await ensureModel(
+            transcriber: transcriber,
+            locale: selectedLocale
+        )
         
         try? await ensureModel(dictationTranscriber: dictationTranscriber, locale: selectedLocale)
 
@@ -167,9 +133,7 @@ actor SpeechTranscriptionService {
         print("preapreAudioEngine 시작")
         let audioEngine = AVAudioEngine()
 
-        guard analyzerFormat != nil else {
-            throw TranscriptionError.failedToSetupRecognitionStream
-        }
+        guard analyzerFormat != nil else { return }
 
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(
@@ -199,9 +163,7 @@ actor SpeechTranscriptionService {
     }
 
     private func sendBufferToAnalyzer(_ buffer: AVAudioPCMBuffer) async throws {
-        guard let speechStreamContinuation, let analyzerFormat else {
-            throw TranscriptionError.invalidAudioDataType
-        }
+        guard let speechStreamContinuation, let analyzerFormat else { return }
 
         let converted = try await converter.convertBuffer(
             buffer,
@@ -218,11 +180,8 @@ actor SpeechTranscriptionService {
 
 extension SpeechTranscriptionService {
     public func ensureModel(transcriber: SpeechTranscriber, locale: Locale)
-        async throws
-    {
-        guard await supported(locale: locale) else {
-            throw TranscriptionError.localeNotSupported
-        }
+        async throws {
+        guard await supported(locale: locale) else { return }
 
         if await installed(locale: locale) {
             return
@@ -232,25 +191,19 @@ extension SpeechTranscriptionService {
     }
     
     public func ensureModel(dictationTranscriber: DictationTranscriber, locale: Locale)
-        async throws
-    {
+        async throws {
         print("ensureModel \(dictationTranscriber)")
         
         guard await supported(locale: locale) else {
             print("ensureModel supported 실패")
             return
         }
-        
-        print("깔아보자 \(dictationTranscriber)")
-        try await downloadIfNeeded(for: dictationTranscriber)
 
-//        if await installedDictationTranscriber(locale: locale) {
-//            print("깔려있음 \(dictationTranscriber)")
-//            return
-//        } else {
-//            print("깔아보자 \(dictationTranscriber)")
-//            try await downloadIfNeeded(for: dictationTranscriber)
-//        }
+        if await installedDictationTranscriber(locale: locale) {
+            return
+        } else {
+            try await downloadIfNeeded(for: dictationTranscriber)
+        }
     }
 
     func supported(locale: Locale) async -> Bool {
