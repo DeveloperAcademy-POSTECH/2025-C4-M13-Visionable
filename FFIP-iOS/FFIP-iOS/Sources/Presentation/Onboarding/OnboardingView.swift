@@ -80,21 +80,22 @@ struct OnboardingUpperContentView: View {
             
             HStack(spacing: 4) {
                 RoundedRectangle(cornerRadius: 50)
-                    .fill(.ffipGrayscale5)
+                    .fill(.ffipGrayscale5NoDark)
                     .frame(height: 50)
                     .overlay(
                         HStack(spacing: 0) {
                             Text(onboardingText)
-                                .foregroundStyle(.ffipGrayscale1)
+                                .foregroundStyle(.ffipGrayscale1NoDark)
                                 .font(.labelMedium14)
                                 .padding(.leading, 18)
                             Spacer()
                         }
                     )
                 
-                Image(.icnSettingsVoice)
+                Image(.icnSettingsVoiceNoDark)
                     .frame(width: 50, height: 50)
-                    .background(Circle().fill(.ffipGrayscale5))
+                    .tint(.ffipGrayscale1)
+                    .background(Circle().fill(.ffipGrayscale5NoDark))
             }
             .padding(.top, 80)
             .padding(.leading, 38)
