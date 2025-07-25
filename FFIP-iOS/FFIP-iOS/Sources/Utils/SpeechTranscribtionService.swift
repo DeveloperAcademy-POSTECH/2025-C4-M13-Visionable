@@ -41,6 +41,7 @@ actor SpeechTranscriptionService {
     private var analyzerFormat: AVAudioFormat?
 
     private var speechTranscriber: SpeechTranscriber?
+    private var dictationTranscriber: DictationTranscriber?
     private var speechDetector: SpeechDetector?
     private var speechAnalyzer: SpeechAnalyzer?
     private var speechStream: AsyncStream<AnalyzerInput>?
@@ -59,19 +60,13 @@ actor SpeechTranscriptionService {
         Task {
             try await testSpeechTranscriber()
         }
+        
+        Task {
+            try await testDictationTranscriber()
+        }
 
         Task {
             try await testSpeechDetector()
-        }
-    }
-
-    func testSpeechDetector() async throws {
-        guard let speechDetector else {
-            return
-        }
-        print("testSpeechDetector")
-        for try await case let result in speechDetector.results {
-            print("디텍터 \(result), \(Date.now)")
         }
     }
 
@@ -83,6 +78,27 @@ actor SpeechTranscriptionService {
         for try await case let result in speechTranscriber.results {
             let text = result.text
             print("트랜스크라이버 \(text), \(Date.now)")
+        }
+    }
+    
+    func testDictationTranscriber() async throws {
+        guard let dictationTranscriber else {
+            return
+        }
+        print("testDictationTranscriber")
+        for try await case let result in dictationTranscriber.results {
+            let text = result.text
+            print("딕테이션 \(result), \(Date.now)")
+        }
+    }
+    
+    func testSpeechDetector() async throws {
+        guard let speechDetector else {
+            return
+        }
+        print("testSpeechDetector")
+        for try await case let result in speechDetector.results {
+            print("디텍터 \(result), \(Date.now)")
         }
     }
 
@@ -101,6 +117,8 @@ actor SpeechTranscriptionService {
             reportingOptions: [.volatileResults],
             attributeOptions: []
         )
+        
+        let dictationTranscriber = DictationTranscriber(locale: selectedLocale, preset: .shortDictation)
 
         let detector = SpeechDetector(
             detectionOptions: .init(sensitivityLevel: .high),
@@ -108,9 +126,10 @@ actor SpeechTranscriptionService {
         )
 
         self.speechTranscriber = transcriber
+        self.dictationTranscriber = dictationTranscriber
         self.speechDetector = detector
 
-        let modules: [any SpeechModule] = [transcriber, detector]
+        let modules: [any SpeechModule] = [dictationTranscriber, detector]
 
         do {
             try await ensureModel(
@@ -121,6 +140,8 @@ actor SpeechTranscriptionService {
             print(error)
             return
         }
+        
+        try? await ensureModel(dictationTranscriber: dictationTranscriber, locale: selectedLocale)
 
         speechAnalyzer = SpeechAnalyzer(modules: modules)
 
@@ -135,7 +156,9 @@ actor SpeechTranscriptionService {
         (speechStream, speechStreamContinuation) = AsyncStream<AnalyzerInput>
             .makeStream()
 
-        guard let speechStream else { return }
+        guard let speechStream else {
+            print("speechStream nil")
+            return }
 
         try await speechAnalyzer.start(inputSequence: speechStream)
     }
@@ -207,6 +230,28 @@ extension SpeechTranscriptionService {
             try await downloadIfNeeded(for: transcriber)
         }
     }
+    
+    public func ensureModel(dictationTranscriber: DictationTranscriber, locale: Locale)
+        async throws
+    {
+        print("ensureModel \(dictationTranscriber)")
+        
+        guard await supported(locale: locale) else {
+            print("ensureModel supported 실패")
+            return
+        }
+        
+        print("깔아보자 \(dictationTranscriber)")
+        try await downloadIfNeeded(for: dictationTranscriber)
+
+//        if await installedDictationTranscriber(locale: locale) {
+//            print("깔려있음 \(dictationTranscriber)")
+//            return
+//        } else {
+//            print("깔아보자 \(dictationTranscriber)")
+//            try await downloadIfNeeded(for: dictationTranscriber)
+//        }
+    }
 
     func supported(locale: Locale) async -> Bool {
         let supported = await SpeechTranscriber.supportedLocales
@@ -221,6 +266,13 @@ extension SpeechTranscriptionService {
             locale.identifier(.bcp47)
         )
     }
+    
+    func installedDictationTranscriber(locale: Locale) async -> Bool {
+        let installed = await Set(DictationTranscriber.installedLocales)
+        return installed.map { $0.identifier(.bcp47) }.contains(
+            locale.identifier(.bcp47)
+        )
+    }
 
     func downloadIfNeeded(for module: SpeechTranscriber) async throws {
         if let downloader = try await AssetInventory.assetInstallationRequest(
@@ -229,6 +281,16 @@ extension SpeechTranscriptionService {
             self.downloadProgress = downloader.progress
             try await downloader.downloadAndInstall()
         }
+    }
+    
+    func downloadIfNeeded(for module: DictationTranscriber) async throws {
+        if let downloader = try await AssetInventory.assetInstallationRequest(
+            supporting: [module])
+        {
+            print("다운로드 \(module)")
+            self.downloadProgress = downloader.progress
+            try await downloader.downloadAndInstall()
+        } else { print("다운로드 \(module) 실패")}
     }
 
     func deallocate() async {
@@ -300,4 +362,4 @@ final class BufferConverter {
     }
 }
 
-extension SpeechDetector: @unchecked Sendable, @retroactive SpeechModule {}
+extension SpeechDetector: @retroactive SpeechModule, @unchecked @retroactive Sendable {}
