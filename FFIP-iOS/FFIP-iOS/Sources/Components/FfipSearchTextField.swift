@@ -45,16 +45,14 @@ struct FfipSearchTextField: View {
                 FfipUIKitTextField(
                     text: $text,
                     placeholder: placeholder,
-                    isFirstResponder: isFocused
+                    isFirstResponder: isFocused,
+                    onSubmit: onSubmit
                 )
                 .foregroundStyle(.ffipGrayscale1)
                 .font(.bodyMedium16)
                 .padding(.vertical, 18)
                 .padding(.leading, 20)
                 .submitLabel(.search)
-                .onSubmit {
-                    isTextEmpty ? onEmptySubmit?() : onSubmit?()
-                }
                 .frame(height: 52)
                 
                 if isFocused && !isTextEmpty {
