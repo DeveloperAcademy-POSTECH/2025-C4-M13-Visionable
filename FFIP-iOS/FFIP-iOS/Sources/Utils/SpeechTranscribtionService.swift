@@ -19,6 +19,8 @@ actor SpeechTranscriptionService {
     private var speechStream: AsyncStream<AnalyzerInput>?
     private var speechStreamContinuation:
         AsyncStream<AnalyzerInput>.Continuation?
+    private var detectorStream: AsyncStream<Float>?
+    private var detectorStreamContinuation: AsyncStream<Float>.Continuation?
     private var recognitionTask: Task<Void, Never>?
 
     private let converter = BufferConverter()
@@ -34,10 +36,15 @@ actor SpeechTranscriptionService {
         }
 
         Task {
-            try await testSpeechDetector()
+            try await testDetectorStream()
         }
+
+        // 향후 애플이 업데이트하면 쓰면 돼요.
+        //        Task {
+        //            try await testSpeechDetector()
+        //        }
     }
-    
+
     func testDictationTranscriber() async throws {
         guard let dictationTranscriber else {
             return
@@ -48,27 +55,42 @@ actor SpeechTranscriptionService {
             print("딕테이션 \(text), \(Date.now)")
         }
     }
-    
-    func testSpeechDetector() async throws {
-        guard let speechDetector else {
+
+    // 향후 애플이 업데이트하면 쓰면 돼요.
+    //    func testSpeechDetector() async throws {
+    //        guard let speechDetector else {
+    //            return
+    //        }
+    //        print("testSpeechDetector")
+    //        for try await case let result in speechDetector.results {
+    //            print("디텍터 \(result), \(Date.now)")
+    //        }
+    //    }
+
+    func testDetectorStream() async throws {
+        guard let detectorStream else {
             return
         }
-        print("testSpeechDetector")
-        for try await case let result in speechDetector.results {
-            print("디텍터 \(result), \(Date.now)")
+        print("testDetectorStream")
+        for await db in detectorStream {
+            print("데시벨 \(db)")
         }
     }
 
     func stopTranscribing() async {
         audioEngine?.stop()
         speechStreamContinuation?.finish()
+        detectorStreamContinuation?.finish()
         try? await speechAnalyzer?.finalizeAndFinishThroughEndOfInput()
     }
 
     private func prepareSpeechModules() async throws {
-        let selectedLocale = Locale(languageCode: "ko_KR")
-        
-        let dictationTranscriber = DictationTranscriber(locale: selectedLocale, preset: .shortDictation)
+        let selectedLocale = Locale.current
+
+        let dictationTranscriber = DictationTranscriber(
+            locale: selectedLocale,
+            preset: .shortDictation
+        )
 
         let detector = SpeechDetector(
             detectionOptions: .init(sensitivityLevel: .high),
@@ -84,8 +106,11 @@ actor SpeechTranscriptionService {
             transcriber: dictationTranscriber,
             locale: selectedLocale
         )
-        
-        try? await ensureModel(transcriber: dictationTranscriber, locale: selectedLocale)
+
+        try? await ensureModel(
+            transcriber: dictationTranscriber,
+            locale: selectedLocale
+        )
 
         speechAnalyzer = SpeechAnalyzer(modules: modules)
 
@@ -99,10 +124,13 @@ actor SpeechTranscriptionService {
 
         (speechStream, speechStreamContinuation) = AsyncStream<AnalyzerInput>
             .makeStream()
+        (detectorStream, detectorStreamContinuation) = AsyncStream<Float>
+            .makeStream(bufferingPolicy: .bufferingNewest(1))
 
         guard let speechStream else {
             print("speechStream nil")
-            return }
+            return
+        }
 
         try await speechAnalyzer.start(inputSequence: speechStream)
     }
@@ -130,6 +158,12 @@ actor SpeechTranscriptionService {
             format: recordingFormat
         ) { [weak self] buffer, _ in
             guard let self else { return }
+            let calculatedMicLevel = calculateMicLevel(from: buffer)
+
+            Task {
+                await sendMicLevelToStream(calculatedMicLevel)
+            }
+
             Task {
                 try? await self.sendBufferToAnalyzer(buffer)
             }
@@ -150,17 +184,36 @@ actor SpeechTranscriptionService {
         let input = AnalyzerInput(buffer: converted)
         speechStreamContinuation.yield(input)
     }
+
+    private func sendMicLevelToStream(_ level: Float) {
+        guard let detectorStreamContinuation else { return }
+        detectorStreamContinuation.yield(level)
+    }
+
+    nonisolated private func calculateMicLevel(from buffer: AVAudioPCMBuffer)
+        -> Float
+    {
+        // Calculate and log mic input level in dB (RMS -> dB)
+        guard let floatChannelData = buffer.floatChannelData?[0] else {
+            return -70
+        }
+        let frameLength = Int(buffer.frameLength)
+        var sum: Float = 0
+        for i in 0..<frameLength {
+            sum += floatChannelData[i] * floatChannelData[i]
+        }
+        let rms = sqrt(sum / Float(frameLength))
+        let avgPower = 20 * log10(rms)
+        return avgPower
+    }
 }
 
 extension SpeechTranscriptionService {
     public func ensureModel(transcriber: DictationTranscriber, locale: Locale)
-        async throws {
-        print("ensureModel \(transcriber)")
-        
-        guard await supported(locale: locale) else {
-            print("ensureModel supported 실패")
-            return
-        }
+        async throws
+    {
+
+        guard await supported(locale: locale) else { return }
 
         if await installedDictationTranscriber(locale: locale) {
             return
@@ -182,21 +235,21 @@ extension SpeechTranscriptionService {
             locale.identifier(.bcp47)
         )
     }
-    
+
     func installedDictationTranscriber(locale: Locale) async -> Bool {
         let installed = await Set(DictationTranscriber.installedLocales)
         return installed.map { $0.identifier(.bcp47) }.contains(
             locale.identifier(.bcp47)
         )
     }
-    
+
     func downloadIfNeeded(for module: DictationTranscriber) async throws {
         if let downloader = try await AssetInventory.assetInstallationRequest(
-            supporting: [module]) {
-            print("다운로드 \(module)")
+            supporting: [module])
+        {
             self.downloadProgress = downloader.progress
             try await downloader.downloadAndInstall()
-        } else { print("다운로드 \(module) 실패")}
+        }
     }
 
     func deallocate() async {
@@ -216,7 +269,8 @@ final class BufferConverter {
     private var converter: AVAudioConverter?
 
     func convertBuffer(_ buffer: AVAudioPCMBuffer, to format: AVAudioFormat)
-        throws -> AVAudioPCMBuffer {
+        throws -> AVAudioPCMBuffer
+    {
         let inputFormat = buffer.format
         guard inputFormat != format else {
             return buffer
@@ -267,4 +321,6 @@ final class BufferConverter {
     }
 }
 
-extension SpeechDetector: @retroactive SpeechModule, @unchecked @retroactive Sendable {}
+extension SpeechDetector: @retroactive SpeechModule,
+    @unchecked @retroactive Sendable
+{}
