@@ -13,7 +13,6 @@ public enum SearchFocusState {
 }
 
 struct SearchView: View {
-    
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
     @State private var selectedSearchType: SearchType = .keyword
@@ -169,6 +168,7 @@ struct SearchView: View {
             }
             .padding(.horizontal, 20)
         }
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 withAnimation {
