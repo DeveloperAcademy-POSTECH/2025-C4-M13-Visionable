@@ -84,6 +84,11 @@ struct SemanticCameraView: View {
                 Spacer()
             }
             
+            Color.black.opacity(isFfipTextFieldFocused ? 0.4 : 0)
+                .onTapGesture {
+                    isFfipTextFieldFocused = false
+                }
+            
             VStack {
                 Spacer()
                 HStack {
