@@ -22,14 +22,15 @@ struct FfipButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(.captionBold16)
+                .font(.titleSemiBold16)
                 .padding(.vertical, 16)
-                .frame(maxWidth: .infinity, maxHeight: 51)
-                .foregroundStyle(.ffipGrayScaleDefault2)
-                .background(.ffipPointGreen1)
-                .cornerRadius(10)
+                .frame(maxWidth: .infinity, maxHeight: 56)
+                .foregroundStyle(.ffipBackground1Main)
+                .background(.ffipGrayscale1)
+                .cornerRadius(8)
         }
         .padding(.horizontal, 20)
+        .padding(.vertical, 12)
     }
 }
 
