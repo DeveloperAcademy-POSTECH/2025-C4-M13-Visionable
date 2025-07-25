@@ -52,11 +52,19 @@ enum FfipOnboardingType: CaseIterable {
     var onboardingImageResource: [ImageResource] {
         switch self {
         case .first:
-            [.onboardingBook]
+            [.onboardingBook, .onboardingBookFind]
         case .second:
             [.onboardingExact, .onboardingExactDimmed]
         case .third:
             [.onboardingSemantic, .onboardingSemanticDimmed]
+        }
+    }
+    
+    var textFieldFilledKeyword: String? {
+        switch self {
+        case .second: String(localized: .onboarding2TextFieldKeyword)
+        case .third: String(localized: .onboarding3TextFieldKeyword)
+        default: nil
         }
     }
 }

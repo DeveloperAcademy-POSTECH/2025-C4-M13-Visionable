@@ -232,6 +232,17 @@
         }
       }
     },
+    "onboarding2_TextFieldKeyword" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어린 왕자"
+          }
+        }
+      }
+    },
     "onboarding2_Title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -250,6 +261,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "주제나 연관된 단어만 입력해도\n알맞은 정보가 있는지 찾아드려요."
+          }
+        }
+      }
+    },
+    "onboarding3_TextFieldKeyword" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "세계 문학 추천"
           }
         }
       }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OnboardingView: View {
     @Environment(AppCoordinator.self) private var coordinator
-
+    
     @State private var currentStepIndex = 0
     private let steps = FfipOnboardingType.allCases
     
@@ -19,8 +19,11 @@ struct OnboardingView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                OnboardingUpperContentView(type: steps[currentStepIndex])
-
+                OnboardingUpperContentView(
+                    type: steps[currentStepIndex],
+                    typingText: steps[currentStepIndex].textFieldFilledKeyword
+                )
+                
                 TabView(selection: $currentStepIndex) {
                     ForEach(steps.indices, id: \.self) { index in
                         VStack(spacing: 0) {
@@ -53,19 +56,85 @@ struct OnboardingView: View {
 
 struct OnboardingUpperContentView: View {
     @State private var currentImageResourceIndex = 0
+    @State private var isTextFiledVisible: Bool = false
+    @State private var onboardingText = ""
     
     let type: FfipOnboardingType
-    let interval: TimeInterval = 2.0
+    let typingText: String?
+    let imageInterval: TimeInterval = 1.0
+    let typingSpeed: TimeInterval = 0.1
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack {
             Color.ffipGrayscale5.ignoresSafeArea()
             
             VStack {
                 Spacer(minLength: 48)
                 Image(type.onboardingImageResource[currentImageResourceIndex])
+                    .transition(type == .first ? .scale : .opacity)
+                    .animation(.easeInOut(duration: 0.5), value: currentImageResourceIndex)
             }
             
+            HStack(spacing: 4) {
+                RoundedRectangle(cornerRadius: 50)
+                    .fill(.ffipGrayscale5)
+                    .frame(height: 50)
+                    .overlay(
+                        HStack(spacing: 0) {
+                            Text(onboardingText)
+                                .foregroundStyle(.ffipGrayscale1)
+                                .font(.labelMedium14)
+                                .padding(.leading, 18)
+                            Spacer()
+                            
+                        }
+                    )
+                
+                Image(.icnSettingsVoice)
+                    .frame(width: 50, height: 50)
+                    .background(Circle().fill(.ffipGrayscale5))
+            }
+            .padding(.top, 80)
+            .padding(.leading, 38)
+            .padding(.trailing, 28)
+            .shadow(color: .black.opacity(0.21), radius: 24)
+            .opacity(isTextFiledVisible ? 1 : 0)
+        }
+        .onChange(of: type) {
+            if currentImageResourceIndex != 0 {
+                currentImageResourceIndex = 0
+                isTextFiledVisible = false
+                startImageTimer()
+            }
+        }
+        .onAppear {
+            if currentImageResourceIndex == 0 { startImageTimer() }
+        }
+    }
+    
+    private func startImageTimer() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + imageInterval) {
+            currentImageResourceIndex += 1
+            if type != .first { startTypingAnimation() }
+        }
+    }
+    
+    private func startTypingAnimation() {
+        isTextFiledVisible = true
+        onboardingText = ""
+        guard let typingText else { return }
+
+        var index = 0
+        Timer.scheduledTimer(withTimeInterval: typingSpeed, repeats: true) { [typingText] timer in
+            if index < typingText.count {
+                let char = typingText[typingText.index(typingText.startIndex, offsetBy: index)]
+                DispatchQueue.main.async {
+                    onboardingText.append(char)
+                }
+                index += 1
+            } else {
+                timer.invalidate()
+            }
         }
     }
 }
@@ -97,7 +166,7 @@ struct OnboardingBottomContentView: View {
                 .font(.bodyMedium16)
                 .multilineTextAlignment(.leading)
                 .lineSpacing(8)
-                .foregroundStyle(.ffipGrayscale3)
+                .foregroundStyle(.ffipGrayscale4)
             
             Spacer()
         }
