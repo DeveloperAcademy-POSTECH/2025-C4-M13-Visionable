@@ -47,6 +47,7 @@ struct OnboardingView: View {
                         coordinator.push(.search)
                     } else {
                         currentStepIndex += 1
+                        triggerHapticFeedback()
                     }
                 }
             }
@@ -54,15 +55,17 @@ struct OnboardingView: View {
     }
 }
 
+// MARK: - 온보딩 상단 탭바와 별도로 애니메이션을 포함하는 목업 화면
 struct OnboardingUpperContentView: View {
     @State private var currentImageResourceIndex = 0
     @State private var isTextFiledVisible: Bool = false
     @State private var onboardingText = ""
+    @State private var isImageTimerRunning = false
     
     let type: FfipOnboardingType
     let typingText: String?
-    let imageInterval: TimeInterval = 1.0
-    let typingSpeed: TimeInterval = 0.1
+    private let imageInterval: TimeInterval = 1.0
+    private let typingSpeed: TimeInterval = 0.1
     
     var body: some View {
         ZStack {
@@ -86,7 +89,6 @@ struct OnboardingUpperContentView: View {
                                 .font(.labelMedium14)
                                 .padding(.leading, 18)
                             Spacer()
-                            
                         }
                     )
                 
@@ -113,32 +115,32 @@ struct OnboardingUpperContentView: View {
     }
     
     private func startImageTimer() {
+        guard !isImageTimerRunning else { return }
+        isImageTimerRunning = true
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + imageInterval) {
             currentImageResourceIndex += 1
+            isImageTimerRunning = false
             if type != .first { startTypingAnimation() }
         }
     }
     
+    @MainActor
     private func startTypingAnimation() {
         isTextFiledVisible = true
         onboardingText = ""
         guard let typingText else { return }
 
-        var index = 0
-        Timer.scheduledTimer(withTimeInterval: typingSpeed, repeats: true) { [typingText] timer in
-            if index < typingText.count {
-                let char = typingText[typingText.index(typingText.startIndex, offsetBy: index)]
-                DispatchQueue.main.async {
-                    onboardingText.append(char)
-                }
-                index += 1
-            } else {
-                timer.invalidate()
+        Task {
+            for char in typingText {
+                onboardingText.append(char)
+                try? await Task.sleep(nanoseconds: UInt64(typingSpeed * 1_000_000_000))
             }
         }
     }
 }
 
+// MARK: - 온보딩 하단 탭바에 들어가는 화면
 struct OnboardingBottomContentView: View {
     let type: FfipOnboardingType
     
@@ -176,7 +178,7 @@ struct OnboardingBottomContentView: View {
     }
 }
 
-#Preview {
-    OnboardingView()
-        .environment(AppCoordinator())
-}
+// #Preview {
+//    OnboardingView()
+//        .environment(AppCoordinator())
+// }
