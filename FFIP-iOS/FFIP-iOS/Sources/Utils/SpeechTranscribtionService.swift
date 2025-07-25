@@ -234,8 +234,7 @@ extension SpeechTranscriptionService {
 
     func downloadIfNeeded(for module: DictationTranscriber) async throws {
         if let downloader = try await AssetInventory.assetInstallationRequest(
-            supporting: [module])
-        {
+            supporting: [module]) {
             self.downloadProgress = downloader.progress
             try await downloader.downloadAndInstall()
         }

@@ -372,6 +372,34 @@
           }
         }
       }
+    },
+    "willCameraPushInstruction" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "will search with ff!p"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색을 시작합니다."
+          }
+        }
+      }
+    },
+    "탐색을 시작합니다." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색을 시작합니다."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
