@@ -98,8 +98,9 @@ struct ExactCameraView: View {
                 )
                 .focused($isTextFieldFocused)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 55)
+                .padding(.bottom, isTextFieldFocused ? 12 : 12 + safeAreaInset(.bottom))
             }
+            .ffipKeyboardAdaptive()
 
             if showTip && !dontShowExactCameraTipAgain {
                 FfipCameraTipOverlay(
