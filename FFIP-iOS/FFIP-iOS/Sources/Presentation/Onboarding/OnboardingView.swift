@@ -65,7 +65,7 @@ struct OnboardingUpperContentView: View {
     let type: FfipOnboardingType
     let typingText: String?
     private let imageInterval: TimeInterval = 1.0
-    private let typingSpeed: TimeInterval = 0.1
+    private let typingSpeed: Duration = .milliseconds(100)
     
     var body: some View {
         ZStack {
@@ -135,7 +135,7 @@ struct OnboardingUpperContentView: View {
         Task {
             for char in typingText {
                 onboardingText.append(char)
-                try? await Task.sleep(nanoseconds: UInt64(typingSpeed * 1_000_000_000))
+                try? await Task.sleep(for: typingSpeed)
             }
         }
     }
