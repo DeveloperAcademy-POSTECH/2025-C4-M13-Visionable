@@ -18,54 +18,80 @@ struct FfipCameraPopupTipOverlay: View {
             VStack {
                 HStack {
                     Spacer()
-                    //                    FfipCloseButton(action: { showPopupTip = false })
-                    //                        .padding(.trailing, 20)
-                    //                        .padding(.top, 67)
+                    Spacer()
+                    FfipInfoButton { showPopupTip = false }
+                        .padding(.top, 67)
+                    Spacer()
                 }
                 Spacer()
             }
+            .padding(.horizontal, 20)
             
-            VStack(spacing: 12) {
+            VStack(spacing: 0) {
                 Spacer()
                 
-                TabView(selection: $currentTipPage) {
-                    ForEach(type.contents.indices, id: \.self) { index in
-                        FfipCameraPopupTipCardView(page: type.contents[index])
-                            .tag(index)
+                ZStack(alignment: .topTrailing) {
+                    FfipCameraPopupTipCardView(currentTipPage: $currentTipPage, type: type)
+                        .frame(height: 352)
+                        .padding(.horizontal, 40)
+                        .padding(.bottom, 20)
+                    
+                    Button(action: { showPopupTip = false }) {
+                        Image(.btnClose)
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 15, height: 22)
+                            .foregroundStyle(.ffipGrayscale1NoDark)
+                            .padding(.top, 16)
+                            .padding(.trailing, 55)
                     }
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
-                .frame(height: 420)
                 
-                HStack(spacing: 8) {
-                    ForEach(type.contents.indices, id: \.self) { index in
-                        Circle()
-                            .fill(index == currentTipPage ? Color.green : Color.gray.opacity(0.4))
-                            .frame(width: 6, height: 6)
-                    }
-                }
+                FfipPageControl(
+                    style: .green,
+                    totalCount: type.contents.count,
+                    currentIndex: currentTipPage
+                )
                 
-                Spacer()
+                Spacer(minLength: 195)
             }
         }
-        .animation(.easeInOut, value: currentTipPage)
     }
-    
 }
 
 struct FfipCameraPopupTipCardView: View {
-    let page: FfipCameraPopupTipModel
+    @Binding var currentTipPage: Int
+    let type: FfipCameraPopupTipType
     
     var body: some View {
         VStack {
-            Text(page.title)
-            Text(page.description)
-            Image(page.imageName)
+            TabView(selection: $currentTipPage) {
+                ForEach(0..<type.contents.count, id: \.self) { index in
+                    let content = type.contents[index]
+                    
+                    ZStack {
+                        VStack(spacing: 0) {
+                            Text(content.title)
+                                .font(.titleBold20)
+                                .foregroundStyle(.ffipGrayscale1NoDark)
+                                .padding(.bottom, 4)
+                            
+                            Text(content.description)
+                                .font(.labelMedium14)
+                                .foregroundStyle(.ffipGrayscale3)
+                                .padding(.bottom, 14)
+                            
+                            Image(content.imageName)
+                        }
+                        .tag(index)
+                    }
+                }
+            }
+            .frame(minWidth: 300)
+            .background(.white)
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
-        .padding()
-        .frame(minWidth: 300)
-        .background(.white)
-        .cornerRadius(20)
     }
 }
 

@@ -25,7 +25,7 @@ struct FfipCameraHeaderBar: View {
             Spacer()
             TorchButton(isTorchOn: isTorchOn, action: onToggleTorch)
             Spacer()
-            InfoButton(action: onInfo)
+            FfipInfoButton(action: onInfo)
             Spacer()
             FfipCloseButton(action: onClose)
         }
@@ -71,19 +71,6 @@ struct FfipCameraHeaderBar: View {
         var body: some View {
             Button(action: action) {
                 Image(isTorchOn ? .btnCameraTorch : .btnCameraTorchSlash)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 22, height: 22)
-            }
-            .frame(maxWidth: 50)
-        }
-    }
-
-    private struct InfoButton: View {
-        let action: () -> Void
-        var body: some View {
-            Button(action: action) {
-                Image(.btnCameraInfo)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 22, height: 22)
