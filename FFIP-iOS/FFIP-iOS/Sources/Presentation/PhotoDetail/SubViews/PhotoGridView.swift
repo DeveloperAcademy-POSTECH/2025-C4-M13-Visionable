@@ -32,6 +32,14 @@ struct PhotoGridView: View {
                                         images[index].recognizedTexts != nil ? .ffipPointGreen1 : .clear,
                                         lineWidth: 1
                                     )
+                                
+                                if images[index].isAnalyzed == false {
+                                    Color.black.opacity(0.3)
+                                        .cornerRadius(4)
+                                    
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                }
                             }
                     }
                 }

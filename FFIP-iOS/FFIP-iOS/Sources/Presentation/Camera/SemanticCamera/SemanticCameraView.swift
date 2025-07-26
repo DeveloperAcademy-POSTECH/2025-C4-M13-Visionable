@@ -235,6 +235,7 @@ private extension SemanticCameraView {
         targetImage.similarKeyword = result.keyword
         targetImage.similarity = result.similarity
         targetImage.recognizedTexts = filteredRecognizedTexts
+        targetImage.isAnalyzed = true
 
         do {
             try modelContext.save()
