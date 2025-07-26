@@ -15,6 +15,7 @@ struct VoiceSearchView: View {
     @State private var transcript: String = ""
     @State private var willCameraPush: Bool = false
     @State private var isUserSpeaking = false
+    @State private var showMicButton = false
 
     var body: some View {
         ZStack {
@@ -50,6 +51,7 @@ struct VoiceSearchView: View {
                 
                 VoiceListenerView(
                     isUserSpeaking: $isUserSpeaking,
+                    showMicButton: $showMicButton
                 )
                 
                 Spacer()
@@ -69,6 +71,8 @@ struct VoiceSearchView: View {
 
             Task {
                 for try await case let result in dictationTranscriber.results {
+                    if showMicButton { return }
+                    
                     let text = String(result.text.characters)
                     transcript = text
 

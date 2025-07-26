@@ -9,10 +9,10 @@ import SwiftUI
 
 struct VoiceListenerView: View {
     @Binding var isUserSpeaking: Bool
+    @Binding var showMicButton: Bool
 
     @State private var phase: Int = 0
     @State private var unDetectCount: Int = 0
-    @State private var showMicButton: Bool = false
 
     private let phaseDuration: TimeInterval = 0.3
 
