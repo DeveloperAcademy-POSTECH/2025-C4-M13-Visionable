@@ -13,4 +13,5 @@ enum AppRoute: Hashable {
     case search
     case voiceSearch
     case photoDetail
+    case onboarding
 }

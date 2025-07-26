@@ -3,6 +3,16 @@
     {
       "filename" : "Property 1=disabled.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "탐색 모드 선택 체크.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

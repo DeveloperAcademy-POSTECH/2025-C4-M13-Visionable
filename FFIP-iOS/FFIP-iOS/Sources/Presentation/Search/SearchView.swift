@@ -13,111 +13,95 @@ public enum SearchFocusState {
 }
 
 struct SearchView: View {
-    
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
     @State private var selectedSearchType: SearchType = .keyword
     @FocusState private var isFocused: Bool
+    @State private var isToolTipPresented: Bool = false
     @State private var isSheetPresented: Bool = false
     @State private var focusState: SearchFocusState = .home
     @State private var searchText: String = ""
     @State private var hasSearchTypeChanged: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            if focusState == .home {
-                FfipNavigationBar(leadingType: .logo, centerType: .none, trailingType: .none)
-                
-                Button {
-                    withAnimation {
-                        isSheetPresented = true
-                    }
-                } label: {
-                    HStack(spacing: 8) {
-                        Text(selectedSearchType.title)
-                            .font(.titleBold24)
-                        Image(.icnKeyboardArrowDown)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20)
-                    }
-                }
-                .tint(.ffipGrayscale1)
-                .padding(.top, 75)
-            }
-
-            HStack(spacing: 12) {
-                if focusState == .editing {
+        ZStack {
+            Color.ffipBackground1Main.ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 0) {
+                if focusState == .home {
+                    FfipNavigationBar(leadingType: .logo, centerType: .none, trailingType: .none)
+                    
                     Button {
-                        searchText = ""
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            withAnimation(.easeInOut(duration: 0.25)) {
-                                focusState = .home
-                                isFocused = false
-                            }
+                        withAnimation {
+                            isSheetPresented = true
                         }
                     } label: {
-                        Image(.icnNavBack)
-                    }
-                }
-                
-                FfipSearchTextField(
-                    text: $searchText,
-                    isFocused: focusState == .editing,
-                    placeholder: String(localized: selectedSearchType.placeholder),
-                    onVoiceSearch: {
-                        coordinator.push(.voiceSearch)
-                    },
-                    onSubmit: {
-                        searchModel.addRecentSearchKeyword(searchText)
-                        if selectedSearchType == .keyword {
-                            coordinator.push(.exactCamera(searchKeyword: searchText))
-                        } else {
-                            coordinator.push(.semanticCamera(searchKeyword: searchText))
+                        HStack(spacing: 8) {
+                            Text(selectedSearchType.title)
+                                .font(.titleBold24)
+                            Image(.icnKeyboardArrowDown)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 20)
+                                .ffipToolTip(
+                                    isToolTipVisible: $isToolTipPresented,
+                                    message: selectedSearchType == .keyword
+                                    ? String(localized: .exactSearchToolTip) : String(localized: .semanticSearchToolTip),
+                                    position: .trailing,
+                                    spacing: 9
+                                )
                         }
-                        
-                    },
-                    onEmptySubmit: { }
-                )
-                .focused($isFocused)
-            }
-            .padding(.top, 16)
-            
-            if focusState == .home && selectedSearchType == .keyword {
-                if !searchModel.recentSearchKeywords.isEmpty {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text(.recentSearchTitle)
-                            .font(.labelMedium12)
-                            .foregroundStyle(.ffipGrayscale2)
-                            .padding(.top, 32)
-                        
-                        RecentSearchFlow(
-                            keywords: searchModel.recentSearchKeywords,
-                            onTap: { keyword in
-                                searchModel.addRecentSearchKeyword(keyword)
-                                if selectedSearchType == .keyword {
-                                    coordinator.push(.exactCamera(searchKeyword: keyword))
-                                } else {
-                                    coordinator.push(.semanticCamera(searchKeyword: keyword))
-                                }
-                            },
-                            onTapDelete: { keyword in
-                                searchModel.deleteRecentSearchKeyword(keyword)
-                            }
-                        )
                     }
+                    .tint(.ffipGrayscale1)
+                    .padding(.top, 75)
                 }
-            }
-            
-            if focusState == .editing {
-                if !searchModel.recentSearchKeywords.isEmpty {
-                    VStack(alignment: .trailing, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 20) {
-                            Text(.recentSearchTitle)
-                                .font(.labelMedium14)
-                                .foregroundStyle(.ffipGrayscale3)
+
+                HStack(spacing: 12) {
+                    if focusState == .editing {
+                        Button {
+                            searchText = ""
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    focusState = .home
+                                    isFocused = false
+                                }
+                            }
+                        } label: {
+                            Image(.icnNavBack)
+                        }
+                    }
+                    
+                    FfipSearchTextField(
+                        text: $searchText,
+                        isFocused: focusState == .editing,
+                        placeholder: String(localized: selectedSearchType.placeholder),
+                        onVoiceSearch: {
+                            coordinator.push(.voiceSearch)
+                        },
+                        onSubmit: {
+                            searchModel.addRecentSearchKeyword(searchText)
+                            if selectedSearchType == .keyword {
+                                coordinator.push(.exactCamera(searchKeyword: searchText))
+                            } else {
+                                coordinator.push(.semanticCamera(searchKeyword: searchText))
+                            }
                             
-                            RecentSearchList(
+                        },
+                        onEmptySubmit: { }
+                    )
+                    .focused($isFocused)
+                }
+                .padding(.top, 16)
+                
+                if focusState == .home && selectedSearchType == .keyword {
+                    if !searchModel.recentSearchKeywords.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text(.recentSearchTitle)
+                                .font(.labelMedium12)
+                                .foregroundStyle(.ffipGrayscale2)
+                                .padding(.top, 32)
+                            
+                            RecentSearchFlow(
                                 keywords: searchModel.recentSearchKeywords,
                                 onTap: { keyword in
                                     searchModel.addRecentSearchKeyword(keyword)
@@ -128,40 +112,69 @@ struct SearchView: View {
                                     }
                                 },
                                 onTapDelete: { keyword in
-                                    withAnimation(.easeInOut(duration: 0.05)) {
-                                        searchModel.deleteRecentSearchKeyword(keyword)
-                                    }
+                                    searchModel.deleteRecentSearchKeyword(keyword)
                                 }
                             )
                         }
-                        Text(.recentSearchesCleared)
-                            .font(.labelMedium14)
-                            .foregroundStyle(.ffipGrayscale2)
-                            .onTapGesture {
-                                searchModel.deleteAllRecentSearchKeyword()
+                    }
+                }
+                
+                if focusState == .editing {
+                    if !searchModel.recentSearchKeywords.isEmpty {
+                        VStack(alignment: .trailing, spacing: 12) {
+                            VStack(alignment: .leading, spacing: 20) {
+                                Text(.recentSearchTitle)
+                                    .font(.labelMedium14)
+                                    .foregroundStyle(.ffipGrayscale3)
+                                
+                                RecentSearchList(
+                                    keywords: searchModel.recentSearchKeywords,
+                                    onTap: { keyword in
+                                        searchModel.addRecentSearchKeyword(keyword)
+                                        if selectedSearchType == .keyword {
+                                            coordinator.push(.exactCamera(searchKeyword: keyword))
+                                        } else {
+                                            coordinator.push(.semanticCamera(searchKeyword: keyword))
+                                        }
+                                    },
+                                    onTapDelete: { keyword in
+                                        withAnimation(.easeInOut(duration: 0.05)) {
+                                            searchModel.deleteRecentSearchKeyword(keyword)
+                                        }
+                                    }
+                                )
                             }
+                            Text(.recentSearchesCleared)
+                                .font(.labelMedium14)
+                                .foregroundStyle(.ffipGrayscale2)
+                                .onTapGesture {
+                                    searchModel.deleteAllRecentSearchKeyword()
+                                }
+                        }
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .padding(.top, 26)
+                    } else {
+                        VStack {
+                            Spacer()
+                                .frame(height: 147)
+                            Text(.noRecentSearchesMessage)
+                                .font(.bodyMedium16)
+                                .foregroundStyle(.ffipGrayscale3)
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .padding(.top, 26)
-                } else {
-                    VStack {
-                        Spacer()
-                            .frame(height: 147)
-                        Text(.noRecentSearchesMessage)
-                            .font(.bodyMedium16)
-                            .foregroundStyle(.ffipGrayscale3)
-                    }
-                    .frame(maxWidth: .infinity)
+                }
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+        }
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                withAnimation {
+                    isToolTipPresented = true
                 }
             }
-            Spacer()
-        }
-        .padding(.horizontal, 20)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            isFocused = false
-        }
-        .onAppear {
             searchText = ""
         }
         .onChange(of: isFocused) {
@@ -174,19 +187,27 @@ struct SearchView: View {
             }
         }
         .onChange(of: selectedSearchType) {
+            if isToolTipPresented { isToolTipPresented = false }
+
             withAnimation {
                 isSheetPresented = false
             }
-            hasSearchTypeChanged = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 withAnimation {
-                    hasSearchTypeChanged = false
+                    isToolTipPresented = true
                 }
             }
+            hasSearchTypeChanged = true
         }
         .ffipSheet(isPresented: $isSheetPresented) {
-            SearchTypeSelectionView(selectedType: $selectedSearchType)}
-        .showFfipToastMessage(toastType: .check, toastTitle: String(localized: .searchModeUpdated), isToastVisible: $hasSearchTypeChanged)
+            SearchTypeSelectionView(selectedType: $selectedSearchType)
+        }
+        .showFfipToastMessage(
+            toastType: .check,
+            toastTitle: String(localized: .searchModeUpdated),
+            isToastVisible: $hasSearchTypeChanged
+        )
     }
 }
 

@@ -3,6 +3,16 @@
     {
       "filename" : "keyboard_arrow_down.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "keyboard_arrow_down 1.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

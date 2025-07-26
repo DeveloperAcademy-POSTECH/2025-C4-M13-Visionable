@@ -13,7 +13,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP 앱이 사진을 촬영하기 위해 카메라 접근을 요청합니다."
+            "value" : "탐색 기능을 사용하려면\n카메라 접근 권한을 허용해주세요."
           }
         }
       }

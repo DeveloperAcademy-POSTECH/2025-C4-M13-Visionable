@@ -29,6 +29,10 @@ final class VisionModel: NSObject {
 }
 
 extension VisionModel {
+    func changeSearchKeyword(keyword: String) {
+        searchKeyword = keyword
+    }
+
     func prepare() async {
         await visionService.prepareTextRecognition(searchKeyword: searchKeyword)
     }

@@ -16,6 +16,13 @@ struct ExactCameraView: View {
     @State private var showLockIcon: Bool = false
     @State private var showLockTask: Task<Void, Never>?
 
+    @AppStorage(AppStorageKey.dontShowExactTipAgain) private var dontShowExactCameraTipAgain: Bool = false
+    @State private var showTip = true
+
+    @State var searchText: String
+    @State private var lastSearchText: String = ""
+    @FocusState private var isTextFieldFocused: Bool
+
     var body: some View {
         ZStack {
             VStack {
@@ -36,7 +43,7 @@ struct ExactCameraView: View {
                                 toggleCameraPauseAndShowLock()
                             }
                         )
-                    
+
                     ForEach(mediator.matchedObservations, id: \.self) { observation in
                         FfipBoundingBox(observation: observation)
                     }
@@ -68,6 +75,51 @@ struct ExactCameraView: View {
                 isPaused: mediator.isCameraPaused,
                 show: showLockIcon
             )
+
+            Color.black.opacity(isTextFieldFocused ? 0.4 : 0)
+                .onTapGesture {
+                    isTextFieldFocused = false
+                }
+
+            VStack {
+                Spacer()
+                FfipSearchTextField(
+                    text: $searchText,
+                    isFocused: isTextFieldFocused,
+                    placeholder: String(
+                        localized: .searchPlaceholder
+                    ),
+                    onSubmit: {
+                        lastSearchText = searchText
+                        mediator.changeSearchKeyword(keyword: searchText)
+                    },
+                    onEmptySubmit: { () },
+                    withVoiceSearch: false
+                )
+                .focused($isTextFieldFocused)
+                .padding(.horizontal, 20)
+                .padding(.bottom, isTextFieldFocused ? 12 : 12 + safeAreaInset(.bottom))
+            }
+            .ffipKeyboardAdaptive()
+
+            if showTip && !dontShowExactCameraTipAgain {
+                FfipCameraTipOverlay(
+                    showTip: $showTip,
+                    dontShowTipAgain: $dontShowExactCameraTipAgain,
+                    ffipCameraTipType: .exact,
+                    tipText1: String(localized: .exactCameraTip1)
+                        .asHighlight(
+                            highlightedString: String(localized: .exactCameraTipGreen1),
+                            highlightColor: .ffipPointGreen1
+                        ),
+                    tipText2: String(localized: .exactCameraTip2)
+                        .asHighlight(
+                            highlightedString: String(localized: .exactCameraTipGreen2),
+                            highlightColor: .ffipPointGreen1
+                        ),
+                    dontShowAgainText: String(localized: .dontShowAgain)
+                )
+            }
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
@@ -75,8 +127,16 @@ struct ExactCameraView: View {
             if !newObservations.isEmpty { triggerHapticFeedback() }
         }
         .task {
+            self.lastSearchText = searchText
             await mediator.start()
         }
+        .onChange(of: isTextFieldFocused) {
+            Task {
+                try? await Task.sleep(for: .milliseconds(100))
+                searchText = lastSearchText
+            }
+        }
+        .animation(.default, value: isTextFieldFocused)
     }
 
     private func handleZoomGestureChanged(_ value: CGFloat) {

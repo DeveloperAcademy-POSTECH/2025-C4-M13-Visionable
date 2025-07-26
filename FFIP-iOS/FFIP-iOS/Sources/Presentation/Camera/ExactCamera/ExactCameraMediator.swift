@@ -74,4 +74,8 @@ final class ExactCameraMediator: NSObject {
             isTorchOn = await cameraModel.turnOnTorch()
         }
     }
+
+    func changeSearchKeyword(keyword: String) {
+        visionModel.changeSearchKeyword(keyword: keyword)
+    }
 }
