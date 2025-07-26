@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VoiceListenerView: View {
-    @State var isListening: Bool
+    @Binding var isUserSpeaking: Bool
 
     @State private var phase: Int = 0
     @State private var unDetectCount: Int = 0
@@ -44,7 +44,7 @@ struct VoiceListenerView: View {
                             shapeBottomPadding(
                                 index: i,
                                 phase: phase,
-                                isListening: isListening,
+                                isListening: isUserSpeaking,
                                 unDetectCount: unDetectCount
                             )
                         )
@@ -52,24 +52,25 @@ struct VoiceListenerView: View {
                 }
                 .animation(
                     .linear(
-                        duration: phaseDuration * (isListening ? 2 / 3 : 1)
+                        duration: phaseDuration * (isUserSpeaking ? 2 / 3 : 1)
                     ),
                     value: phase
                 )
                 .animation(
                     .linear(
-                        duration: phaseDuration * (isListening ? 2 / 3 : 1)
+                        duration: phaseDuration * (isUserSpeaking ? 2 / 3 : 1)
                     ),
                     value: unDetectCount
                 )
                 .task {
                     while true {
-                        if isListening {
+                        print(isUserSpeaking)
+                        if isUserSpeaking {
                             unDetectCount = 0
                             phase = (phase + 1) % 4
                             try? await Task.sleep(
                                 for: .seconds(
-                                    phaseDuration * (isListening ? 2 / 3 : 1)
+                                    phaseDuration * (isUserSpeaking ? 2 / 3 : 1)
                                 )
                             )
                         } else {

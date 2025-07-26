@@ -17,8 +17,6 @@ final class VoiceSearchModel {
     private(set) var dictationTranscriber: DictationTranscriber?
     private(set) var detectorStream: AsyncStream<Float>?
 
-    private(set) var isUserSpeaking: Bool = false
-
     private var listenTranscriptTask: Task<Void, Never>?
     private var listenSpeechDetectedTask: Task<Void, Never>?
 

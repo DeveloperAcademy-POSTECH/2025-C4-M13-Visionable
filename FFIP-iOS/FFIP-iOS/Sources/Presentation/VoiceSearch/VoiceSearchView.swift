@@ -14,41 +14,46 @@ struct VoiceSearchView: View {
 
     @State private var transcript: String = ""
     @State private var willCameraPush: Bool = false
-    @State private var isListening = false
+    @State private var isUserSpeaking = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
-                .frame(height: 58)
-            HStack {
-                Text(
-                    transcript == ""
+        ZStack {
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: 58)
+                HStack {
+                    Text(
+                        transcript == ""
                         ? String(localized: .searchPlaceholder)
                         : "\"\(transcript)\""
-                )
-                .font(.titleBold24)
-                .foregroundStyle(.ffipGrayscale1)
-
-                Spacer()
-            }
-            .padding(.leading, 30)
-
-            HStack {
-                Text(String(localized: .willCameraPushInstruction))
+                    )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
-                    .opacity(willCameraPush ? 1 : 0)
+                    
+                    Spacer()
+                }
+                .padding(.leading, 30)
+                
+                HStack {
+                    Text(String(localized: .willCameraPushInstruction))
+                        .font(.titleBold24)
+                        .foregroundStyle(.ffipGrayscale1)
+                        .opacity(willCameraPush ? 1 : 0)
+                    Spacer()
+                }
+                .padding(.leading, 30)
+                
                 Spacer()
             }
-            .padding(.leading, 30)
-
-            Spacer()
-
-            VoiceListenerView(
-                isListening: voiceSearchModel.isUserSpeaking,
-            )
-
-            Spacer()
+            VStack {
+                Spacer()
+                
+                VoiceListenerView(
+                    isUserSpeaking: $isUserSpeaking,
+                )
+                
+                Spacer()
+            }
         }
         .task {
             transcript = ""
@@ -84,10 +89,11 @@ struct VoiceSearchView: View {
 
             Task {
                 for await db in detectorStream {
-                    if db > -40 {
-                        try await Task.sleep(for: .seconds(5))
+                    if db > -50 {
+                        isUserSpeaking = true
+                        try await Task.sleep(for: .seconds(2))
                     } else {
-                        try await Task.sleep(for: .seconds(5))
+                        isUserSpeaking = false
                     }
                 }
             }
