@@ -22,7 +22,7 @@ struct FfipUIKitTextField: UIViewRepresentable {
         textField.placeholder = placeholder
         textField.returnKeyType = .search
         textField.enablesReturnKeyAutomatically = true
-        textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged(_:)), for: .editingChanged)
+        textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
         
         textField.textColor = .ffipGrayscale1
         textField.font = .bodyMedium16
