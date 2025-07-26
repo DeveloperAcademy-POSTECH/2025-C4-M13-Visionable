@@ -85,39 +85,11 @@ struct VoiceSearchView: View {
             }
 
             Task {
-                for try await case let result in dictationTranscriber.results {
-                    if showMicButton { return }
-
-                    let text = String(result.text.characters)
-                    transcript = text
-
-                    await voiceSearchModel.stop()
-
-                    try await Task.sleep(for: .seconds(1))
-
-                    willCameraPush = true
-
-                    try await Task.sleep(for: .seconds(1))
-
-                    switch searchType {
-                    case .exact:
-                        coordinator.push(.exactCamera(searchKeyword: transcript))
-                    case .semantic:
-                        coordinator.push(.semanticCamera(searchKeyword: transcript))
-                    }
-                    break
-                }
+                try await handleDictationResults(dictationTranscriber: dictationTranscriber)
             }
 
             Task {
-                for await db in detectorStream {
-                    if db > -50 {
-                        isUserSpeaking = true
-                        try await Task.sleep(for: .seconds(2))
-                    } else {
-                        isUserSpeaking = false
-                    }
-                }
+                await handleDetectorStream(detectorStream: detectorStream)
             }
         }
     }
@@ -126,6 +98,42 @@ struct VoiceSearchView: View {
         await voiceSearchModel.stop()
         coordinator.pop()
     }
+
+    private func handleDictationResults(dictationTranscriber: DictationTranscriber) async throws {
+        for try await case let result in dictationTranscriber.results {
+            if showMicButton { return }
+
+            let text = String(result.text.characters)
+            transcript = text
+
+            await voiceSearchModel.stop()
+
+            try await Task.sleep(for: .seconds(1))
+
+            willCameraPush = true
+
+            try await Task.sleep(for: .seconds(1))
+
+            switch searchType {
+            case .exact:
+                coordinator.push(.exactCamera(searchKeyword: transcript))
+            case .semantic:
+                coordinator.push(.semanticCamera(searchKeyword: transcript))
+            }
+            break
+        }
+    }
+
+    private func handleDetectorStream(detectorStream: AsyncStream<Float>) async {
+        for await db in detectorStream {
+            if db > -50 {
+                isUserSpeaking = true
+                try? await Task.sleep(for: .seconds(2))
+            } else {
+                isUserSpeaking = false
+            }
+        }
+    }
 }
 
 // #Preview {
@@ -133,3 +141,4 @@ struct VoiceSearchView: View {
 //    VoiceSearchView(voiceSearchModel: VoiceSearchModel(privacyService: PrivacyService(), speechService: SpeechRecognitionService()))
 //        .environment(coordinator)
 // }
+
