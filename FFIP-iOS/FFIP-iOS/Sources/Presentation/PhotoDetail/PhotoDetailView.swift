@@ -25,7 +25,7 @@ struct PhotoDetailView: View {
             VStack {
                 FfipNavigationBar(
                     leadingType: .back(action: { coordinator.pop() }),
-                    centerType: isGridMode ? .none : .title(title: "어어어"),
+                    centerType: isGridMode ? .none : .title(title: capturedImages[selectedIndex].similarKeyword ?? ""),
                     trailingType: isGridMode ? .none : .grid(action: { isGridMode = true })
                 )
                 .padding(.horizontal, 16)

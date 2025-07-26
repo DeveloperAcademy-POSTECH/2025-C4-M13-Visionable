@@ -7,13 +7,17 @@
 
 import Foundation
 import SwiftData
+import Vision
 
 @Model
 final class SemanticCameraCapturedImage {
     @Attribute(.unique) var id: UUID
     @Attribute(.externalStorage) var imageData: Data
     var createdAt: Date
-    
+    var similarKeyword: String?
+    var similarity: Double?
+    var recognizedTexts: [RecognizedTextObservation]?
+
     init(
         id: UUID = UUID(),
         imageData: Data,

@@ -32,6 +32,11 @@ extension Font {
     // Caption
     static let captionSemiBold14: Font = .custom(FontName.pretendardSemiBold.rawValue, size: 14)
     static let captionMedium12: Font = .custom(FontName.pretendardMedium.rawValue, size: 12)
+    
+    // Onboarding
+    static let onboardingBold24: Font = .custom(FontName.pretendardBold.rawValue, size: 24)
+    static let onboardingBold16: Font = .custom(FontName.pretendardBold.rawValue, size: 16)
+    static let onboardingSemiBold12: Font = .custom(FontName.pretendardSemiBold.rawValue, size: 12)
 }
 
 extension UIFont {

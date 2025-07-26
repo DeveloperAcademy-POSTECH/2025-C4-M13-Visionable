@@ -13,6 +13,7 @@ protocol ModuleFactoryProtocol {
     func makeSearchView() -> SearchView
     func makeVoiceSearchView() -> VoiceSearchView
     func makePhotoDetailView() -> PhotoDetailView
+    func makeOnboardingView() -> OnboardingView
 }
 
 final class ModuleFactory: ModuleFactoryProtocol {
@@ -84,6 +85,11 @@ final class ModuleFactory: ModuleFactoryProtocol {
     
     func makePhotoDetailView() -> PhotoDetailView {
         let view = PhotoDetailView()
+        return view
+    }
+    
+    func makeOnboardingView() -> OnboardingView {
+        let view = OnboardingView()
         return view
     }
 }
