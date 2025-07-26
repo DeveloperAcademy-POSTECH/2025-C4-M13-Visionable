@@ -37,17 +37,6 @@ actor SpeechTranscriptionService {
         //        }
     }
 
-    func testDictationTranscriber() async throws {
-        guard let dictationTranscriber else {
-            return
-        }
-        print("testDictationTranscriber")
-        for try await case let result in dictationTranscriber.results {
-            let text = result.text
-            print("딕테이션 \(text), \(Date.now)")
-        }
-    }
-
     // 향후 애플이 업데이트하면 쓰면 돼요.
     //    func testSpeechDetector() async throws {
     //        guard let speechDetector else {
@@ -58,16 +47,6 @@ actor SpeechTranscriptionService {
     //            print("디텍터 \(result), \(Date.now)")
     //        }
     //    }
-
-    func testDetectorStream() async throws {
-        guard let detectorStream else {
-            return
-        }
-        print("testDetectorStream")
-        for await db in detectorStream {
-            print("데시벨 \(db)")
-        }
-    }
 
     func stopTranscribing() async {
         audioEngine?.stop()
@@ -95,11 +74,6 @@ actor SpeechTranscriptionService {
         let modules: [any SpeechModule] = [dictationTranscriber, detector]
 
         try await ensureModel(
-            transcriber: dictationTranscriber,
-            locale: selectedLocale
-        )
-
-        try? await ensureModel(
             transcriber: dictationTranscriber,
             locale: selectedLocale
         )
