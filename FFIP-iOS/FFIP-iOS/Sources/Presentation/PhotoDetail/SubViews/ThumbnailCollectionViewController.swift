@@ -8,11 +8,16 @@
 import UIKit
 
 final class ThumbnailCollectionViewController: UIViewController {
+    private var isUserInteraction: Bool = false
     private var images = [UIImage]()
     private(set) var selectedIndex: Int = 0 {
         didSet {
             thumbnailCollectionView.reloadData()
-            //scrollToSelected()
+            if !isUserInteraction {
+                DispatchQueue.main.async {
+                    self.scrollToSelected()
+                }
+            }
         }
     }
     private(set) var onSelect: ((Int) -> Void)?
@@ -32,6 +37,17 @@ final class ThumbnailCollectionViewController: UIViewController {
         setupRegisterCell()
         setupDelegate()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        applyCenteredContentInset()
+    }
+    
+    private func applyCenteredContentInset() {
+        let cellWidth: CGFloat = 35
+        let inset = (thumbnailCollectionView.bounds.width - cellWidth) / 2
+        thumbnailCollectionView.contentInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+    }
 }
 
 // MARK: - Extension Methods
@@ -43,7 +59,7 @@ extension ThumbnailCollectionViewController {
     func setupSelectedIndex(_ index: Int) {
         self.selectedIndex = index
     }
-
+    
     func setOnSelect(_ handler: @escaping (Int) -> Void) {
         self.onSelect = handler
     }
@@ -87,6 +103,7 @@ private extension ThumbnailCollectionViewController {
 // MARK: - CollectionView Delegate
 extension ThumbnailCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        isUserInteraction = false
         selectedIndex = indexPath.item
         onSelect?(indexPath.item)
     }
@@ -114,13 +131,30 @@ extension ThumbnailCollectionViewController: UICollectionViewDelegateFlowLayout 
         return selected ? CGSize(width: 35, height: 35) : CGSize(width: 25, height: 35)
     }
     
-    // ContentInset: Cell에서 Content 외부에 존재하는 Inset의 크기를 결정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-    }
-    
     // minimumLineSpacing: Cell 들의 위, 아래 간격 지정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 8
+    }
+}
+
+extension ThumbnailCollectionViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isUserInteraction = true
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard isUserInteraction else { return }
+        
+        let centerPoint = CGPoint(
+            x: scrollView.bounds.midX,
+            y: scrollView.bounds.midY
+        )
+        if let indexPath = thumbnailCollectionView.indexPathForItem(at: centerPoint) {
+            if selectedIndex != indexPath.item {
+                selectedIndex = indexPath.item
+                onSelect?(indexPath.item)
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            }
+        }
     }
 }
