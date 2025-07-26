@@ -44,7 +44,7 @@ struct OnboardingView: View {
                 
                 FfipButton(title: steps[currentStepIndex].buttonTitle) {
                     if currentStepIndex == 2 {
-                        coordinator.push(.search)
+                        coordinator.popToRoot()
                     } else {
                         currentStepIndex += 1
                         triggerHapticFeedback()
