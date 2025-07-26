@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "aiBadge" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -171,8 +168,6 @@
         }
       }
     },
-    "Key" : {
-      "extractionState" : "manual"
     "next" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -474,41 +469,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please enter your search query."
+            "value" : "Please enter a search keyword."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색할 내용을 입력해주세요."
-          }
-        }
-      }
-    },
-    "willCameraPushInstruction" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "will search with ff!p"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "탐색을 시작합니다."
-          }
-        }
-      }
-    },
-    "탐색을 시작합니다." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "탐색을 시작합니다."
+            "value" : "탐색어를 입력해주세요."
           }
         }
       }
@@ -520,6 +487,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "탐색 시작하기"
+          }
+        }
+      }
+    },
+    "willCameraPushInstruction" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색할 내용을 입력해주세요."
           }
         }
       }
