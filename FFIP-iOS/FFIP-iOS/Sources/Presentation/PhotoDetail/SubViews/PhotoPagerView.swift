@@ -66,7 +66,7 @@ struct PhotoPagerView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, UIScreen.main.bounds.width / 2 - 15)
+                    .padding(.horizontal, screenWidth / 2 - 15)
                     .padding(.vertical, 12)
                     .gesture(
                         DragGesture()

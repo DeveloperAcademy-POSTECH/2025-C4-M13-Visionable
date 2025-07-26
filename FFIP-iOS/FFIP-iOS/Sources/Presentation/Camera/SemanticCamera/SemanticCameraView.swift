@@ -34,7 +34,7 @@ struct SemanticCameraView: View {
         ZStack {
             VStack {
                 ZStack {
-                    GeometryReader { geometry in
+                    GeometryReader { _ in
                         FrameView(image: mediator.frame)
                             .background(
                                 GeometryReader { proxy in

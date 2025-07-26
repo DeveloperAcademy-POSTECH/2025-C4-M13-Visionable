@@ -6,36 +6,42 @@
 //
 
 import SwiftUI
+import Speech
 
 @MainActor
 @Observable
 final class VoiceSearchModel {
     private let privacyService: PrivacyService
-    private let speechService: SpeechRecognitionService
-    
-    private(set) var transcript: String = ""
-    
+    private let speechService: SpeechTranscriptionService
+
+    private(set) var dictationTranscriber: DictationTranscriber?
+    private(set) var detectorStream: AsyncStream<Float>?
+
+    private var listenTranscriptTask: Task<Void, Never>?
+    private var listenSpeechDetectedTask: Task<Void, Never>?
+
     init(
         privacyService: PrivacyService,
-        speechService: SpeechRecognitionService
+        speechService: SpeechTranscriptionService
     ) {
         self.privacyService = privacyService
         self.speechService = speechService
     }
-    
+
     func start() async {
         await privacyService.fetchMicrophoneAuthorization()
-        
+
         do {
             try await speechService.startTranscribing()
         } catch {
-            transcript = "<< 에러: \(error.localizedDescription) >>"
+            print("transcribe error: \(error.localizedDescription)")
         }
+        
+        dictationTranscriber = await speechService.dictationTranscriber
+        detectorStream = await speechService.detectorStream
     }
-    
+
     func stop() async {
         await speechService.stopTranscribing()
-        transcript = await speechService.getTranscript()
     }
-    
 }

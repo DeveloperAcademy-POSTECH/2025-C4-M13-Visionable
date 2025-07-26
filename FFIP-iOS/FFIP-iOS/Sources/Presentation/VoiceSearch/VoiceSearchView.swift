@@ -5,44 +5,134 @@
 //  Created by mini on 7/8/25.
 //
 
+import Speech
 import SwiftUI
 
 struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
 
-    @State private var isListening = false
+    @AppStorage("searchType") var searchType: SearchType = .exact
+
+    @State private var transcript: String = ""
+    @State private var willCameraPush: Bool = false
+    @State private var isUserSpeaking = false
+    @State private var showMicButton = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text(voiceSearchModel.transcript)
-                .font(.title2)
-                .multilineTextAlignment(.center)
-                .padding()
+        ZStack {
+            VStack {
+                FfipNavigationBar(
+                    leadingType: .back(action: {
+                        Task { await handleBackAction() }
+                    }),
+                    centerType: .none,
+                    trailingType: .none
+                )
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: 58)
+                HStack {
+                    Text(
+                        transcript == ""
+                            ? String(localized: .searchPlaceholder)
+                            : "\"\(transcript)\""
+                    )
+                    .font(.titleBold24)
+                    .foregroundStyle(.ffipGrayscale1)
 
-            VoiceListenerView(
-                isListening: $isListening,
-            )
-
-            Button {
-                Task {
-                    if isListening {
-                        await voiceSearchModel.stop()
-                        isListening = false
-                    } else {
-                        await voiceSearchModel.start()
-                        isListening = true
-                    }
+                    Spacer()
                 }
-            } label: {
-                Image(systemName: isListening ? "mic.fill" : "mic")
-                    .font(.system(size: 40))
-                    .padding()
-                    .background(Circle().fill(isListening ? .red : .blue))
-                    .foregroundColor(.white)
+                .padding(.leading, 30)
+
+                HStack {
+                    Text(String(localized: .willCameraPushInstruction))
+                        .font(.titleBold24)
+                        .foregroundStyle(.ffipGrayscale1)
+                        .opacity(willCameraPush ? 1 : 0)
+                    Spacer()
+                }
+                .padding(.leading, 30)
+
+                Spacer()
+            }
+            VStack {
+                Spacer()
+
+                VoiceListenerView(
+                    isUserSpeaking: $isUserSpeaking,
+                    showMicButton: $showMicButton
+                )
+
+                Spacer()
             }
         }
-        .padding()
+        .navigationBarBackButtonHidden(true)
+        .task {
+            transcript = ""
+
+            await voiceSearchModel.start()
+
+            guard
+                let dictationTranscriber = voiceSearchModel.dictationTranscriber
+            else { return }
+            guard let detectorStream = voiceSearchModel.detectorStream else {
+                return
+            }
+
+            Task {
+                try await handleDictationResults(dictationTranscriber: dictationTranscriber)
+            }
+
+            Task {
+                await handleDetectorStream(detectorStream: detectorStream)
+            }
+        }
+    }
+
+    private func handleBackAction() async {
+        await voiceSearchModel.stop()
+        coordinator.pop()
+    }
+
+    private func handleDictationResults(dictationTranscriber: DictationTranscriber) async throws {
+        for try await case let result in dictationTranscriber.results {
+            if showMicButton { return }
+
+            let text = String(result.text.characters)
+            transcript = text
+
+            await voiceSearchModel.stop()
+
+            try await Task.sleep(for: .seconds(1))
+
+            willCameraPush = true
+
+            try await Task.sleep(for: .seconds(1))
+
+            switch searchType {
+            case .exact:
+                coordinator.push(.exactCamera(searchKeyword: transcript))
+            case .semantic:
+                coordinator.push(.semanticCamera(searchKeyword: transcript))
+            }
+            break
+        }
+    }
+
+    private func handleDetectorStream(detectorStream: AsyncStream<Float>) async {
+        for await db in detectorStream {
+            if db > -50 {
+                isUserSpeaking = true
+                try? await Task.sleep(for: .seconds(2))
+            } else {
+                isUserSpeaking = false
+            }
+        }
     }
 }
 
@@ -51,3 +141,4 @@ struct VoiceSearchView: View {
 //    VoiceSearchView(voiceSearchModel: VoiceSearchModel(privacyService: PrivacyService(), speechService: SpeechRecognitionService()))
 //        .environment(coordinator)
 // }
+

@@ -22,7 +22,7 @@ struct FFIPAppRootView: View {
                 set: { coordinator.path = $0 }
             )
         ) {
-            moduleFactory.makeOnboardingView()
+            moduleFactory.makeSearchView()
                 .navigationBarBackButtonHidden(true)
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
@@ -34,6 +34,9 @@ struct FFIPAppRootView: View {
                     case .onboarding: moduleFactory.makeOnboardingView()
                     }
                 }
+        }
+        .task {
+            coordinator.push(.onboarding)
         }
     }
 }

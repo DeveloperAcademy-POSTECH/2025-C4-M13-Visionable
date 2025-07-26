@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "aiBadge" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -490,6 +487,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "탐색 시작하기"
+          }
+        }
+      }
+    },
+    "willCameraPushInstruction" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색을 시작합니다."
           }
         }
       }
