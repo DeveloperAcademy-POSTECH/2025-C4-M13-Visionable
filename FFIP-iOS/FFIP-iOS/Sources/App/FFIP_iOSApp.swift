@@ -11,15 +11,26 @@ import SwiftData
 @main
 struct FFIP_iOSApp: App {
     @State private var coordinator = AppCoordinator()
-    
+    @AppStorage("searchType") var searchType: SearchType = .exact
+
     var body: some Scene {
         WindowGroup {
             FFIPAppRootView(moduleFactory: ModuleFactory.shared)
                 .environment(coordinator)
                 .onOpenURL { url in
                     switch url.host {
-                    case "search":
+                    case "searchExact":
                         coordinator.popToRoot()
+                        searchType = .exact
+                    case "searchSemantic":
+                        coordinator.popToRoot()
+                        searchType = .semantic
+                    case "voiceSearchExact":
+                        coordinator.push(.voiceSearch)
+                        searchType = .exact
+                    case "voiceSearchSemantic":
+                        coordinator.push(.voiceSearch)
+                        searchType = .semantic
                     default: break
                     }
                 }

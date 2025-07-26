@@ -15,7 +15,7 @@ public enum SearchFocusState {
 struct SearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
-    @State private var selectedSearchType: SearchType = .exact
+    @AppStorage("searchType") var searchType: SearchType = .exact
     @FocusState private var isFocused: Bool
     @State private var isToolTipPresented: Bool = false
     @State private var isSheetPresented: Bool = false
@@ -37,7 +37,7 @@ struct SearchView: View {
                         }
                     } label: {
                         HStack(spacing: 8) {
-                            Text(selectedSearchType.title)
+                            Text(searchType.title)
                                 .font(.titleBold24)
                             Image(.icnKeyboardArrowDown)
                                 .resizable()
@@ -45,7 +45,7 @@ struct SearchView: View {
                                 .frame(width: 20)
                                 .ffipToolTip(
                                     isToolTipVisible: $isToolTipPresented,
-                                    message: selectedSearchType == .exact
+                                    message: searchType == .exact
                                     ? String(localized: .exactSearchToolTip) : String(localized: .semanticSearchToolTip),
                                     position: .trailing,
                                     spacing: 9
@@ -74,13 +74,14 @@ struct SearchView: View {
                     FfipSearchTextField(
                         text: $searchText,
                         isFocused: focusState == .editing,
-                        placeholder: String(localized: selectedSearchType.placeholder),
+                        placeholder: String(localized: searchType.placeholder),
                         onVoiceSearch: {
-                            coordinator.push(.voiceSearch(searchType: selectedSearchType))
+                            coordinator.push(.voiceSearch)
                         },
                         onSubmit: {
                             searchModel.addRecentSearchKeyword(searchText)
-                            if selectedSearchType == .exact {
+                            print("\(searchType)")
+                            if searchType == .exact {
                                 coordinator.push(.exactCamera(searchKeyword: searchText))
                             } else {
                                 coordinator.push(.semanticCamera(searchKeyword: searchText))
@@ -93,7 +94,7 @@ struct SearchView: View {
                 }
                 .padding(.top, 16)
                 
-                if focusState == .home && selectedSearchType == .exact {
+                if focusState == .home && searchType == .exact {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
                             Text(.recentSearchTitle)
@@ -105,7 +106,7 @@ struct SearchView: View {
                                 keywords: searchModel.recentSearchKeywords,
                                 onTap: { keyword in
                                     searchModel.addRecentSearchKeyword(keyword)
-                                    if selectedSearchType == .exact {
+                                    if searchType == .exact {
                                         coordinator.push(.exactCamera(searchKeyword: keyword))
                                     } else {
                                         coordinator.push(.semanticCamera(searchKeyword: keyword))
@@ -131,7 +132,7 @@ struct SearchView: View {
                                     keywords: searchModel.recentSearchKeywords,
                                     onTap: { keyword in
                                         searchModel.addRecentSearchKeyword(keyword)
-                                        if selectedSearchType == .exact {
+                                        if searchType == .exact {
                                             coordinator.push(.exactCamera(searchKeyword: keyword))
                                         } else {
                                             coordinator.push(.semanticCamera(searchKeyword: keyword))
@@ -186,7 +187,7 @@ struct SearchView: View {
                 }
             }
         }
-        .onChange(of: selectedSearchType) {
+        .onChange(of: searchType) {
             if isToolTipPresented { isToolTipPresented = false }
 
             withAnimation {
@@ -201,7 +202,7 @@ struct SearchView: View {
             hasSearchTypeChanged = true
         }
         .ffipSheet(isPresented: $isSheetPresented) {
-            SearchTypeSelectionView(selectedType: $selectedSearchType)
+            SearchTypeSelectionView(selectedType: $searchType)
         }
         .showFfipToastMessage(
             toastType: .check,
