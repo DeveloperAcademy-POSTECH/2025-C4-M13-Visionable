@@ -52,6 +52,7 @@ struct OnboardingView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
