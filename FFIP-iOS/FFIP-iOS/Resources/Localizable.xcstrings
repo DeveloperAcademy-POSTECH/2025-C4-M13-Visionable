@@ -65,6 +65,72 @@
         }
       }
     },
+    "exactCameraPopupTip1_Description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색 결과를 더 정확하게  얻을 수 있어요."
+          }
+        }
+      }
+    },
+    "exactCameraPopupTip1_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일정하게 스캔"
+          }
+        }
+      }
+    },
+    "exactCameraPopupTip2_Description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색 영역과 결과를 가까이 볼 수 있어요."
+          }
+        }
+      }
+    },
+    "exactCameraPopupTip2_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "줌 기능"
+          }
+        }
+      }
+    },
+    "exactCameraPopupTip3_Description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FF!P Box로 결과를 나타내요. "
+          }
+        }
+      }
+    },
+    "exactCameraPopupTip3_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색 결과"
+          }
+        }
+      }
+    },
     "exactCameraTip1" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -390,6 +456,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "탐색 모드 선택"
+          }
+        }
+      }
+    },
+    "semanticCameraPopupTip1_Description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색 결과를 더 정확하게  얻을 수 있어요."
+          }
+        }
+      }
+    },
+    "semanticCameraPopupTip1_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두 번 연속 탭하기"
+          }
+        }
+      }
+    },
+    "semanticCameraPopupTip2_Description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색 결과를 더 정확하게  얻을 수 있어요."
+          }
+        }
+      }
+    },
+    "semanticCameraPopupTip2_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스냅북에서 확인 가능함"
+          }
+        }
+      }
+    },
+    "semanticCameraPopupTip3_Description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색 결과를 더 정확하게  얻을 수 있어요."
+          }
+        }
+      }
+    },
+    "semanticCameraPopupTip3_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스냅북에서 확인 가능함"
           }
         }
       }

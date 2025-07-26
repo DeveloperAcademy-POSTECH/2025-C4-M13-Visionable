@@ -18,6 +18,7 @@ struct ExactCameraView: View {
 
     @AppStorage(AppStorageKey.dontShowExactTipAgain) private var dontShowExactCameraTipAgain: Bool = false
     @State private var showTip = true
+    @State private var showPopupTip = false
 
     @State var searchText: String
     @State private var lastSearchText: String = ""
@@ -60,7 +61,7 @@ struct ExactCameraView: View {
                     onZoom: { Task { await handleZoomButtonTapped() } },
                     isTorchOn: mediator.isTorchOn,
                     onToggleTorch: { Task { await mediator.toggleTorch() } },
-                    onInfo: {},
+                    onInfo: { showPopupTip = true },
                     onClose: {
                         Task {
                             await mediator.stop()
@@ -119,6 +120,10 @@ struct ExactCameraView: View {
                         ),
                     dontShowAgainText: String(localized: .dontShowAgain)
                 )
+            }
+            
+            if showPopupTip {
+                FfipCameraPopupTipOverlay(showPopupTip: $showPopupTip, type: .exact)
             }
         }
         .ignoresSafeArea(.all)
