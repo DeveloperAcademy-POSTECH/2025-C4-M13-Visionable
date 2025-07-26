@@ -497,7 +497,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색할 내용을 입력해주세요."
+            "value" : "탐색을 시작합니다."
           }
         }
       }
