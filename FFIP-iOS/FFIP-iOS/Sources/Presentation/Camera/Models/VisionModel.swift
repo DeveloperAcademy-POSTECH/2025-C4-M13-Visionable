@@ -17,7 +17,7 @@ final class VisionModel: NSObject {
     var searchKeyword: String
 
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
-    private(set) var matchedObservations = [RecognizedTextObservation]()
+//    private(set) var matchedObservations = [RecognizedTextObservation]()
 
     init(
         searchKeyword: String,
@@ -39,19 +39,15 @@ extension VisionModel {
     
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
-            let textRects = try await visionService.performTextRecognition(
-                image: buffer
-            )
-
+            let textRects = try await visionService.performTextRecognition(image: buffer)
             self.recognizedTextObservations = textRects
-            filterMatchedObservations()
         } catch {
             print("Vision Processing Error !")
         }
     }
 
-    func filterMatchedObservations() {
-        matchedObservations = recognizedTextObservations.filter {
+    func filterMatchedObservations() -> [RecognizedTextObservation] {
+        recognizedTextObservations.filter {
             $0.transcript.localizedCaseInsensitiveContains(searchKeyword)
         }
     }
