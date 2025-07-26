@@ -63,6 +63,12 @@ extension ThumbnailCollectionViewController {
     func setOnSelect(_ handler: @escaping (Int) -> Void) {
         self.onSelect = handler
     }
+    
+    func stopScrolling() {
+        print("멈춰!")
+        thumbnailCollectionView.setContentOffset(thumbnailCollectionView.contentOffset, animated: false)
+        thumbnailCollectionView.layer.removeAllAnimations()
+    }
 }
 
 // MARK: - Private Extensions

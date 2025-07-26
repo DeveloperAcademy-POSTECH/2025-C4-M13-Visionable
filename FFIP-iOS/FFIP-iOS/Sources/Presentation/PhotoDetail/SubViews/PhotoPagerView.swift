@@ -28,10 +28,12 @@ struct PhotoPagerView: View {
                                             .frame(width: geo.size.width, height: geo.size.height)
                                     }
                                 }
-                                
                             }
                         }
                         .tag(index)
+                        .onTapGesture {
+                            // TODO: - 멈춰
+                        }
                     }
                 }
             }
