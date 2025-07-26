@@ -9,7 +9,7 @@ import Foundation
 import Vision
 
 struct CapturedImageAnalysisResultDTO {
-    let keyword: String
+    let keyword: String?
     let similarity: Double
     let recognizedTexts: [RecognizedTextObservation]
 }

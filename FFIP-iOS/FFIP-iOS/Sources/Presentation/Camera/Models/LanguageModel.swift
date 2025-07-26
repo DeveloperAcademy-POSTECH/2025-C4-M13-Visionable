@@ -33,7 +33,7 @@ final class LanguageModel: NSObject {
     func findMostSimilarKeywordWithScore(
         to searchKeyword: String,
         from recognitionKeywords: [String]
-    ) async throws -> (keyword: String, similarity: Double)? {
+    ) async throws -> (keyword: String?, similarity: Double)? {
         try await foundationModelsService.findRelatedKeywords(
             searchKeyword: searchKeyword,
             recognitionKeywords: recognitionKeywords
