@@ -123,7 +123,7 @@ struct OnboardingUpperContentView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + imageInterval) {
             currentImageResourceIndex += 1
             isImageTimerRunning = false
-            if type != .first { startTypingAnimation() }
+            if type != .first { startTypingAnimation() } else { triggerHapticFeedback() }
         }
     }
     
