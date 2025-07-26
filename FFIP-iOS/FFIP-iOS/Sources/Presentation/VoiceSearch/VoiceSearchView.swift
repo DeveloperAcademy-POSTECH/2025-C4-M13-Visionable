@@ -19,22 +19,34 @@ struct VoiceSearchView: View {
 
     var body: some View {
         ZStack {
+            VStack {
+                FfipNavigationBar(
+                    leadingType: .back(action: {
+                        Task { await handleBackAction() }
+                    }),
+                    centerType: .none,
+                    trailingType: .none
+                )
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            
             VStack(spacing: 0) {
                 Spacer()
                     .frame(height: 58)
                 HStack {
                     Text(
                         transcript == ""
-                        ? String(localized: .searchPlaceholder)
-                        : "\"\(transcript)\""
+                            ? String(localized: .searchPlaceholder)
+                            : "\"\(transcript)\""
                     )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
-                    
+
                     Spacer()
                 }
                 .padding(.leading, 30)
-                
+
                 HStack {
                     Text(String(localized: .willCameraPushInstruction))
                         .font(.titleBold24)
@@ -43,20 +55,21 @@ struct VoiceSearchView: View {
                     Spacer()
                 }
                 .padding(.leading, 30)
-                
+
                 Spacer()
             }
             VStack {
                 Spacer()
-                
+
                 VoiceListenerView(
                     isUserSpeaking: $isUserSpeaking,
                     showMicButton: $showMicButton
                 )
-                
+
                 Spacer()
             }
         }
+        .navigationBarBackButtonHidden(true)
         .task {
             transcript = ""
 
@@ -72,7 +85,7 @@ struct VoiceSearchView: View {
             Task {
                 for try await case let result in dictationTranscriber.results {
                     if showMicButton { return }
-                    
+
                     let text = String(result.text.characters)
                     transcript = text
 
@@ -102,6 +115,11 @@ struct VoiceSearchView: View {
                 }
             }
         }
+    }
+
+    private func handleBackAction() async {
+        await voiceSearchModel.stop()
+        coordinator.pop()
     }
 }
 

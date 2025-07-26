@@ -64,7 +64,6 @@ struct VoiceListenerView: View {
                 )
                 .task {
                     while true {
-                        print(isUserSpeaking)
                         if isUserSpeaking {
                             unDetectCount = 0
                             phase = (phase + 1) % 4
