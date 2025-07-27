@@ -159,23 +159,23 @@ struct ExactCameraView: View {
     }
 
     private func toggleCameraPauseAndShowLock() {
-        if mediator.isCameraPaused {
-            mediator.resumeCamera()
-        } else {
-            mediator.pauseCamera()
-        }
         showLockTask?.cancel()
         withAnimation {
             showLockIcon = true
         }
-        showLockTask = Task {
-            try? await Task.sleep(
-                for: .seconds(mediator.isCameraPaused ? 1 : 0.8)
-            )
-            if Task.isCancelled { return }
-            withAnimation {
-                showLockIcon = false
+        if mediator.isCameraPaused {
+            mediator.resumeCamera()
+            showLockTask = Task {
+                try? await Task.sleep(
+                    for: .seconds(0.8)
+                )
+                if Task.isCancelled { return }
+                withAnimation {
+                    showLockIcon = false
+                }
             }
+        } else {
+            mediator.pauseCamera()
         }
     }
 }
