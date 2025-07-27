@@ -223,19 +223,26 @@ private extension SemanticCameraView {
     
     @MainActor
     func analyzeAndUpdateCapturedImage(_ id: UUID, buffer: CVImageBuffer) async {
-        guard let result = await mediator.analyzeCapturedImage(buffer) else {
+        if let result = await mediator.analyzeCapturedImage(buffer) {
+            guard let targetImage = capturedImages.first(where: { $0.id == id }) else { return }
+            
+            let filteredRecognizedTexts = result.recognizedTexts.filter { observation in
+                observation.transcript == result.keyword && result.similarity >= 0.7
+            }
+            targetImage.similarKeyword = result.keyword
+            targetImage.similarity = result.similarity
+            targetImage.recognizedTexts = filteredRecognizedTexts.isEmpty ? nil : filteredRecognizedTexts
+            targetImage.isAnalyzed = true
+        } else {
+            try? await Task.sleep(for: .milliseconds(100))
+            guard let targetImage = capturedImages.first(where: { $0.id == id }) else {
+                print("이미지 못찾음 !")
+                return
+            }
+            targetImage.isAnalyzed = true
             print("❌ 분석 실패")
             return
         }
-        guard let targetImage = capturedImages.first(where: { $0.id == id }) else { return }
-        
-        let filteredRecognizedTexts = result.recognizedTexts.filter { observation in
-            observation.transcript == result.keyword && result.similarity >= 0.7
-        }
-        targetImage.similarKeyword = result.keyword
-        targetImage.similarity = result.similarity
-        targetImage.recognizedTexts = filteredRecognizedTexts.isEmpty ? nil : filteredRecognizedTexts
-        targetImage.isAnalyzed = true
 
         do {
             try modelContext.save()
@@ -255,3 +262,4 @@ private extension SemanticCameraView {
         }
     }
 }
+

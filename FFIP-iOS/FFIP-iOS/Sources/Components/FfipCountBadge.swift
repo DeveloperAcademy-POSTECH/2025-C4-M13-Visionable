@@ -25,7 +25,8 @@ struct FfipCountBadge: View {
                 RoundedRectangle(cornerRadius: 17)
                     .stroke(.ffipGrayScaleDefault2, lineWidth: 1)
             )
-            .frame(minWidth: 34, minHeight: 34)
+            .frame(height: 34)
+            .frame(minWidth: 34)
             .fixedSize()
             .offset(x: -12, y: -12)
     }
