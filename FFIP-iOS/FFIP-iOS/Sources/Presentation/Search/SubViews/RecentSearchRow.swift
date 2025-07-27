@@ -17,8 +17,8 @@ struct RecentSearchRow: View {
             Text(keyword)
                 .foregroundStyle(.ffipGrayscale1)
                 .lineLimit(1)
-                .accessibilityLabel("최근 탐색어 \(keyword)")
-                .accessibilityHint("탭하면 카메라 뷰를 켜서 탐색을 시작합니다.")
+                .accessibilityLabel(.VoiceOverLocalizable.recentKeyword(keyword))
+                .accessibilityHint(.VoiceOverLocalizable.searchCapsule)
                 .accessibilityAddTraits(.isButton)
             
             Spacer()
@@ -28,8 +28,8 @@ struct RecentSearchRow: View {
             }
             .frame(width: 20, height: 20)
             .tint(.gray)
-            .accessibilityLabel("\(keyword) 삭제")
-            .accessibilityHint("최근 탐색어 목록에서 이 항목을 제거합니다.")
+            .accessibilityLabel(.VoiceOverLocalizable.delete(keyword))
+            .accessibilityHint(.VoiceOverLocalizable.deleteRecentKeyword)
             .accessibilityAddTraits(.isButton)
         }
         .contentShape(Rectangle())

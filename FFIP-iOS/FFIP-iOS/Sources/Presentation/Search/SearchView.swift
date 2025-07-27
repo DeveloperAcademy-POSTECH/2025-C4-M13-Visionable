@@ -22,15 +22,19 @@ struct SearchView: View {
     @State private var focusState: SearchFocusState = .home
     @State private var searchText: String = ""
     @State private var hasSearchTypeChanged: Bool = false
-    
+
     var body: some View {
         ZStack {
             Color.ffipBackground1Main.ignoresSafeArea()
-            
+
             VStack(alignment: .leading, spacing: 0) {
                 if focusState == .home {
-                    FfipNavigationBar(leadingType: .logo, centerType: .none, trailingType: .none)
-                    
+                    FfipNavigationBar(
+                        leadingType: .logo,
+                        centerType: .none,
+                        trailingType: .none
+                    )
+
                     Button {
                         withAnimation {
                             isSheetPresented = true
@@ -46,7 +50,10 @@ struct SearchView: View {
                                 .ffipToolTip(
                                     isToolTipVisible: $isToolTipPresented,
                                     message: searchType == .exact
-                                    ? String(localized: .exactSearchToolTip) : String(localized: .semanticSearchToolTip),
+                                        ? String(localized: .exactSearchToolTip)
+                                        : String(
+                                            localized: .semanticSearchToolTip
+                                        ),
                                     position: .trailing,
                                     spacing: 9
                                 )
@@ -54,9 +61,17 @@ struct SearchView: View {
                     }
                     .tint(.ffipGrayscale1)
                     .padding(.top, 75)
-                    .accessibilityLabel("탐색 모드: \(searchType == .exact ? "지정 탐색" : "연관 탐색").")
-                    .accessibilityValue(searchType == .exact ? "탐색창에 입력하는 텍스트와 연관된 모든 항목을 찾습니다. 정확한 명칭을 입력하지 않아도 AI로 추론하여 비슷한 항목을 탐색합니다." : "탐색창에 입력하는 텍스트와 정확히 일치하는 항목만 찾아줍니다.")
-                    .accessibilityHint("눌러서 탐색모드를 변경할 수 있습니다.")
+                    .accessibilityLabel(
+                        .VoiceOverLocalizable.searchMode(
+                            searchType == .exact ? "지정 탐색" : "연관 탐색"
+                        )
+                    )
+                    .accessibilityValue(
+                        searchType == .exact
+                            ? .VoiceOverLocalizable.exactSearchModeValue
+                            : .VoiceOverLocalizable.semanticSearchModeValue
+                    )
+                    .accessibilityHint(.VoiceOverLocalizable.changeSearchMode)
                     .accessibilityAddTraits(.isButton)
                     .accessibilitySortPriority(1)
                 }
@@ -65,7 +80,9 @@ struct SearchView: View {
                     if focusState == .editing {
                         Button {
                             searchText = ""
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            DispatchQueue.main.asyncAfter(
+                                deadline: .now() + 0.1
+                            ) {
                                 withAnimation(.easeInOut(duration: 0.25)) {
                                     focusState = .home
                                     isFocused = false
@@ -74,10 +91,10 @@ struct SearchView: View {
                         } label: {
                             Image(.icnNavBack)
                         }
-                        .accessibilityLabel("뒤로가기")
-                        .accessibilityHint("탐색 모드를 변경할 수 있는 초기 화면으로 돌아갑니다.")
+                        .accessibilityLabel(.VoiceOverLocalizable.back)
+                        .accessibilityHint(.VoiceOverLocalizable.backHint)
                     }
-                    
+
                     FfipSearchTextField(
                         text: $searchText,
                         isFocused: focusState == .editing,
@@ -89,18 +106,22 @@ struct SearchView: View {
                             searchModel.addRecentSearchKeyword(searchText)
                             print("\(searchType)")
                             if searchType == .exact {
-                                coordinator.push(.exactCamera(searchKeyword: searchText))
+                                coordinator.push(
+                                    .exactCamera(searchKeyword: searchText)
+                                )
                             } else {
-                                coordinator.push(.semanticCamera(searchKeyword: searchText))
+                                coordinator.push(
+                                    .semanticCamera(searchKeyword: searchText)
+                                )
                             }
-                            
+
                         },
-                        onEmptySubmit: { }
+                        onEmptySubmit: {}
                     )
                     .focused($isFocused)
                 }
                 .padding(.top, 16)
-                
+
                 if focusState == .home && searchType == .exact {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
@@ -109,25 +130,33 @@ struct SearchView: View {
                                 .foregroundStyle(.ffipGrayscale2)
                                 .padding(.top, 32)
                                 .accessibilityAddTraits(.isHeader)
-                            
+
                             RecentSearchFlow(
                                 keywords: searchModel.recentSearchKeywords,
                                 onTap: { keyword in
                                     searchModel.addRecentSearchKeyword(keyword)
                                     if searchType == .exact {
-                                        coordinator.push(.exactCamera(searchKeyword: keyword))
+                                        coordinator.push(
+                                            .exactCamera(searchKeyword: keyword)
+                                        )
                                     } else {
-                                        coordinator.push(.semanticCamera(searchKeyword: keyword))
+                                        coordinator.push(
+                                            .semanticCamera(
+                                                searchKeyword: keyword
+                                            )
+                                        )
                                     }
                                 },
                                 onTapDelete: { keyword in
-                                    searchModel.deleteRecentSearchKeyword(keyword)
+                                    searchModel.deleteRecentSearchKeyword(
+                                        keyword
+                                    )
                                 }
                             )
                         }
                     }
                 }
-                
+
                 if focusState == .editing {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .trailing, spacing: 12) {
@@ -135,20 +164,35 @@ struct SearchView: View {
                                 Text(.recentSearchTitle)
                                     .font(.labelMedium14)
                                     .foregroundStyle(.ffipGrayscale3)
-                                
+
                                 RecentSearchList(
                                     keywords: searchModel.recentSearchKeywords,
                                     onTap: { keyword in
-                                        searchModel.addRecentSearchKeyword(keyword)
+                                        searchModel.addRecentSearchKeyword(
+                                            keyword
+                                        )
                                         if searchType == .exact {
-                                            coordinator.push(.exactCamera(searchKeyword: keyword))
+                                            coordinator.push(
+                                                .exactCamera(
+                                                    searchKeyword: keyword
+                                                )
+                                            )
                                         } else {
-                                            coordinator.push(.semanticCamera(searchKeyword: keyword))
+                                            coordinator.push(
+                                                .semanticCamera(
+                                                    searchKeyword: keyword
+                                                )
+                                            )
                                         }
                                     },
                                     onTapDelete: { keyword in
-                                        withAnimation(.easeInOut(duration: 0.05)) {
-                                            searchModel.deleteRecentSearchKeyword(keyword)
+                                        withAnimation(
+                                            .easeInOut(duration: 0.05)
+                                        ) {
+                                            searchModel
+                                                .deleteRecentSearchKeyword(
+                                                    keyword
+                                                )
                                         }
                                     }
                                 )
@@ -159,11 +203,17 @@ struct SearchView: View {
                                 .onTapGesture {
                                     searchModel.deleteAllRecentSearchKeyword()
                                 }
-                                .accessibilityLabel("최근 탐색어 전체 삭제")
-                                .accessibilityHint("최근 탐색어 목록을 초기화합니다.")
+                                .accessibilityLabel(
+                                    .VoiceOverLocalizable.deleteRecentAll
+                                )
+                                .accessibilityHint(
+                                    .VoiceOverLocalizable.resetRecentKeywords
+                                )
                                 .accessibilityAddTraits(.isButton)
                         }
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .transition(
+                            .move(edge: .bottom).combined(with: .opacity)
+                        )
                         .padding(.top, 26)
                     } else {
                         VStack {
@@ -172,7 +222,9 @@ struct SearchView: View {
                             Text(.noRecentSearchesMessage)
                                 .font(.bodyMedium16)
                                 .foregroundStyle(.ffipGrayscale3)
-                                .accessibilityLabel("최근 탐색어가 없습니다.")
+                                .accessibilityLabel(
+                                    .VoiceOverLocalizable.noRecentKeyword
+                                )
                         }
                         .frame(maxWidth: .infinity)
                     }
@@ -200,7 +252,10 @@ struct SearchView: View {
             }
         }
         .ffipSheet(isPresented: $isSheetPresented) {
-            SearchTypeSelectionView(selectedType: $searchType, dismissAction: dismissFfipSheet)
+            SearchTypeSelectionView(
+                selectedType: $searchType,
+                dismissAction: dismissFfipSheet
+            )
         }
         .showFfipToastMessage(
             toastType: .check,
@@ -208,14 +263,14 @@ struct SearchView: View {
             isToastVisible: $hasSearchTypeChanged
         )
     }
-    
+
     private func dismissFfipSheet() {
         if isToolTipPresented { isToolTipPresented = false }
 
         withAnimation {
             isSheetPresented = false
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             withAnimation {
                 isToolTipPresented = true
