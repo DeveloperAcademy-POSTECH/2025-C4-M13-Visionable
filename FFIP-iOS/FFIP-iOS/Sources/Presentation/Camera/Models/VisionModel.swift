@@ -39,6 +39,10 @@ extension VisionModel {
     
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
+            let isSmudge = try await visionService.performDetectSmudge(in: buffer, threshold: 0.9)
+                        
+            if isSmudge { return }
+            
             let textRects = try await visionService.performTextRecognition(image: buffer)
             self.recognizedTextObservations = textRects
         } catch {
