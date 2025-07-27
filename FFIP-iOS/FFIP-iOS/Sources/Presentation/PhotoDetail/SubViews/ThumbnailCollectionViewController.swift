@@ -74,6 +74,7 @@ extension ThumbnailCollectionViewController {
 // MARK: - Private Extensions
 private extension ThumbnailCollectionViewController {
     func setupStyle() {
+        thumbnailCollectionView.backgroundColor = .ffipBackground1Main
         thumbnailCollectionView.showsHorizontalScrollIndicator = false
     }
     
