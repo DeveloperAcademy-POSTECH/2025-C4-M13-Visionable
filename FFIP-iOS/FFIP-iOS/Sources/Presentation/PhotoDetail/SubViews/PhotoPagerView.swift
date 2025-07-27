@@ -16,10 +16,22 @@ struct PhotoPagerView: View {
             TabView(selection: $selectedIndex) {
                 ForEach(images.indices, id: \.self) { index in
                     if let image = UIImage(data: images[index].imageData) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                            .tag(index)
+                        ZStack {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                            
+                            GeometryReader { geo in
+                                if let recognizedTexts = images[index].recognizedTexts {
+                                    ForEach(recognizedTexts, id: \.self) { text in
+                                        FfipBoundingBox(observation: text)
+                                            .frame(width: geo.size.width, height: geo.size.height)
+                                    }
+                                }
+                                
+                            }
+                        }
+                        .tag(index)
                     }
                 }
             }
@@ -37,6 +49,13 @@ struct PhotoPagerView: View {
                                         width: index == selectedIndex ? 35 : 25,
                                         height: 35
                                     )
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 4)
+                                            .stroke(
+                                                images[index].recognizedTexts != nil ? .ffipPointGreen1 : .clear,
+                                                lineWidth: 1
+                                            )
+                                    }
                                     .cornerRadius(6)
                                     .id(index)
                                     .onTapGesture {
@@ -47,7 +66,7 @@ struct PhotoPagerView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, UIScreen.main.bounds.width / 2 - 15)
+                    .padding(.horizontal, screenWidth / 2 - 15)
                     .padding(.vertical, 12)
                     .gesture(
                         DragGesture()

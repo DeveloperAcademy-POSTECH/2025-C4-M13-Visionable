@@ -5,6 +5,7 @@
 //  Created by mini on 7/9/25.
 //
 
+import SwiftUI
 import Vision
 
 actor VisionService {
@@ -24,6 +25,12 @@ actor VisionService {
         image: CVImageBuffer
     ) async throws -> [RecognizedTextObservation] {
         return try await recognizeTextRequest.perform(on: image)
+    }
+    
+    func performTextRecognition(
+        imageData: Data
+    ) async throws -> [RecognizedTextObservation] {
+        return try await recognizeTextRequest.perform(on: imageData)
     }
     
     func recognizedTexts(observations: [RecognizedTextObservation]) -> [String] {

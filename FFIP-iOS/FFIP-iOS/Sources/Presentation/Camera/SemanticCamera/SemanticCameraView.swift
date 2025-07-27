@@ -35,7 +35,7 @@ struct SemanticCameraView: View {
         ZStack {
             VStack {
                 ZStack {
-                    GeometryReader { geometry in
+                    GeometryReader { _ in
                         FrameView(image: mediator.frame)
                             .background(
                                 GeometryReader { proxy in
@@ -59,10 +59,6 @@ struct SemanticCameraView: View {
                             .onTapGesture(count: 2) {
                                 captureFrameAndSave()
                             }
-                        
-                        ForEach(mediator.matchedObservations, id: \.self) { observation in
-                            FfipBoundingBox(observation: observation)
-                        }
                     }
                 }
             }
@@ -170,9 +166,6 @@ struct SemanticCameraView: View {
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
-        .onChange(of: mediator.matchedObservations) { _, newObservations in
-            if !newObservations.isEmpty { triggerHapticFeedback() }
-        }
         .task {
             await mediator.start()
         }
@@ -205,7 +198,7 @@ private extension SemanticCameraView {
         withAnimation(.easeIn(duration: 0.1)) {
             showFlash = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             withAnimation(.easeOut(duration: 0.3)) {
                 showFlash = false
@@ -221,10 +214,37 @@ private extension SemanticCameraView {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     let capturedImage = SemanticCameraCapturedImage(imageData: jpegData)
+                    let capturedImageId = capturedImage.id
                     modelContext.insert(capturedImage)
+
+                    Task.detached(priority: .background) {
+                        await analyzeAndUpdateCapturedImage(capturedImageId, buffer: captureFrame)
+                    }
                     animateCapture = false
                 }
             }
+        }
+    }
+    
+    @MainActor
+    func analyzeAndUpdateCapturedImage(_ id: UUID, buffer: CVImageBuffer) async {
+        guard let result = await mediator.analyzeCapturedImage(buffer) else {
+            print("❌ 분석 실패")
+            return
+        }
+        guard let targetImage = capturedImages.first(where: { $0.id == id }) else { return }
+        
+        let filteredRecognizedTexts = result.recognizedTexts.filter { observation in
+            observation.transcript == result.keyword && result.similarity >= 0.5
+        }
+        targetImage.similarKeyword = result.keyword
+        targetImage.similarity = result.similarity
+        targetImage.recognizedTexts = filteredRecognizedTexts
+
+        do {
+            try modelContext.save()
+        } catch {
+            print("❌ 분석 후 저장 실패: \(error)")
         }
     }
     

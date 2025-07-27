@@ -8,28 +8,28 @@
 import SwiftUI
 
 enum SearchType: String, CaseIterable, Identifiable {
-    case keyword
+    case exact
     case semantic
     
     var id: String { rawValue }
     
     var title: LocalizedStringResource {
         switch self {
-        case .keyword: return .exactSearch
+        case .exact: return .exactSearch
         case .semantic: return .semanticSearch
         }
     }
     
     var placeholder: LocalizedStringResource {
         switch self {
-        case .keyword: return .exactSearchPlaceholder
+        case .exact: return .exactSearchPlaceholder
         case .semantic: return .semantictSearchPlaceholder
         }
     }
     
     var tagIcon: ImageResource? {
         switch self {
-        case .keyword:
+        case .exact:
             return nil
         case .semantic:
             return .icnAImark

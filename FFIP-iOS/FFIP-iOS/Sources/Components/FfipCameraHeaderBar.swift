@@ -73,7 +73,7 @@ struct FfipCameraHeaderBar: View {
                 Image(isTorchOn ? .btnCameraTorch : .btnCameraTorchSlash)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 22, height: 22)
+                    .frame(width: 40, height: 22)
             }
             .frame(maxWidth: 50)
         }

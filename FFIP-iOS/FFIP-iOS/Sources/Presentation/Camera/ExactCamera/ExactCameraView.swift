@@ -65,7 +65,7 @@ struct ExactCameraView: View {
                     onClose: {
                         Task {
                             await mediator.stop()
-                            coordinator.pop()
+                            coordinator.popToRoot()
                         }
                     }
                 )

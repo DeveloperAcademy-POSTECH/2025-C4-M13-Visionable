@@ -12,7 +12,7 @@ import Vision
 struct Box: Shape {
     private let normalizedRect: NormalizedRect
     
-    init(observation: any BoundingBoxProviding) {
+    init(observation: RecognizedTextObservation) {
         normalizedRect = observation.boundingBox
     }
     
@@ -26,9 +26,9 @@ struct Box: Shape {
 
 // MARK: - 실제 바운딩 박스의 디자인을 담당하는 뷰
 struct FfipBoundingBox: View {
-    private let observation: any BoundingBoxProviding
+    private let observation: RecognizedTextObservation
     
-    init(observation: any BoundingBoxProviding) {
+    init(observation: RecognizedTextObservation) {
         self.observation = observation
     }
     

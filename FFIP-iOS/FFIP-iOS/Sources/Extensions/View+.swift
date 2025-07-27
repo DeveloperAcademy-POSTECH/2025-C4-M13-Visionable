@@ -10,12 +10,20 @@ import SwiftUI
 extension View {
     /// 디바이스의 스크린 너비
     var screenWidth: CGFloat {
-        UIScreen.main.bounds.width
+        (UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?
+            .screen
+            .bounds.width) ?? 0
     }
 
     /// 디바이스의 스크린 높이
     var screenHeight: CGFloat {
-        UIScreen.main.bounds.height
+        (UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?
+            .screen
+            .bounds.height) ?? 0
     }
 }
 

@@ -5,20 +5,26 @@
 //  Created by mini on 7/17/25.
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date())
     }
-    
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
+
+    func getSnapshot(
+        in context: Context,
+        completion: @escaping (SimpleEntry) -> Void
+    ) {
         let entry = SimpleEntry(date: Date())
         completion(entry)
     }
-    
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+
+    func getTimeline(
+        in context: Context,
+        completion: @escaping (Timeline<Entry>) -> Void
+    ) {
         let entry = SimpleEntry(date: Date())
         completion(Timeline(entries: [entry], policy: .never))
     }
@@ -35,20 +41,27 @@ enum FfipWidgetType: String {
 
 struct FFIPWidgetEntryView: View {
     let widgetType: FfipWidgetType
-    
+
     var body: some View {
         VStack(spacing: 13) {
-            Link(destination: URL(string: URLLiterals.DeepLink.search)!) {
+            Link(
+                destination: URL(
+                    string:
+                        widgetType == .exactSearch
+                        ? URLLiterals.DeepLink.searchExact
+                        : URLLiterals.DeepLink.searchSemantic
+                )!
+            ) {
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 100)
                         .fill(.ffipGrayscale5)
                         .frame(height: 55)
-                    
+
                     Image(.ffipWidgetLogo)
                         .padding(.leading, 16)
                 }
             }
-                        
+
             HStack(spacing: 14) {
                 VStack(alignment: .leading) {
                     HStack(spacing: 4) {
@@ -63,8 +76,14 @@ struct FFIPWidgetEntryView: View {
                 }
                 .font(.widgetSemiBold16)
                 .foregroundStyle(.ffipGrayscale2)
-                
-                Link(destination: URL(string: URLLiterals.DeepLink.voiceSearch)!) {
+
+                Link(
+                    destination: URL(
+                        string: widgetType == .exactSearch
+                            ? URLLiterals.DeepLink.voiceSearchExact
+                            : URLLiterals.DeepLink.voiceSearchSemantic
+                    )!
+                ) {
                     Image(.icnSettingsVoice)
                         .tint(.ffipGrayscale1)
                         .frame(width: 55, height: 55)
@@ -81,12 +100,14 @@ struct FFIPWidgetEntryView: View {
 
 struct FFIPExactSearchWidget: Widget {
     let kind: String = "FFIPExactSearchWidget"
-    
+
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { _ in
             FFIPWidgetEntryView(widgetType: .exactSearch)
         }
-        .configurationDisplayName(String(localized: .designatedSearchWidgetConfigurationDisplayName))
+        .configurationDisplayName(
+            String(localized: .designatedSearchWidgetConfigurationDisplayName)
+        )
         .description(String(localized: .designatedSearchWidgetDescription))
         .supportedFamilies([.systemSmall])
     }
@@ -94,12 +115,14 @@ struct FFIPExactSearchWidget: Widget {
 
 struct FFIPSemanticSearchWidget: Widget {
     let kind: String = "FFIPRelatedSearchWidget"
-    
+
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { _ in
             FFIPWidgetEntryView(widgetType: .semanticSearch)
         }
-        .configurationDisplayName(String(localized: .relatedSearchWidgetConfigurationDisplayName))
+        .configurationDisplayName(
+            String(localized: .relatedSearchWidgetConfigurationDisplayName)
+        )
         .description(String(localized: .relatedSearchWidgetDescription))
         .supportedFamilies([.systemSmall])
     }

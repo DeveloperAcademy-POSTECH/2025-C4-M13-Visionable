@@ -45,7 +45,7 @@ struct OnboardingView: View {
                 
                 FfipButton(title: steps[currentStepIndex].buttonTitle) {
                     if currentStepIndex == 2 {
-                        coordinator.push(.search)
+                        coordinator.popToRoot()
                     } else {
                         currentStepIndex += 1
                         triggerHapticFeedback()
@@ -53,6 +53,7 @@ struct OnboardingView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -62,6 +63,7 @@ struct OnboardingUpperContentView: View {
     @State private var isTextFiledVisible: Bool = false
     @State private var onboardingText = ""
     @State private var isImageTimerRunning = false
+    @State private var onChangeTask: Task<Void, Never>?
     
     let type: FfipOnboardingType
     let typingText: String?
@@ -76,7 +78,6 @@ struct OnboardingUpperContentView: View {
                 Spacer(minLength: 48)
                 Image(type.onboardingImageResource[currentImageResourceIndex])
                     .transition(type == .first ? .scale : .opacity)
-                    .animation(.easeInOut(duration: 0.5), value: currentImageResourceIndex)
             }
             
             HStack(spacing: 4) {
@@ -105,29 +106,13 @@ struct OnboardingUpperContentView: View {
             .opacity(isTextFiledVisible ? 1 : 0)
         }
         .onChange(of: type) {
-            if currentImageResourceIndex != 0 {
-                currentImageResourceIndex = 0
-                isTextFiledVisible = false
-                startImageTimer()
-            }
+            handleOnboardingAnimation()
         }
         .onAppear {
-            if currentImageResourceIndex == 0 { startImageTimer() }
+            handleOnboardingAnimation()
         }
     }
     
-    private func startImageTimer() {
-        guard !isImageTimerRunning else { return }
-        isImageTimerRunning = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + imageInterval) {
-            currentImageResourceIndex += 1
-            isImageTimerRunning = false
-            if type != .first { startTypingAnimation() }
-        }
-    }
-    
-    @MainActor
     private func startTypingAnimation() {
         isTextFiledVisible = true
         onboardingText = ""
@@ -137,6 +122,24 @@ struct OnboardingUpperContentView: View {
             for char in typingText {
                 onboardingText.append(char)
                 try? await Task.sleep(for: typingSpeed)
+            }
+        }
+    }
+    
+    private func handleOnboardingAnimation() {
+        onChangeTask?.cancel()
+        currentImageResourceIndex = 0
+        isTextFiledVisible = false
+        onChangeTask = Task {
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.5)) {
+                currentImageResourceIndex += 1
+                if type != .first {
+                    startTypingAnimation()
+                } else {
+                    triggerHapticFeedback()
+                }
             }
         }
     }
@@ -184,3 +187,4 @@ struct OnboardingBottomContentView: View {
 //    OnboardingView()
 //        .environment(AppCoordinator())
 // }
+
