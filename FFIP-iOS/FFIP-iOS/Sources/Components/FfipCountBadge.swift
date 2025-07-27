@@ -1,5 +1,5 @@
 //
-//  FfipCountBagde.swift
+//  FfipCountBadge.swift
 //  FFIP-iOS
 //
 //  Created by mini on 7/27/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FfipCountBagde: View {
+struct FfipCountBadge: View {
     var isLoading: Bool
     var count: Int
     
@@ -17,13 +17,16 @@ struct FfipCountBagde: View {
             .foregroundColor(.ffipGrayScaleDefault2)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(isLoading ? .ffipGrayscale4 : .ffipPointGreen1)
-            .clipShape(Circle())
+            .background(
+                RoundedRectangle(cornerRadius: 17)
+                    .fill(isLoading ? .ffipGrayscale4 : .ffipPointGreen1)
+            )
             .overlay(
-                Circle()
+                RoundedRectangle(cornerRadius: 17)
                     .stroke(.ffipGrayScaleDefault2, lineWidth: 1)
             )
+            .frame(minWidth: 34, minHeight: 34)
+            .fixedSize()
             .offset(x: -12, y: -12)
-            .frame(width: 34, height: 34)
     }
 }

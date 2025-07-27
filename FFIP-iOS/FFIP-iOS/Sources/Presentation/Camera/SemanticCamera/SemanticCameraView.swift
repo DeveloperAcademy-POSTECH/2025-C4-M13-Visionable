@@ -234,7 +234,7 @@ private extension SemanticCameraView {
         }
         targetImage.similarKeyword = result.keyword
         targetImage.similarity = result.similarity
-        targetImage.recognizedTexts = filteredRecognizedTexts
+        targetImage.recognizedTexts = filteredRecognizedTexts.isEmpty ? nil : filteredRecognizedTexts
         targetImage.isAnalyzed = true
 
         do {

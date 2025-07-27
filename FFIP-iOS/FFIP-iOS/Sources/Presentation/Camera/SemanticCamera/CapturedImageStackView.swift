@@ -46,7 +46,7 @@ struct CapturedImageStackView: View {
                         .animation(.easeOut(duration: 0.25), value: capturedImages.count)
                         .overlay(alignment: .topLeading) {
                             if index == 0 {
-                                FfipCountBagde(
+                                FfipCountBadge(
                                     isLoading: isLoading,
                                     count: recognizedTextCount
                                 )
