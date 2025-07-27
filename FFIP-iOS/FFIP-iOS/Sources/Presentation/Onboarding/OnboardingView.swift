@@ -186,4 +186,3 @@ struct OnboardingBottomContentView: View {
 //    OnboardingView()
 //        .environment(AppCoordinator())
 // }
-

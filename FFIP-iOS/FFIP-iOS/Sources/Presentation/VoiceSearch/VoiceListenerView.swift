@@ -23,6 +23,10 @@ struct VoiceListenerView: View {
                     unDetectCount = 0
                     showMicButton = false
                 })
+                .accessibilityLabel("음성 입력")
+                .accessibilityHint("음성으로 탐색어를 입력할 수 있습니다. 탭하면 음성 인식이 시작됩니다.")
+                .accessibilityAddTraits(.isButton)
+                .accessibilitySortPriority(1)
             } else {
                 HStack(spacing: 13) {
                     ForEach(0..<4, id: \.self) { i in

@@ -44,6 +44,9 @@ struct VoiceSearchView: View {
                     )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
+                    .accessibilityLabel("탐색어를 말해주세요")
+                    .accessibilityHint("정확히 인식되면 자동으로 카메라 뷰를 켜서 탐색을 시작합니다.")
+                    .accessibilitySortPriority(1)
 
                     Spacer()
                 }
@@ -141,4 +144,3 @@ struct VoiceSearchView: View {
 //    VoiceSearchView(voiceSearchModel: VoiceSearchModel(privacyService: PrivacyService(), speechService: SpeechRecognitionService()))
 //        .environment(coordinator)
 // }
-

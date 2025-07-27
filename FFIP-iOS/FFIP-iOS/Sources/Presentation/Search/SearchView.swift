@@ -54,6 +54,11 @@ struct SearchView: View {
                     }
                     .tint(.ffipGrayscale1)
                     .padding(.top, 75)
+                    .accessibilityLabel("탐색 모드: \(searchType == .exact ? "지정 탐색" : "연관 탐색").")
+                    .accessibilityValue(searchType == .exact ? "탐색창에 입력하는 텍스트와 연관된 모든 항목을 찾습니다. 정확한 명칭을 입력하지 않아도 AI로 추론하여 비슷한 항목을 탐색합니다." : "탐색창에 입력하는 텍스트와 정확히 일치하는 항목만 찾아줍니다.")
+                    .accessibilityHint("눌러서 탐색모드를 변경할 수 있습니다.")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilitySortPriority(1)
                 }
 
                 HStack(spacing: 12) {
@@ -69,6 +74,8 @@ struct SearchView: View {
                         } label: {
                             Image(.icnNavBack)
                         }
+                        .accessibilityLabel("뒤로가기")
+                        .accessibilityHint("탐색 모드를 변경할 수 있는 초기 화면으로 돌아갑니다.")
                     }
                     
                     FfipSearchTextField(
@@ -101,6 +108,7 @@ struct SearchView: View {
                                 .font(.labelMedium12)
                                 .foregroundStyle(.ffipGrayscale2)
                                 .padding(.top, 32)
+                                .accessibilityAddTraits(.isHeader)
                             
                             RecentSearchFlow(
                                 keywords: searchModel.recentSearchKeywords,
@@ -151,6 +159,9 @@ struct SearchView: View {
                                 .onTapGesture {
                                     searchModel.deleteAllRecentSearchKeyword()
                                 }
+                                .accessibilityLabel("최근 탐색어 전체 삭제")
+                                .accessibilityHint("최근 탐색어 목록을 초기화합니다.")
+                                .accessibilityAddTraits(.isButton)
                         }
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                         .padding(.top, 26)
@@ -161,6 +172,7 @@ struct SearchView: View {
                             Text(.noRecentSearchesMessage)
                                 .font(.bodyMedium16)
                                 .foregroundStyle(.ffipGrayscale3)
+                                .accessibilityLabel("최근 탐색어가 없습니다.")
                         }
                         .frame(maxWidth: .infinity)
                     }
@@ -187,28 +199,29 @@ struct SearchView: View {
                 }
             }
         }
-        .onChange(of: searchType) {
-            if isToolTipPresented { isToolTipPresented = false }
-
-            withAnimation {
-                isSheetPresented = false
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                withAnimation {
-                    isToolTipPresented = true
-                }
-            }
-            hasSearchTypeChanged = true
-        }
         .ffipSheet(isPresented: $isSheetPresented) {
-            SearchTypeSelectionView(selectedType: $searchType)
+            SearchTypeSelectionView(selectedType: $searchType, dismissAction: dismissFfipSheet)
         }
         .showFfipToastMessage(
             toastType: .check,
             toastTitle: String(localized: .searchModeUpdated),
             isToastVisible: $hasSearchTypeChanged
         )
+    }
+    
+    private func dismissFfipSheet() {
+        if isToolTipPresented { isToolTipPresented = false }
+
+        withAnimation {
+            isSheetPresented = false
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            withAnimation {
+                isToolTipPresented = true
+            }
+        }
+        hasSearchTypeChanged = true
     }
 }
 
