@@ -12,8 +12,8 @@ final class SearchModel {
     private(set) var recentSearchKeywords: [String]
     
     init(recentSearchKeywords: [String]) {
-            self.recentSearchKeywords = recentSearchKeywords
-        }
+        self.recentSearchKeywords = recentSearchKeywords
+    }
     
     func addRecentSearchKeyword(_ keyword: String) {
         recentSearchKeywords.removeAll(where: { $0 == keyword })

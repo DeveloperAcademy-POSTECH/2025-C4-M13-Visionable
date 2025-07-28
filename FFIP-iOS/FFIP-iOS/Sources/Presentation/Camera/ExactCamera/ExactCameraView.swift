@@ -11,6 +11,7 @@ import Vision
 struct ExactCameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var mediator: ExactCameraMediator
+    @Bindable var searchModel: SearchModel
 
     @State private var zoomGestureValue: CGFloat = 1.0
     @State private var showLockIcon: Bool = false
@@ -100,6 +101,7 @@ struct ExactCameraView: View {
                     onSubmit: {
                         lastSearchText = searchText
                         mediator.changeSearchKeyword(keyword: searchText)
+                        searchModel.addRecentSearchKeyword(searchText)
                     },
                     withVoiceSearch: false
                 )

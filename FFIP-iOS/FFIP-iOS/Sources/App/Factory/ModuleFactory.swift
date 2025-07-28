@@ -29,13 +29,20 @@ final class ModuleFactory: ModuleFactoryProtocol {
             captureService: captureService,
             deviceService: deviceService
         )
+        
         let visionService = VisionService()
         let visionModel = VisionModel(searchKeyword: searchKeyword, visionService: visionService)
         
+        let keywords = UserDefaults.standard.stringArray(forKey: UserDefaultsKey.recentSearch) ?? []
+        let searchModel = SearchModel(recentSearchKeywords: keywords)
+        
         let cameraMediator = ExactCameraMediator(cameraModel: cameraModel, visionModel: visionModel)
         
-        let view = ExactCameraView(mediator: cameraMediator, searchText: searchKeyword)
-
+        let view = ExactCameraView(
+            mediator: cameraMediator,
+            searchModel: searchModel,
+            searchText: searchKeyword
+        )
         return view
     }
     
