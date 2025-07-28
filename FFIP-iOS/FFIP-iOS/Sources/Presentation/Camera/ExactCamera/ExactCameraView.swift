@@ -93,7 +93,6 @@ struct ExactCameraView: View {
                         lastSearchText = searchText
                         mediator.changeSearchKeyword(keyword: searchText)
                     },
-                    onEmptySubmit: { () },
                     withVoiceSearch: false
                 )
                 .focused($isTextFieldFocused)

@@ -11,7 +11,7 @@ import SwiftData
 @main
 struct FFIP_iOSApp: App {
     @State private var coordinator = AppCoordinator()
-    @AppStorage("searchType") var searchType: SearchType = .exact
+    @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
 
     
     var ffipModelContainer: ModelContainer = {

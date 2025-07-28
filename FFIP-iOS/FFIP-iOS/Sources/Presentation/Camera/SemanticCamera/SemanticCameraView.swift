@@ -109,8 +109,9 @@ struct SemanticCameraView: View {
                 
                 FfipSearchTextField(
                     text: $mediator.visionModel.searchKeyword,
-                    isFocused: true,
-                    placeholder: mediator.visionModel.searchKeyword
+                    isFocused: isFfipTextFieldFocused,
+                    placeholder: mediator.visionModel.searchKeyword,
+                    withVoiceSearch: false
                 )
                 .focused($isFfipTextFieldFocused)
                 .padding(.bottom, isFfipTextFieldFocused ? 12 : 12 + safeAreaInset(.bottom))
