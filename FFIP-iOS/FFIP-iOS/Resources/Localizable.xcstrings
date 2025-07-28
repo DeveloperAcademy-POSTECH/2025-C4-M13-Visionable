@@ -764,6 +764,7 @@
       }
     },
     "willCameraPushInstruction" : {
+      "comment" : "음성검색",
       "extractionState" : "manual",
       "localizations" : {
         "ko" : {
