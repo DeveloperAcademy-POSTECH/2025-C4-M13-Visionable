@@ -101,6 +101,8 @@ struct SearchView: View {
                                 ? .exactCamera(searchKeyword: searchText)
                                 : .semanticCamera(searchKeyword: searchText)
                             )
+                            
+                            searchFocusState = .home
                         },
                         withVoiceSearch: searchFocusState.isHome
                     )
