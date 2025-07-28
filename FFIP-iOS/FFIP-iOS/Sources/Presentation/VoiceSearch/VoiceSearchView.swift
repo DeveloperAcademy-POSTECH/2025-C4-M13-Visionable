@@ -12,7 +12,7 @@ struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
 
-    @AppStorage("searchType") var searchType: SearchType = .exact
+    @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
 
     @State private var transcript: String = ""
     @State private var willCameraPush: Bool = false

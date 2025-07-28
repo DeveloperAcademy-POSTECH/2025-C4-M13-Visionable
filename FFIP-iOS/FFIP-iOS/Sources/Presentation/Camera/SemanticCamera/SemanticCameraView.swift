@@ -16,6 +16,7 @@ struct SemanticCameraView: View {
     
     @AppStorage(AppStorageKey.dontShowSemanticTipAgain) private var dontShowSemanticCameraTipAgain: Bool = false
     @State private var showTip = true
+    @State private var showPopupTip = false
     
     @FocusState private var isFfipTextFieldFocused: Bool
     @State private var showFlash: Bool = false
@@ -68,7 +69,7 @@ struct SemanticCameraView: View {
                     onZoom: { Task { await handleZoomButtonTapped() } },
                     isTorchOn: mediator.isTorchOn,
                     onToggleTorch: { Task { await mediator.toggleTorch() } },
-                    onInfo: {},
+                    onInfo: { showPopupTip = true },
                     onClose: {
                         Task {
                             await mediator.stop()
@@ -109,8 +110,9 @@ struct SemanticCameraView: View {
                 
                 FfipSearchTextField(
                     text: $mediator.visionModel.searchKeyword,
-                    isFocused: true,
-                    placeholder: mediator.visionModel.searchKeyword
+                    isFocused: isFfipTextFieldFocused,
+                    placeholder: mediator.visionModel.searchKeyword,
+                    withVoiceSearch: false
                 )
                 .focused($isFfipTextFieldFocused)
                 .padding(.bottom, isFfipTextFieldFocused ? 12 : 12 + safeAreaInset(.bottom))
@@ -135,6 +137,10 @@ struct SemanticCameraView: View {
                         ),
                     dontShowAgainText: String(localized: .dontShowAgain)
                 )
+            }
+            
+            if showPopupTip {
+                FfipCameraPopupTipOverlay(showPopupTip: $showPopupTip, type: .semantic)
             }
             
             if showFlash {
@@ -223,18 +229,26 @@ private extension SemanticCameraView {
     
     @MainActor
     func analyzeAndUpdateCapturedImage(_ id: UUID, buffer: CVImageBuffer) async {
-        guard let result = await mediator.analyzeCapturedImage(buffer) else {
+        if let result = await mediator.analyzeCapturedImage(buffer) {
+            guard let targetImage = capturedImages.first(where: { $0.id == id }) else { return }
+            
+            let filteredRecognizedTexts = result.recognizedTexts.filter { observation in
+                observation.transcript == result.keyword && result.similarity >= 0.7
+            }
+            targetImage.similarKeyword = result.keyword
+            targetImage.similarity = result.similarity
+            targetImage.recognizedTexts = filteredRecognizedTexts.isEmpty ? nil : filteredRecognizedTexts
+            targetImage.isAnalyzed = true
+        } else {
+            try? await Task.sleep(for: .milliseconds(100))
+            guard let targetImage = capturedImages.first(where: { $0.id == id }) else {
+                print("이미지 못찾음 !")
+                return
+            }
+            targetImage.isAnalyzed = true
             print("❌ 분석 실패")
             return
         }
-        guard let targetImage = capturedImages.first(where: { $0.id == id }) else { return }
-        
-        let filteredRecognizedTexts = result.recognizedTexts.filter { observation in
-            observation.transcript == result.keyword && result.similarity >= 0.5
-        }
-        targetImage.similarKeyword = result.keyword
-        targetImage.similarity = result.similarity
-        targetImage.recognizedTexts = filteredRecognizedTexts
 
         do {
             try modelContext.save()
@@ -254,3 +268,4 @@ private extension SemanticCameraView {
         }
     }
 }
+

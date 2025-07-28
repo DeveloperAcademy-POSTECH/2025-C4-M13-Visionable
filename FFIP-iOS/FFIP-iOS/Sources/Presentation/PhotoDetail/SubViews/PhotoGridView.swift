@@ -29,9 +29,19 @@ struct PhotoGridView: View {
                             .overlay {
                                 RoundedRectangle(cornerRadius: 4)
                                     .stroke(
-                                        images[index].recognizedTexts != nil ? .ffipPointGreen1 : .clear,
+                                        images[index].recognizedTexts == nil || !images[index].isAnalyzed
+                                        ? .clear
+                                        : .ffipPointGreen1,
                                         lineWidth: 1
                                     )
+                                
+                                if images[index].isAnalyzed == false {
+                                    Color.black.opacity(0.3)
+                                        .cornerRadius(4)
+                                    
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                }
                             }
                     }
                 }

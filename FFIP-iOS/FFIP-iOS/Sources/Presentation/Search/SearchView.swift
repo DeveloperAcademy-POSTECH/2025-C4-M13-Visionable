@@ -15,7 +15,7 @@ public enum SearchFocusState {
 struct SearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
-    @AppStorage("searchType") var searchType: SearchType = .exact
+    @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
     @FocusState private var isFocused: Bool
     @State private var isToolTipPresented: Bool = false
     @State private var isSheetPresented: Bool = false
@@ -104,7 +104,6 @@ struct SearchView: View {
                         },
                         onSubmit: {
                             searchModel.addRecentSearchKeyword(searchText)
-                            print("\(searchType)")
                             if searchType == .exact {
                                 coordinator.push(
                                     .exactCamera(searchKeyword: searchText)
@@ -114,9 +113,9 @@ struct SearchView: View {
                                     .semanticCamera(searchKeyword: searchText)
                                 )
                             }
-
                         },
-                        onEmptySubmit: {}
+                        onEmptySubmit: { },
+                        withVoiceSearch: focusState == .home
                     )
                     .focused($isFocused)
                 }
