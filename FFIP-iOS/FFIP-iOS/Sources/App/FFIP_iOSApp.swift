@@ -11,8 +11,22 @@ import SwiftData
 @main
 struct FFIP_iOSApp: App {
     @State private var coordinator = AppCoordinator()
-    @AppStorage("searchType") var searchType: SearchType = .exact
+    @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
 
+    
+    var ffipModelContainer: ModelContainer = {
+        let schema = Schema([
+            SemanticCameraCapturedImage.self,
+        ])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+
+        do {
+            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
+    
     var body: some Scene {
         WindowGroup {
             FFIPAppRootView(moduleFactory: ModuleFactory.shared)
@@ -35,6 +49,6 @@ struct FFIP_iOSApp: App {
                     }
                 }
         }
-        .modelContainer(for: [SemanticCameraCapturedImage.self])
+        .modelContainer(ffipModelContainer)
     }
 }

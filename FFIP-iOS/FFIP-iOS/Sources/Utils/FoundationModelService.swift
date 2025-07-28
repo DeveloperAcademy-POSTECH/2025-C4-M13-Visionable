@@ -30,8 +30,10 @@ actor FoundationModelsService {
             다음은 OCR로 추출되어 인식된 키워드들이 모여있는 배열이야.
             [\(recognitionKeywords.joined(separator: ", "))]
                     
-            recognitionKeywords 배열에 있는 키워드 중에서 "\(searchKeyword)"와 가장 유사한 단어를 찾아 "findKeyword" 필드에 담아주고, 
-            \(searchKeyword)와의 유사도를 similarity 필드에 0~1 범위의 수치로 반환해줘.
+            recognitionKeywords 배열에 있는 키워드에서 "\(searchKeyword)"와 가장 유사한 단어를 찾아 "findKeyword" 필드에 담아주고, 
+            유사도를 similarity 필드에 0~1 범위의 수치로 반환해줘.
+            
+            만약 "\(searchKeyword)"와 유사한 단어가 없다면 "findKeyword" 필드에 nil을 담고, similarity는 0을 반환해줘.
             """
         }
         self.relatedKeywords = response.content
@@ -41,7 +43,7 @@ actor FoundationModelsService {
 
 @Generable
 struct RelatedKeywords {
-    let findKeyword: String
+    let findKeyword: String?
     @Guide(.range(0...1))
     let similarity: Double
 }

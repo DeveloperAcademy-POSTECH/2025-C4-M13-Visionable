@@ -19,7 +19,7 @@ struct FfipSearchTextField: View {
 
     public init(
         text: Binding<String>,
-        isFocused: Bool,
+        isFocused: Bool = false,
         placeholder: String,
         onVoiceSearch: (() -> Void)? = nil,
         onSubmit: (() -> Void)? = nil,
@@ -52,8 +52,10 @@ struct FfipSearchTextField: View {
                 .font(.bodyMedium16)
                 .padding(.vertical, 18)
                 .padding(.leading, 20)
+                .padding(.trailing, 52)
                 .submitLabel(.search)
                 .frame(height: 52)
+                .frame(minWidth: 0, maxWidth: .infinity)
                 
                 if isFocused && !isTextEmpty {
                     Button {
@@ -67,7 +69,7 @@ struct FfipSearchTextField: View {
             .background(.ffipGrayscale5)
             .cornerRadius(50)
 
-            if !isFocused && withVoiceSearch {
+            if withVoiceSearch {
                 Button {
                     onVoiceSearch?()
                 } label: {
@@ -81,10 +83,10 @@ struct FfipSearchTextField: View {
     }
 }
 
-// #Preview {
-//    FfipSearchTextField(
-//        text: .constant("dd"),
-//        isFocused: true,
-//        placeholder: "어쩌구저쩌구 플레이스홀더"
-//    )
-// }
+ #Preview {
+    FfipSearchTextField(
+        text: .constant("dddddddddddddddddddddddddddddddd"),
+        isFocused: true,
+        placeholder: "어쩌구저쩌구 플레이스홀더"
+    )
+ }
