@@ -55,7 +55,8 @@ struct FfipToolTipModifier: ViewModifier {
         }
         .onChange(of: isToolTipVisible) { _, isVisible in
             if isVisible {
-                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                Task {
+                    try? await Task.sleep(for: .seconds(duration))
                     withAnimation(.easeInOut) {
                         isToolTipVisible = false
                     }

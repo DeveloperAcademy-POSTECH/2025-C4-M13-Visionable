@@ -12,7 +12,10 @@ import SwiftData
 struct FFIP_iOSApp: App {
     @State private var coordinator = AppCoordinator()
     @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
-
+    
+    init() {
+        searchType = .exact
+    }
     
     var ffipModelContainer: ModelContainer = {
         let schema = Schema([

@@ -77,6 +77,8 @@ private struct SearchTypeRow: View {
         HStack {
             HStack(spacing: 8) {
                 Text(title)
+                    .font(.bodyMedium16)
+                    .foregroundStyle(.ffipGrayscale2)
                 if let tagImage {
                     Image(tagImage)
                 }
@@ -94,5 +96,5 @@ private struct SearchTypeRow: View {
 }
 
 // #Preview {
-//    SearchTypeSelectionView(selectedType: .constant(.keyword))
+//     SearchTypeSelectionView(selectedType: .constant(.exact), dismissAction: {})
 // }

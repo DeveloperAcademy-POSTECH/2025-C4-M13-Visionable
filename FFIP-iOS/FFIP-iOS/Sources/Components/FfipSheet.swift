@@ -23,7 +23,7 @@ struct FfipBottomSheet<Content: View>: View {
 
             content
                 .padding(.horizontal, 24)
-                .padding(.top, 28)
+                .padding(.top, 32)
                 .padding(.bottom, 60)
         }
         .background(
