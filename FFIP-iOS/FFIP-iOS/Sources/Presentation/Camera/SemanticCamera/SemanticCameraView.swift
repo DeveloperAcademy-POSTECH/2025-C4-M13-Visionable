@@ -102,7 +102,10 @@ struct SemanticCameraView: View {
                             }
                         )
                         .onTapGesture {
-                            coordinator.push(.photoDetail)
+                            Task {
+                                await mediator.stop()
+                                coordinator.push(.photoDetail)
+                            }
                         }
                 }
                 .padding(.bottom, 12)
