@@ -26,6 +26,7 @@ struct FfipUIKitTextField: UIViewRepresentable {
         
         textField.textColor = .ffipGrayscale1
         textField.font = .bodyMedium16
+        textField.addPadding(left: 20, right: 52)
         
         return textField
     }

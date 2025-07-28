@@ -10,8 +10,8 @@ import SwiftUI
 protocol ModuleFactoryProtocol {
     func makeExactCameraView(searchKeyword: String) -> ExactCameraView
     func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView
-    func makeSearchView() -> SearchView
-    func makeVoiceSearchView() -> VoiceSearchView
+    func makeSearchView(searchType: Binding<SearchType>) -> SearchView
+    func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView
     func makePhotoDetailView() -> PhotoDetailView
     func makeOnboardingView() -> OnboardingView
 }
@@ -72,21 +72,27 @@ final class ModuleFactory: ModuleFactoryProtocol {
         return view
     }
     
-    func makeSearchView() -> SearchView {
+    func makeSearchView(searchType: Binding<SearchType>) -> SearchView {
         let keywords = UserDefaults.standard.stringArray(forKey: UserDefaultsKey.recentSearch) ?? []
         let model = SearchModel(recentSearchKeywords: keywords)
-        let view = SearchView(searchModel: model)
+        let view = SearchView(
+            searchModel: model,
+            searchType: searchType
+        )
         return view
     }
     
-    func makeVoiceSearchView() -> VoiceSearchView {
+    func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView {
         let privacyService = PrivacyService()
         let speeachService = SpeechTranscriptionService()
         let model = VoiceSearchModel(
             privacyService: privacyService,
             speechService: speeachService
         )
-        let view = VoiceSearchView(voiceSearchModel: model)
+        let view = VoiceSearchView(
+            voiceSearchModel: model,
+            searchType: searchType
+        )
         return view
     }
     

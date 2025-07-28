@@ -11,18 +11,14 @@ import SwiftData
 @main
 struct FFIP_iOSApp: App {
     @State private var coordinator = AppCoordinator()
-    @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
-    
-    init() {
-        searchType = .exact
-    }
+    @State private var searchType: SearchType = .exact
     
     var ffipModelContainer: ModelContainer = {
         let schema = Schema([
             SemanticCameraCapturedImage.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-
+        
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
@@ -32,25 +28,28 @@ struct FFIP_iOSApp: App {
     
     var body: some Scene {
         WindowGroup {
-            FFIPAppRootView(moduleFactory: ModuleFactory.shared)
-                .environment(coordinator)
-                .onOpenURL { url in
-                    switch url.host {
-                    case "searchExact":
-                        coordinator.popToRoot()
-                        searchType = .exact
-                    case "searchSemantic":
-                        coordinator.popToRoot()
-                        searchType = .semantic
-                    case "voiceSearchExact":
-                        coordinator.push(.voiceSearch)
-                        searchType = .exact
-                    case "voiceSearchSemantic":
-                        coordinator.push(.voiceSearch)
-                        searchType = .semantic
-                    default: break
-                    }
+            FFIPAppRootView(
+                searchType: $searchType,
+                moduleFactory: ModuleFactory.shared
+            )
+            .environment(coordinator)
+            .onOpenURL { url in
+                switch url.host {
+                case "searchExact":
+                    coordinator.popToRoot()
+                    searchType = .exact
+                case "searchSemantic":
+                    coordinator.popToRoot()
+                    searchType = .semantic
+                case "voiceSearchExact":
+                    coordinator.push(.voiceSearch)
+                    searchType = .exact
+                case "voiceSearchSemantic":
+                    coordinator.push(.voiceSearch)
+                    searchType = .semantic
+                default: break
                 }
+            }
         }
         .modelContainer(ffipModelContainer)
     }

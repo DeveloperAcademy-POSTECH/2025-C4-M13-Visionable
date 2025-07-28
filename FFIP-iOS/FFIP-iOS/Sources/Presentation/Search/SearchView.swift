@@ -15,19 +15,22 @@ public enum SearchFocusState {
 struct SearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
-    @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
+    @Binding var searchType: SearchType
+    
     @FocusState private var isFocused: Bool
     @State private var isToolTipPresented: Bool = false
     @State private var isSheetPresented: Bool = false
+    @State private var isToastPresented: Bool = false
+    
     @State private var focusState: SearchFocusState = .home
     @State private var searchText: String = ""
-    @State private var hasSearchTypeChanged: Bool = false
 
     var body: some View {
         ZStack {
             Color.ffipBackground1Main.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
+                // 홈화면에서 로고 네비바와 탐색 방법 선택
                 if focusState == .home {
                     FfipNavigationBar(
                         leadingType: .logo,
@@ -36,9 +39,7 @@ struct SearchView: View {
                     )
 
                     Button {
-                        withAnimation {
-                            isSheetPresented = true
-                        }
+                        withAnimation { isSheetPresented = true }
                     } label: {
                         HStack(spacing: 8) {
                             Text(searchType.title)
@@ -49,11 +50,7 @@ struct SearchView: View {
                                 .frame(width: 20)
                                 .ffipToolTip(
                                     isToolTipVisible: $isToolTipPresented,
-                                    message: searchType == .exact
-                                        ? String(localized: .exactSearchToolTip)
-                                        : String(
-                                            localized: .semanticSearchToolTip
-                                        ),
+                                    message: String(localized: searchType == .exact ? .exactSearchToolTip : .semanticSearchToolTip),
                                     position: .trailing,
                                     spacing: 9
                                 )
@@ -76,17 +73,14 @@ struct SearchView: View {
                     .accessibilitySortPriority(1)
                 }
 
+                // 텍스트필드 검색바
                 HStack(spacing: 12) {
                     if focusState == .editing {
                         Button {
                             searchText = ""
-                            DispatchQueue.main.asyncAfter(
-                                deadline: .now() + 0.1
-                            ) {
-                                withAnimation(.easeInOut(duration: 0.25)) {
-                                    focusState = .home
-                                    isFocused = false
-                                }
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                focusState = .home
+                                isFocused = false
                             }
                         } label: {
                             Image(.icnNavBack)
@@ -103,24 +97,22 @@ struct SearchView: View {
                             coordinator.push(.voiceSearch)
                         },
                         onSubmit: {
-                            searchModel.addRecentSearchKeyword(searchText)
                             if searchType == .exact {
-                                coordinator.push(
-                                    .exactCamera(searchKeyword: searchText)
-                                )
-                            } else {
-                                coordinator.push(
-                                    .semanticCamera(searchKeyword: searchText)
-                                )
+                                searchModel.addRecentSearchKeyword(searchText)
                             }
+                            coordinator.push(
+                                searchType == .exact
+                                ? .exactCamera(searchKeyword: searchText)
+                                : .semanticCamera(searchKeyword: searchText)
+                            )
                         },
-                        onEmptySubmit: { },
                         withVoiceSearch: focusState == .home
                     )
                     .focused($isFocused)
                 }
                 .padding(.top, 16)
 
+                // 지정탐색 일 때만 하단에 뜨는 최근 탐색어 (by 검색모드)
                 if focusState == .home && searchType == .exact {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
@@ -134,29 +126,18 @@ struct SearchView: View {
                                 keywords: searchModel.recentSearchKeywords,
                                 onTap: { keyword in
                                     searchModel.addRecentSearchKeyword(keyword)
-                                    if searchType == .exact {
-                                        coordinator.push(
-                                            .exactCamera(searchKeyword: keyword)
-                                        )
-                                    } else {
-                                        coordinator.push(
-                                            .semanticCamera(
-                                                searchKeyword: keyword
-                                            )
-                                        )
-                                    }
+                                    coordinator.push(.exactCamera(searchKeyword: keyword))
                                 },
                                 onTapDelete: { keyword in
-                                    searchModel.deleteRecentSearchKeyword(
-                                        keyword
-                                    )
+                                    searchModel.deleteRecentSearchKeyword(keyword)
                                 }
                             )
                         }
                     }
                 }
 
-                if focusState == .editing {
+                // 지정탐색일 때만 하단에 뜨는 최근 탐색어 (by 편집모드)
+                if focusState == .editing && searchType == .exact {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .trailing, spacing: 12) {
                             VStack(alignment: .leading, spacing: 20) {
@@ -167,31 +148,14 @@ struct SearchView: View {
                                 RecentSearchList(
                                     keywords: searchModel.recentSearchKeywords,
                                     onTap: { keyword in
-                                        searchModel.addRecentSearchKeyword(
-                                            keyword
-                                        )
-                                        if searchType == .exact {
-                                            coordinator.push(
-                                                .exactCamera(
-                                                    searchKeyword: keyword
-                                                )
-                                            )
-                                        } else {
-                                            coordinator.push(
-                                                .semanticCamera(
-                                                    searchKeyword: keyword
-                                                )
-                                            )
-                                        }
+                                        searchModel.addRecentSearchKeyword(keyword)
+                                        coordinator.push(.exactCamera(searchKeyword: keyword))
                                     },
                                     onTapDelete: { keyword in
                                         withAnimation(
                                             .easeInOut(duration: 0.05)
                                         ) {
-                                            searchModel
-                                                .deleteRecentSearchKeyword(
-                                                    keyword
-                                                )
+                                            searchModel.deleteRecentSearchKeyword(keyword)
                                         }
                                     }
                                 )
@@ -234,19 +198,16 @@ struct SearchView: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                withAnimation {
-                    isToolTipPresented = true
-                }
-            }
             searchText = ""
+            Task {
+                try? await Task.sleep(for: .seconds(0.2))
+                withAnimation { isToolTipPresented = true }
+            }
         }
         .onChange(of: isFocused) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    if isFocused {
-                        focusState = .editing
-                    }
+            if isFocused {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    focusState = .editing
                 }
             }
         }
@@ -259,23 +220,23 @@ struct SearchView: View {
         .showFfipToastMessage(
             toastType: .check,
             toastTitle: String(localized: .searchModeUpdated),
-            isToastVisible: $hasSearchTypeChanged
+            isToastVisible: $isToastPresented
         )
     }
 
     private func dismissFfipSheet() {
+        if isToastPresented { isToastPresented = false }
         if isToolTipPresented { isToolTipPresented = false }
 
         withAnimation {
             isSheetPresented = false
         }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            withAnimation {
-                isToolTipPresented = true
-            }
+        
+        isToastPresented = true
+        Task {
+            try? await Task.sleep(for: .seconds(0.2))
+            withAnimation { isToolTipPresented = true }
         }
-        hasSearchTypeChanged = true
     }
 }
 
