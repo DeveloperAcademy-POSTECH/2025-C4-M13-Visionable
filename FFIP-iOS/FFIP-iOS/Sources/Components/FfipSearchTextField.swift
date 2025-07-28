@@ -55,6 +55,8 @@ struct FfipSearchTextField: View {
                 .padding(.trailing, 52)
                 .submitLabel(.search)
                 .frame(height: 52)
+                .accessibilityLabel(.VoiceOverLocalizable.textField)
+                .accessibilityHint(.VoiceOverLocalizable.textFieldHint)
                 .frame(minWidth: 0, maxWidth: .infinity)
                 
                 if isFocused && !isTextEmpty {
@@ -78,6 +80,8 @@ struct FfipSearchTextField: View {
                         .frame(width: 55, height: 55)
                         .background(Circle().fill(.ffipGrayscale5))
                 }
+                .accessibilityLabel(.VoiceOverLocalizable.voiceInput)
+                .accessibilityHint(.VoiceOverLocalizable.voiceSearhHint)
             }
         }
     }

@@ -15,10 +15,12 @@ final class ExactCameraMediator: NSObject {
     private(set) var frame: CVImageBuffer?
     private(set) var matchedObservations = [RecognizedTextObservation]()
 
+    var showSmudgeToast: Bool = false
+
     private(set) var zoomFactor: CGFloat = 2.0
     private(set) var isCameraPaused: Bool = false
     private(set) var isTorchOn: Bool = false
-
+    
     private let cameraModel: CameraModel
     private let visionModel: VisionModel
 
@@ -44,6 +46,9 @@ final class ExactCameraMediator: NSObject {
         Task {
             for await imageBuffer in framesStream {
                 await visionModel.processFrame(imageBuffer)
+                if visionModel.countDetectSmudge == 5 {
+                    showSmudgeToast = true
+                }
                 matchedObservations = visionModel.filterMatchedObservations()
             }
         }

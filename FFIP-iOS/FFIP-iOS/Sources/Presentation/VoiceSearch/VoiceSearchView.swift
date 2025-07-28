@@ -44,13 +44,16 @@ struct VoiceSearchView: View {
                     )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
+                    .accessibilityLabel(.VoiceOverLocalizable.sayKeyword)
+                    .accessibilityHint(.VoiceOverLocalizable.voiceInput)
+                    .accessibilitySortPriority(1)
 
                     Spacer()
                 }
                 .padding(.leading, 30)
 
                 HStack {
-                    Text(String(localized: .willCameraPushInstruction))
+                    Text(.willCameraPushInstruction)
                         .font(.titleBold24)
                         .foregroundStyle(.ffipGrayscale1)
                         .opacity(willCameraPush ? 1 : 0)
@@ -141,4 +144,3 @@ struct VoiceSearchView: View {
 //    VoiceSearchView(voiceSearchModel: VoiceSearchModel(privacyService: PrivacyService(), speechService: SpeechRecognitionService()))
 //        .environment(coordinator)
 // }
-

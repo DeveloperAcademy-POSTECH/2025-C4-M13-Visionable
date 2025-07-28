@@ -23,6 +23,10 @@ struct VoiceListenerView: View {
                     unDetectCount = 0
                     showMicButton = false
                 })
+                .accessibilityLabel(.VoiceOverLocalizable.voiceInput)
+                .accessibilityHint(.VoiceOverLocalizable.voiceSearhHint)
+                .accessibilityAddTraits(.isButton)
+                .accessibilitySortPriority(1)
             } else {
                 HStack(spacing: 13) {
                     ForEach(0..<4, id: \.self) { i in

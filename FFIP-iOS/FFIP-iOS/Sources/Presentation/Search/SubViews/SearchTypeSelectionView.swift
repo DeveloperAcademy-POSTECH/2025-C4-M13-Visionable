@@ -9,13 +9,16 @@ import SwiftUI
 
 struct SearchTypeSelectionView: View {
     @Binding var selectedType: SearchType
-    
+    let dismissAction: () -> Void
+
     var body: some View {
         VStack(alignment: .leading, spacing: 32) {
             Text(.selectSearchMode)
                 .font(.titleBold20)
                 .foregroundStyle(.ffipGrayscale1)
-            
+                .accessibilityAddTraits(.isHeader)
+                .accessibilitySortPriority(1)
+
             VStack(spacing: 24) {
                 ForEach(SearchType.allCases) { type in
                     SearchTypeRow(
@@ -24,8 +27,28 @@ struct SearchTypeSelectionView: View {
                         isSelected: selectedType == type,
                         onTap: {
                             selectedType = type
+                            dismissAction()
                         }
                     )
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(
+                        String(
+                            localized: selectedType == .exact
+                                ? .VoiceOverLocalizable.exactSearch
+                                : .VoiceOverLocalizable.semanticSearch
+                        )
+                    )
+                    .accessibilityValue(
+                        selectedType == .exact
+                        ? .VoiceOverLocalizable.exactSelectValue
+                            : .VoiceOverLocalizable.semanticSelectValue
+                    )
+                    .accessibilityHint(
+                        String(
+                            localized: .VoiceOverLocalizable.changeSearchMode
+                        )
+                    )
+                    .accessibilityAddTraits(.isButton)
                 }
             }
         }
@@ -37,7 +60,7 @@ private struct SearchTypeRow: View {
     private let tagImage: ImageResource?
     private let isSelected: Bool
     private let onTap: () -> Void
-    
+
     init(
         title: String,
         tagImage: ImageResource? = nil,
@@ -49,7 +72,7 @@ private struct SearchTypeRow: View {
         self.isSelected = isSelected
         self.onTap = onTap
     }
-    
+
     var body: some View {
         HStack {
             HStack(spacing: 8) {
@@ -58,9 +81,9 @@ private struct SearchTypeRow: View {
                     Image(tagImage)
                 }
             }
-            
+
             Spacer()
-            
+
             Image(isSelected ? .icnCheckEnabled : .icnCheckDisabled)
         }
         .contentShape(Rectangle())

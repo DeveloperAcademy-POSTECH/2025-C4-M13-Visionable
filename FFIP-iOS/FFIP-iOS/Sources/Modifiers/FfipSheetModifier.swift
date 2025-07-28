@@ -35,6 +35,8 @@ struct FfipSheetModifier<SheetContent: View>: ViewModifier {
                         withAnimation { isPresented = false }
                         onDismiss?()
                     }
+                    .accessibilityHidden(true)
+                
                 
                 VStack {
                     Spacer()

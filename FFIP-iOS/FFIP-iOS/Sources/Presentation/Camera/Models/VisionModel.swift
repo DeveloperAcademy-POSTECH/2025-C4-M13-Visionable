@@ -18,7 +18,7 @@ final class VisionModel: NSObject {
 
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
 //    private(set) var matchedObservations = [RecognizedTextObservation]()
-
+    private(set) var countDetectSmudge: Int = 0
     init(
         searchKeyword: String,
         visionService: VisionService
@@ -39,6 +39,17 @@ extension VisionModel {
     
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
+            let isSmudge = try await visionService.performDetectSmudge(in: buffer, threshold: 0.9)
+            if isSmudge {
+                countDetectSmudge += 1
+                if countDetectSmudge > 5 {
+                    countDetectSmudge = 0
+                }
+                return
+            } else {
+                countDetectSmudge = 0
+            }
+            
             let textRects = try await visionService.performTextRecognition(image: buffer)
             self.recognizedTextObservations = textRects
         } catch {
