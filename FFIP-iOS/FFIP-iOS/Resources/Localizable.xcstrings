@@ -68,7 +68,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "더 정확한 탐색 결과를 얻을 수 있습니다."
+            "value" : "더 정확한 탐색 결과를 얻을 수 있어요."
           }
         }
       }
@@ -90,7 +90,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색 영역과 결과를 가까이 볼 수 있어요."
+            "value" : "탐색 영역을 자유롭게 조정할 수 있어요."
           }
         }
       }
@@ -101,7 +101,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "줌 기능"
+            "value" : "줌 기능을 활용해보세요."
           }
         }
       }
@@ -112,7 +112,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FF!P Box로 결과를 나타내요. "
+            "value" : "두 번 연속 탭하면 화면을 정지할 수 있어요."
           }
         }
       }
@@ -123,7 +123,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색 결과"
+            "value" : "진동과 FF!p 박스가 나타나요."
           }
         }
       }
@@ -463,7 +463,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색 결과를 더 정확하게  얻을 수 있어요."
+            "value" : "두 번 탭으로 빠르게 캡처해보세요."
           }
         }
       }
@@ -474,7 +474,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "두 번 연속 탭하기"
+            "value" : "화면을 두 번 탭해서\n탐색 영역을 정하세요."
           }
         }
       }
@@ -485,7 +485,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색 결과를 더 정확하게  얻을 수 있어요."
+            "value" : "탐색 중에도 FF!p 개수를 알 수 있어요."
           }
         }
       }
@@ -496,7 +496,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "스냅북에서 확인 가능함"
+            "value" : "탐색 결과는 \n스냅북에서 모아봐요."
           }
         }
       }
@@ -507,7 +507,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색 결과를 더 정확하게  얻을 수 있어요."
+            "value" : "카메라를 끄면 스냅북이 초기화돼요."
           }
         }
       }
@@ -518,7 +518,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "스냅북에서 확인 가능함"
+            "value" : "감지된 탐색어가 있으면\n초록색으로 나타나요."
           }
         }
       }
