@@ -201,6 +201,9 @@ struct SearchView: View {
                 }
             }
         }
+        .onChange(of: searchType) {
+            withAnimation { isToastPresented = true }
+        }
         .ffipSheet(isPresented: $isSheetPresented) {
             SearchTypeSelectionView(
                 selectedType: $searchType,
@@ -233,14 +236,9 @@ private extension SearchView {
     }
     
     func dismissFfipSheet() {
-        if isToastPresented { isToastPresented = false }
         if isToolTipPresented { isToolTipPresented = false }
 
-        withAnimation {
-            isSheetPresented = false
-        }
-        
-        isToastPresented = true
+        withAnimation { isSheetPresented = false }
         Task {
             try? await Task.sleep(for: .seconds(0.2))
             withAnimation { isToolTipPresented = true }
