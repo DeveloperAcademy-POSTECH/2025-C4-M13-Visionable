@@ -9,6 +9,16 @@ import SwiftUI
 
 struct CapturedImageStackView: View {
     let capturedImages: [SemanticCameraCapturedImage]
+    
+    private var isLoading: Bool {
+        capturedImages.contains(where: { $0.isAnalyzed == false })
+    }
+    
+    private var recognizedTextCount: Int {
+        capturedImages
+            .compactMap { $0.recognizedTexts?.count }
+            .reduce(0, +)
+    }
 
     var body: some View {
         ZStack {
@@ -32,8 +42,16 @@ struct CapturedImageStackView: View {
                         .rotationEffect(.degrees(rotation))
                         .offset(x: offsetX, y: offsetY)
                         .zIndex(Double(capturedImages.count - index))
-                        .transition(.move(edge: .trailing).combined(with: .opacity)) 
+                        .transition(.move(edge: .trailing).combined(with: .opacity))
                         .animation(.easeOut(duration: 0.25), value: capturedImages.count)
+                        .overlay(alignment: .topLeading) {
+                            if index == 0 {
+                                FfipCountBadge(
+                                    isLoading: isLoading,
+                                    count: recognizedTextCount
+                                )
+                            }
+                        }
                 }
             }
         }

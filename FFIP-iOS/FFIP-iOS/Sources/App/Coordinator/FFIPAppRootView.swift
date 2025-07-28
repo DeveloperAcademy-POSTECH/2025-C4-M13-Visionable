@@ -31,8 +31,12 @@ struct FFIPAppRootView: View {
                     case .search: moduleFactory.makeSearchView()
                     case .voiceSearch: moduleFactory.makeVoiceSearchView()
                     case .photoDetail: moduleFactory.makePhotoDetailView()
+                    case .onboarding: moduleFactory.makeOnboardingView()
                     }
                 }
+        }
+        .task {
+            coordinator.push(.onboarding)
         }
     }
 }

@@ -18,11 +18,17 @@ struct FfipRecentSearchCapsule: View {
                 .font(.labelMedium14)
                 .foregroundStyle(.ffipGrayscale1)
                 .lineLimit(1)
+                .accessibilityLabel(.VoiceOverLocalizable.recentKeyword(keyword))
+                .accessibilityHint(.VoiceOverLocalizable.searchCapsule)
+                .accessibilityAddTraits(.isButton)
             
             Button(action: onTapDelete) {
                 Image(.btnClose)
                     .tint(.ffipGrayscale2)
             }
+            .accessibilityLabel(.VoiceOverLocalizable.delete(keyword))
+            .accessibilityHint(.VoiceOverLocalizable.deleteRecentKeyword)
+            .accessibilityAddTraits(.isButton)
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 12)

@@ -16,8 +16,10 @@ struct ExactCameraView: View {
     @State private var showLockIcon: Bool = false
     @State private var showLockTask: Task<Void, Never>?
 
-    @AppStorage(AppStorageKey.dontShowExactTipAgain) private var dontShowExactCameraTipAgain: Bool = false
+    @AppStorage(AppStorageKey.dontShowExactTipAgain) private
+        var dontShowExactCameraTipAgain: Bool = false
     @State private var showTip = true
+    @State private var showPopupTip = false
 
     @State var searchText: String
     @State private var lastSearchText: String = ""
@@ -60,11 +62,11 @@ struct ExactCameraView: View {
                     onZoom: { Task { await handleZoomButtonTapped() } },
                     isTorchOn: mediator.isTorchOn,
                     onToggleTorch: { Task { await mediator.toggleTorch() } },
-                    onInfo: {},
+                    onInfo: { showPopupTip = true },
                     onClose: {
                         Task {
                             await mediator.stop()
-                            coordinator.pop()
+                            coordinator.popToRoot()
                         }
                     }
                 )
@@ -83,6 +85,12 @@ struct ExactCameraView: View {
 
             VStack {
                 Spacer()
+                    .showFfipToastMessage(
+                        toastType: .warning,
+                        toastTitle: "렌즈의 지문을 닦거나 천천히 움직여 주세요.",
+                        isToastVisible: $mediator.showSmudgeToast
+                    )
+
                 FfipSearchTextField(
                     text: $searchText,
                     isFocused: isTextFieldFocused,
@@ -93,13 +101,16 @@ struct ExactCameraView: View {
                         lastSearchText = searchText
                         mediator.changeSearchKeyword(keyword: searchText)
                     },
-                    onEmptySubmit: { () },
                     withVoiceSearch: false
                 )
                 .focused($isTextFieldFocused)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 55)
+                .padding(
+                    .bottom,
+                    isTextFieldFocused ? 12 : 12 + safeAreaInset(.bottom)
+                )
             }
+            .ffipKeyboardAdaptive()
 
             if showTip && !dontShowExactCameraTipAgain {
                 FfipCameraTipOverlay(
@@ -108,16 +119,24 @@ struct ExactCameraView: View {
                     ffipCameraTipType: .exact,
                     tipText1: String(localized: .exactCameraTip1)
                         .asHighlight(
-                            highlightedString: String(localized: .exactCameraTipGreen1),
+                            highlightedString: String(
+                                localized: .exactCameraTipGreen1
+                            ),
                             highlightColor: .ffipPointGreen1
                         ),
                     tipText2: String(localized: .exactCameraTip2)
                         .asHighlight(
-                            highlightedString: String(localized: .exactCameraTipGreen2),
+                            highlightedString: String(
+                                localized: .exactCameraTipGreen2
+                            ),
                             highlightColor: .ffipPointGreen1
                         ),
                     dontShowAgainText: String(localized: .dontShowAgain)
                 )
+            }
+            
+            if showPopupTip {
+                FfipCameraPopupTipOverlay(showPopupTip: $showPopupTip, type: .exact)
             }
         }
         .ignoresSafeArea(.all)
@@ -158,23 +177,23 @@ struct ExactCameraView: View {
     }
 
     private func toggleCameraPauseAndShowLock() {
-        if mediator.isCameraPaused {
-            mediator.resumeCamera()
-        } else {
-            mediator.pauseCamera()
-        }
         showLockTask?.cancel()
         withAnimation {
             showLockIcon = true
         }
-        showLockTask = Task {
-            try? await Task.sleep(
-                for: .seconds(mediator.isCameraPaused ? 1 : 0.8)
-            )
-            if Task.isCancelled { return }
-            withAnimation {
-                showLockIcon = false
+        if mediator.isCameraPaused {
+            mediator.resumeCamera()
+            showLockTask = Task {
+                try? await Task.sleep(
+                    for: .seconds(0.8)
+                )
+                if Task.isCancelled { return }
+                withAnimation {
+                    showLockIcon = false
+                }
             }
+        } else {
+            mediator.pauseCamera()
         }
     }
 }

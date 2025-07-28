@@ -11,6 +11,21 @@ import SwiftData
 @main
 struct FFIP_iOSApp: App {
     @State private var coordinator = AppCoordinator()
+    @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
+
+    
+    var ffipModelContainer: ModelContainer = {
+        let schema = Schema([
+            SemanticCameraCapturedImage.self,
+        ])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+
+        do {
+            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
     
     var body: some Scene {
         WindowGroup {
@@ -18,14 +33,22 @@ struct FFIP_iOSApp: App {
                 .environment(coordinator)
                 .onOpenURL { url in
                     switch url.host {
-                    case "search":
+                    case "searchExact":
                         coordinator.popToRoot()
-                    case "voiceSearch":
+                        searchType = .exact
+                    case "searchSemantic":
+                        coordinator.popToRoot()
+                        searchType = .semantic
+                    case "voiceSearchExact":
                         coordinator.push(.voiceSearch)
+                        searchType = .exact
+                    case "voiceSearchSemantic":
+                        coordinator.push(.voiceSearch)
+                        searchType = .semantic
                     default: break
                     }
                 }
         }
-        .modelContainer(for: [SemanticCameraCapturedImage.self])
+        .modelContainer(ffipModelContainer)
     }
 }

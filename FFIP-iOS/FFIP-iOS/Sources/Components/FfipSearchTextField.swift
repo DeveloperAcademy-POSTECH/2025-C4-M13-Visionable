@@ -19,7 +19,7 @@ struct FfipSearchTextField: View {
 
     public init(
         text: Binding<String>,
-        isFocused: Bool,
+        isFocused: Bool = false,
         placeholder: String,
         onVoiceSearch: (() -> Void)? = nil,
         onSubmit: (() -> Void)? = nil,
@@ -42,22 +42,23 @@ struct FfipSearchTextField: View {
     var body: some View {
         HStack(spacing: 4) {
             HStack(spacing: 12) {
-                TextField(
-                    "",
+                FfipUIKitTextField(
                     text: $text,
-                    prompt: Text(placeholder)
-                        .foregroundStyle(.ffipGrayscale4)
-                        .font(.bodyMedium16)
+                    placeholder: placeholder,
+                    isFirstResponder: isFocused,
+                    onSubmit: onSubmit
                 )
                 .foregroundStyle(.ffipGrayscale1)
                 .font(.bodyMedium16)
                 .padding(.vertical, 18)
                 .padding(.leading, 20)
+                .padding(.trailing, 52)
                 .submitLabel(.search)
-                .onSubmit {
-                    isTextEmpty ? onEmptySubmit?() : onSubmit?()
-                }
-
+                .frame(height: 52)
+                .accessibilityLabel(.VoiceOverLocalizable.textField)
+                .accessibilityHint(.VoiceOverLocalizable.textFieldHint)
+                .frame(minWidth: 0, maxWidth: .infinity)
+                
                 if isFocused && !isTextEmpty {
                     Button {
                         text = ""
@@ -70,7 +71,7 @@ struct FfipSearchTextField: View {
             .background(.ffipGrayscale5)
             .cornerRadius(50)
 
-            if !isFocused && withVoiceSearch {
+            if withVoiceSearch {
                 Button {
                     onVoiceSearch?()
                 } label: {
@@ -79,15 +80,17 @@ struct FfipSearchTextField: View {
                         .frame(width: 55, height: 55)
                         .background(Circle().fill(.ffipGrayscale5))
                 }
+                .accessibilityLabel(.VoiceOverLocalizable.voiceInput)
+                .accessibilityHint(.VoiceOverLocalizable.voiceSearhHint)
             }
         }
     }
 }
 
-// #Preview {
-//    FfipSearchTextField(
-//        text: .constant("dd"),
-//        isFocused: true,
-//        placeholder: "어쩌구저쩌구 플레이스홀더"
-//    )
-// }
+ #Preview {
+    FfipSearchTextField(
+        text: .constant("dddddddddddddddddddddddddddddddd"),
+        isFocused: true,
+        placeholder: "어쩌구저쩌구 플레이스홀더"
+    )
+ }

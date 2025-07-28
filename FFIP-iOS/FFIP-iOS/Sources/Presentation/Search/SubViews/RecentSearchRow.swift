@@ -17,6 +17,9 @@ struct RecentSearchRow: View {
             Text(keyword)
                 .foregroundStyle(.ffipGrayscale1)
                 .lineLimit(1)
+                .accessibilityLabel(.VoiceOverLocalizable.recentKeyword(keyword))
+                .accessibilityHint(.VoiceOverLocalizable.searchCapsule)
+                .accessibilityAddTraits(.isButton)
             
             Spacer()
             
@@ -25,6 +28,9 @@ struct RecentSearchRow: View {
             }
             .frame(width: 20, height: 20)
             .tint(.gray)
+            .accessibilityLabel(.VoiceOverLocalizable.delete(keyword))
+            .accessibilityHint(.VoiceOverLocalizable.deleteRecentKeyword)
+            .accessibilityAddTraits(.isButton)
         }
         .contentShape(Rectangle())
         .onTapGesture {

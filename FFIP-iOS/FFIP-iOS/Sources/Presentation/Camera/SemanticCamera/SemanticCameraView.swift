@@ -16,6 +16,7 @@ struct SemanticCameraView: View {
     
     @AppStorage(AppStorageKey.dontShowSemanticTipAgain) private var dontShowSemanticCameraTipAgain: Bool = false
     @State private var showTip = true
+    @State private var showPopupTip = false
     
     @FocusState private var isFfipTextFieldFocused: Bool
     @State private var showFlash: Bool = false
@@ -34,7 +35,7 @@ struct SemanticCameraView: View {
         ZStack {
             VStack {
                 ZStack {
-                    GeometryReader { geometry in
+                    GeometryReader { _ in
                         FrameView(image: mediator.frame)
                             .background(
                                 GeometryReader { proxy in
@@ -58,10 +59,6 @@ struct SemanticCameraView: View {
                             .onTapGesture(count: 2) {
                                 captureFrameAndSave()
                             }
-                        
-                        ForEach(mediator.matchedObservations, id: \.self) { observation in
-                            FfipBoundingBox(observation: observation)
-                        }
                     }
                 }
             }
@@ -72,7 +69,7 @@ struct SemanticCameraView: View {
                     onZoom: { Task { await handleZoomButtonTapped() } },
                     isTorchOn: mediator.isTorchOn,
                     onToggleTorch: { Task { await mediator.toggleTorch() } },
-                    onInfo: {},
+                    onInfo: { showPopupTip = true },
                     onClose: {
                         Task {
                             await mediator.stop()
@@ -83,6 +80,11 @@ struct SemanticCameraView: View {
                 )
                 Spacer()
             }
+            
+            Color.black.opacity(isFfipTextFieldFocused ? 0.4 : 0)
+                .onTapGesture {
+                    isFfipTextFieldFocused = false
+                }
             
             VStack {
                 Spacer()
@@ -108,8 +110,9 @@ struct SemanticCameraView: View {
                 
                 FfipSearchTextField(
                     text: $mediator.visionModel.searchKeyword,
-                    isFocused: true,
-                    placeholder: mediator.visionModel.searchKeyword
+                    isFocused: isFfipTextFieldFocused,
+                    placeholder: mediator.visionModel.searchKeyword,
+                    withVoiceSearch: false
                 )
                 .focused($isFfipTextFieldFocused)
                 .padding(.bottom, isFfipTextFieldFocused ? 12 : 12 + safeAreaInset(.bottom))
@@ -136,6 +139,10 @@ struct SemanticCameraView: View {
                 )
             }
             
+            if showPopupTip {
+                FfipCameraPopupTipOverlay(showPopupTip: $showPopupTip, type: .semantic)
+            }
+            
             if showFlash {
                 Color.white
                     .ignoresSafeArea()
@@ -160,9 +167,6 @@ struct SemanticCameraView: View {
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
-        .onChange(of: mediator.matchedObservations) { _, newObservations in
-            if !newObservations.isEmpty { triggerHapticFeedback() }
-        }
         .task {
             await mediator.start()
         }
@@ -195,7 +199,7 @@ private extension SemanticCameraView {
         withAnimation(.easeIn(duration: 0.1)) {
             showFlash = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             withAnimation(.easeOut(duration: 0.3)) {
                 showFlash = false
@@ -211,10 +215,45 @@ private extension SemanticCameraView {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     let capturedImage = SemanticCameraCapturedImage(imageData: jpegData)
+                    let capturedImageId = capturedImage.id
                     modelContext.insert(capturedImage)
+
+                    Task.detached(priority: .background) {
+                        await analyzeAndUpdateCapturedImage(capturedImageId, buffer: captureFrame)
+                    }
                     animateCapture = false
                 }
             }
+        }
+    }
+    
+    @MainActor
+    func analyzeAndUpdateCapturedImage(_ id: UUID, buffer: CVImageBuffer) async {
+        if let result = await mediator.analyzeCapturedImage(buffer) {
+            guard let targetImage = capturedImages.first(where: { $0.id == id }) else { return }
+            
+            let filteredRecognizedTexts = result.recognizedTexts.filter { observation in
+                observation.transcript == result.keyword && result.similarity >= 0.7
+            }
+            targetImage.similarKeyword = result.keyword
+            targetImage.similarity = result.similarity
+            targetImage.recognizedTexts = filteredRecognizedTexts.isEmpty ? nil : filteredRecognizedTexts
+            targetImage.isAnalyzed = true
+        } else {
+            try? await Task.sleep(for: .milliseconds(100))
+            guard let targetImage = capturedImages.first(where: { $0.id == id }) else {
+                print("이미지 못찾음 !")
+                return
+            }
+            targetImage.isAnalyzed = true
+            print("❌ 분석 실패")
+            return
+        }
+
+        do {
+            try modelContext.save()
+        } catch {
+            print("❌ 분석 후 저장 실패: \(error)")
         }
     }
     
@@ -229,3 +268,4 @@ private extension SemanticCameraView {
         }
     }
 }
+

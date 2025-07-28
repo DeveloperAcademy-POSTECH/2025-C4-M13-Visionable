@@ -45,6 +45,7 @@ private extension FfipNavigationBar {
         case .logo:
             Image(.logoFfip)
                 .padding(.leading, 8)
+                .accessibilityHidden(true)
         case .back(let action):
             Button(action: action) {
                 Image(.icnNavBack)
@@ -52,6 +53,8 @@ private extension FfipNavigationBar {
                     .scaledToFit()
                     .frame(width: 20)
             }
+            .accessibilityLabel(.VoiceOverLocalizable.back)
+            .accessibilityHint(.VoiceOverLocalizable.backHint)
         case .none:
             Spacer().frame(width: 20).opacity(0)
         }
