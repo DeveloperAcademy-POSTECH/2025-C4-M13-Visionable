@@ -37,6 +37,7 @@ struct OnboardingView: View {
                 .ignoresSafeArea()
                 
                 FfipPageControl(
+                    style: .black,
                     totalCount: steps.count,
                     currentIndex: currentStepIndex
                 )

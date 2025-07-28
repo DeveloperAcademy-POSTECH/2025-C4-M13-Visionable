@@ -16,6 +16,7 @@ struct SemanticCameraView: View {
     
     @AppStorage(AppStorageKey.dontShowSemanticTipAgain) private var dontShowSemanticCameraTipAgain: Bool = false
     @State private var showTip = true
+    @State private var showPopupTip = false
     
     @FocusState private var isFfipTextFieldFocused: Bool
     @State private var showFlash: Bool = false
@@ -68,7 +69,7 @@ struct SemanticCameraView: View {
                     onZoom: { Task { await handleZoomButtonTapped() } },
                     isTorchOn: mediator.isTorchOn,
                     onToggleTorch: { Task { await mediator.toggleTorch() } },
-                    onInfo: {},
+                    onInfo: { showPopupTip = true },
                     onClose: {
                         Task {
                             await mediator.stop()
@@ -136,6 +137,10 @@ struct SemanticCameraView: View {
                         ),
                     dontShowAgainText: String(localized: .dontShowAgain)
                 )
+            }
+            
+            if showPopupTip {
+                FfipCameraPopupTipOverlay(showPopupTip: $showPopupTip, type: .semantic)
             }
             
             if showFlash {
