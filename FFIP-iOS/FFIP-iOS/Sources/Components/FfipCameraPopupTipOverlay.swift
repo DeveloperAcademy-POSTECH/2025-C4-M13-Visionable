@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Lottie
 
 struct FfipCameraPopupTipOverlay: View {
     @Binding var showPopupTip: Bool
@@ -15,18 +16,8 @@ struct FfipCameraPopupTipOverlay: View {
     var body: some View {
         ZStack {
             Color.black.opacity(0.8)
-            VStack {
-                HStack {
-                    Spacer()
-                    Spacer()
-                    FfipInfoButton { showPopupTip = false }
-                        .padding(.top, 67)
-                    Spacer()
-                }
-                Spacer()
-            }
-            .padding(.horizontal, 20)
-            
+                .onTapGesture { showPopupTip = false }
+   
             VStack(spacing: 0) {
                 Spacer()
                 
@@ -37,7 +28,7 @@ struct FfipCameraPopupTipOverlay: View {
                         .padding(.bottom, 20)
                     
                     Button(action: { showPopupTip = false }) {
-                        Image(.btnClose)
+                        Image(.icnAlertClose)
                             .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
@@ -79,13 +70,23 @@ struct FfipCameraPopupTipCardView: View {
                             
                             Text(content.description)
                                 .font(.labelMedium14)
-                                .foregroundStyle(.ffipGrayscale3)
-                                .padding(.bottom, 14)
+                                .foregroundStyle(.ffipGrayscale4)
                             
-                            Image(content.imageName)
+                            ZStack {
+                                Image(content.imageName)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 138)
+                                    .padding(.top, 20)
+                                
+                                // TODO: - 로티 화면 넣을 자리
+                            }
+                            .frame(width: 225, height: 225)
                         }
                         .tag(index)
                     }
+                    .padding(.top, 50)
+                    .padding(.bottom, 36)
                 }
             }
             .frame(minWidth: 300)
@@ -103,35 +104,35 @@ enum FfipCameraPopupTipType {
         case .exact: [
             FfipCameraPopupTipModel(
                 title: String(localized: .exactCameraPopupTip1Title),
-                description: String(localized: .exactCameraPopupTip1Title),
-                imageName: .mock
+                description: String(localized: .exactCameraPopupTip1Description),
+                imageName: .onboardingIPhone
             ),
             FfipCameraPopupTipModel(
                 title: String(localized: .exactCameraPopupTip2Title),
-                description: String(localized: .exactCameraPopupTip2Title),
-                imageName: .mock
+                description: String(localized: .exactCameraPopupTip2Description),
+                imageName: .onboardingIPhone
             ),
             FfipCameraPopupTipModel(
                 title: String(localized: .exactCameraPopupTip3Title),
-                description: String(localized: .exactCameraPopupTip3Title),
-                imageName: .mock
+                description: String(localized: .exactCameraPopupTip3Description),
+                imageName: .onboardingIPhone
             )]
             
         case .semantic: [
             FfipCameraPopupTipModel(
                 title: String(localized: .semanticCameraPopupTip1Title),
                 description: String(localized: .semanticCameraPopupTip1Description),
-                imageName: .mock
+                imageName: .onboardingIPhone
             ),
             FfipCameraPopupTipModel(
                 title: String(localized: .semanticCameraPopupTip2Title),
                 description: String(localized: .semanticCameraPopupTip2Description),
-                imageName: .mock
+                imageName: .onboardingIPhone
             ),
             FfipCameraPopupTipModel(
                 title: String(localized: .semanticCameraPopupTip3Title),
                 description: String(localized: .semanticCameraPopupTip3Description),
-                imageName: .mock
+                imageName: .onboardingIPhone
             )]
         }
     }
@@ -144,6 +145,6 @@ struct FfipCameraPopupTipModel: Identifiable {
     let imageName: ImageResource
 }
 
-#Preview {
-    FfipCameraPopupTipOverlay(showPopupTip: .constant(true), type: .exact)
-}
+// #Preview {
+//    FfipCameraPopupTipOverlay(showPopupTip: .constant(true), type: .exact)
+// }

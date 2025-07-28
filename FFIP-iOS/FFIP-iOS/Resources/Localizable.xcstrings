@@ -68,7 +68,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "탐색 결과를 더 정확하게  얻을 수 있어요."
+            "value" : "더 정확한 탐색 결과를 얻을 수 있습니다."
           }
         }
       }
@@ -79,7 +79,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "일정하게 스캔"
+            "value" : "일정한 속도를 유지하세요."
           }
         }
       }
