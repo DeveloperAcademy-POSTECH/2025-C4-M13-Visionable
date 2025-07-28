@@ -38,7 +38,7 @@ struct FfipSearchTextField: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            HStack(spacing: 12) {
+            ZStack(alignment: .trailing) {
                 FfipUIKitTextField(
                     text: $text,
                     placeholder: placeholder,
@@ -50,18 +50,16 @@ struct FfipSearchTextField: View {
                 .padding(.vertical, 18)
                 .submitLabel(.search)
                 .frame(height: 52)
+                .frame(minWidth: 0, maxWidth: .infinity)
                 .accessibilityLabel(.VoiceOverLocalizable.textField)
                 .accessibilityHint(.VoiceOverLocalizable.textFieldHint)
-                .frame(minWidth: 0, maxWidth: .infinity)
-                
-                if isFocused && !isTextEmpty {
-                    Button {
-                        text = ""
-                    } label: {
-                        Image(.icnXButton)
-                    }
-                    .padding(.trailing, 20)
+                Button {
+                    text = ""
+                } label: {
+                    Image(.icnXButton)
                 }
+                .padding(.trailing, 20)
+                .opacity(isFocused && !isTextEmpty ? 1 : 0)
             }
             .background(.ffipGrayscale5)
             .cornerRadius(50)
@@ -82,10 +80,13 @@ struct FfipSearchTextField: View {
     }
 }
 
- #Preview {
-    FfipSearchTextField(
-        text: .constant(""),
-        isFocused: true,
-        placeholder: "어쩌구저쩌구 플레이스홀더"
-    )
- }
+// #Preview {
+//    @Previewable @State var text: String = ""
+//    FfipSearchTextField(
+//        text: $text,
+//        isFocused: true,
+//        placeholder: "어쩌구저쩌구 플레이스홀더",
+//        withVoiceSearch: false
+//    )
+//    .padding(.horizontal, 20)
+// }
