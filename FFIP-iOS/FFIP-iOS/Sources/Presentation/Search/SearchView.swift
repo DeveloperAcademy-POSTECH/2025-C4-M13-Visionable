@@ -10,6 +10,9 @@ import SwiftUI
 public enum SearchFocusState {
     case home
     case editing
+    
+    var isHome: Bool { self == .home }
+    var isEditing: Bool { self == .editing }
 }
 
 struct SearchView: View {
@@ -18,11 +21,10 @@ struct SearchView: View {
     @Binding var searchType: SearchType
     
     @FocusState private var isFocused: Bool
+    @State private var searchFocusState: SearchFocusState = .home
     @State private var isToolTipPresented: Bool = false
     @State private var isSheetPresented: Bool = false
     @State private var isToastPresented: Bool = false
-    
-    @State private var focusState: SearchFocusState = .home
     @State private var searchText: String = ""
 
     var body: some View {
@@ -31,7 +33,7 @@ struct SearchView: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 // 홈화면에서 로고 네비바와 탐색 방법 선택
-                if focusState == .home {
+                if searchFocusState.isHome {
                     FfipNavigationBar(
                         leadingType: .logo,
                         centerType: .none,
@@ -75,14 +77,8 @@ struct SearchView: View {
 
                 // 텍스트필드 검색바
                 HStack(spacing: 12) {
-                    if focusState == .editing {
-                        Button {
-                            searchText = ""
-                            withAnimation(.easeInOut(duration: 0.25)) {
-                                focusState = .home
-                                isFocused = false
-                            }
-                        } label: {
+                    if searchFocusState.isEditing {
+                        Button(action: navigationBackButtonTapped) {
                             Image(.icnNavBack)
                         }
                         .accessibilityLabel(.VoiceOverLocalizable.back)
@@ -91,7 +87,7 @@ struct SearchView: View {
 
                     FfipSearchTextField(
                         text: $searchText,
-                        isFocused: focusState == .editing,
+                        isFocused: searchFocusState.isEditing,
                         placeholder: String(localized: searchType.placeholder),
                         onVoiceSearch: {
                             coordinator.push(.voiceSearch)
@@ -106,14 +102,14 @@ struct SearchView: View {
                                 : .semanticCamera(searchKeyword: searchText)
                             )
                         },
-                        withVoiceSearch: focusState == .home
+                        withVoiceSearch: searchFocusState.isHome
                     )
                     .focused($isFocused)
                 }
                 .padding(.top, 16)
 
                 // 지정탐색 일 때만 하단에 뜨는 최근 탐색어 (by 검색모드)
-                if focusState == .home && searchType == .exact {
+                if searchFocusState.isHome && searchType == .exact {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
                             Text(.recentSearchTitle)
@@ -137,7 +133,7 @@ struct SearchView: View {
                 }
 
                 // 지정탐색일 때만 하단에 뜨는 최근 탐색어 (by 편집모드)
-                if focusState == .editing && searchType == .exact {
+                if searchFocusState.isEditing && searchType == .exact {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .trailing, spacing: 12) {
                             VStack(alignment: .leading, spacing: 20) {
@@ -197,17 +193,11 @@ struct SearchView: View {
             .padding(.horizontal, 20)
         }
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            searchText = ""
-            Task {
-                try? await Task.sleep(for: .seconds(0.2))
-                withAnimation { isToolTipPresented = true }
-            }
-        }
+        .onAppear { searchViewWillAppear() }
         .onChange(of: isFocused) {
             if isFocused {
                 withAnimation(.easeInOut(duration: 0.25)) {
-                    focusState = .editing
+                    searchFocusState = .editing
                 }
             }
         }
@@ -223,8 +213,26 @@ struct SearchView: View {
             isToastVisible: $isToastPresented
         )
     }
+}
 
-    private func dismissFfipSheet() {
+private extension SearchView {
+    func searchViewWillAppear() {
+        searchText = ""
+        Task {
+            try? await Task.sleep(for: .seconds(0.2))
+            withAnimation { isToolTipPresented = true }
+        }
+    }
+    
+    func navigationBackButtonTapped() {
+        searchText = ""
+        withAnimation(.easeInOut(duration: 0.25)) {
+            searchFocusState = .home
+            isFocused = false
+        }
+    }
+    
+    func dismissFfipSheet() {
         if isToastPresented { isToastPresented = false }
         if isToolTipPresented { isToolTipPresented = false }
 
