@@ -9,7 +9,9 @@ import Foundation
 
 enum URLLiterals {
     enum DeepLink {
-        static let search: String = "ffip://search"
-        static let voiceSearch: String = "ffip://voiceSearch"
+        static let searchExact: String = "ffip://searchExact"
+        static let searchSemantic: String = "ffip://searchSemantic"
+        static let voiceSearchExact: String = "ffip://voiceSearchExact"
+        static let voiceSearchSemantic: String = "ffip://voiceSearchSemantic"
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 enum FontName: String {
     case pretendardBold = "Pretendard-Bold"
@@ -36,4 +37,8 @@ extension Font {
     static let onboardingBold24: Font = .custom(FontName.pretendardBold.rawValue, size: 24)
     static let onboardingBold16: Font = .custom(FontName.pretendardBold.rawValue, size: 16)
     static let onboardingSemiBold12: Font = .custom(FontName.pretendardSemiBold.rawValue, size: 12)
+}
+
+extension UIFont {
+    static let bodyMedium16: UIFont = UIFont(name: FontName.pretendardMedium.rawValue, size: 16) ?? UIFont.systemFont(ofSize: 16, weight: .medium)
 }
