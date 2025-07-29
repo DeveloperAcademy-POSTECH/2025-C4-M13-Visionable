@@ -67,7 +67,7 @@ struct OnboardingUpperContentView: View {
     
     let type: FfipOnboardingType
     let typingText: String?
-    private let imageInterval: TimeInterval = 1.0
+    private let imageInterval: TimeInterval = 0.3
     private let typingSpeed: Duration = .milliseconds(100)
     
     var body: some View {
@@ -131,7 +131,7 @@ struct OnboardingUpperContentView: View {
         currentImageResourceIndex = 0
         isTextFiledVisible = false
         onChangeTask = Task {
-            try? await Task.sleep(for: .seconds(1))
+            try? await Task.sleep(for: .seconds(imageInterval))
             guard !Task.isCancelled else { return }
             withAnimation(.easeInOut(duration: 0.5)) {
                 currentImageResourceIndex += 1

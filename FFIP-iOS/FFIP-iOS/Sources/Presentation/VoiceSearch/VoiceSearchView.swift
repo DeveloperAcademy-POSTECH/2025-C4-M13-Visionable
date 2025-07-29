@@ -20,7 +20,6 @@ struct VoiceSearchView: View {
 
     var body: some View {
         ZStack {
-            Color.ffipBackground1Main.ignoresSafeArea()
             VStack {
                 FfipNavigationBar(
                     leadingType: .back(action: {
@@ -75,6 +74,7 @@ struct VoiceSearchView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .background(.ffipBackground1Main)
         .task {
             transcript = ""
 
