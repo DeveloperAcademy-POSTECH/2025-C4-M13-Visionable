@@ -16,6 +16,7 @@ final class SearchModel {
     }
     
     func addRecentSearchKeyword(_ keyword: String) {
+        recentSearchKeywords = UserDefaults.standard.stringArray(forKey: UserDefaultsKey.recentSearch) ?? []
         recentSearchKeywords.removeAll(where: { $0 == keyword })
         recentSearchKeywords.insert(keyword, at: 0)
         recentSearchKeywords = Array(recentSearchKeywords.prefix(5))
