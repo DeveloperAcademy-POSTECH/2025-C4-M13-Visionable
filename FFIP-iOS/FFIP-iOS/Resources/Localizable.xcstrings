@@ -11,13 +11,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI"
+            "value" : "AI Powered"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "AI 연관탐색"
+            "state" : "translated",
+            "value" : "AI 기반 탐색"
           }
         }
       }
@@ -712,7 +712,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Found snaps\nget a green frame"
+            "value" : "See your results\nin the Snapbook"
           }
         },
         "ko" : {
@@ -748,12 +748,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A green frame appears\nwhen related info is found"
+            "value" : "Found snaps\nget a green frame"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "찾은 탐색어가 있으면\n초록색 테두리가 나타나요"
           }
         }
@@ -904,12 +904,18 @@
       }
     },
     "willCameraPushInstruction" : {
-      "comment" : "음성검색",
+      "comment" : "음성인식 완료 후 탐색 시작",
       "extractionState" : "manual",
       "localizations" : {
-        "ko" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Starting search now."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색을 시작합니다."
           }
         }
