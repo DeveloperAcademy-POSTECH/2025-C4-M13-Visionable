@@ -127,15 +127,3 @@ struct FFIPSemanticSearchWidget: Widget {
         .supportedFamilies([.systemSmall])
     }
 }
-
-#Preview(as: .systemSmall) {
-    FFIPExactSearchWidget()
-} timeline: {
-    SimpleEntry(date: .now)
-}
-
-#Preview(as: .systemSmall) {
-    FFIPSemanticSearchWidget()
-} timeline: {
-    SimpleEntry(date: .now)
-}

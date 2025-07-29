@@ -12,6 +12,8 @@ import SwiftUI
 struct FFIPWidgetBundle: WidgetBundle {
     var body: some Widget {
         FFIPExactSearchWidget()
-        FFIPSemanticSearchWidget()
+        if #available(iOS 26.0, *) {
+            FFIPSemanticSearchWidget()
+        }
     }
 }

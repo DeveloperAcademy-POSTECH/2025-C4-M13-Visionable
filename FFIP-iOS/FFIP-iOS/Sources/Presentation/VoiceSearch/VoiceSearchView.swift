@@ -146,4 +146,3 @@ struct VoiceSearchView: View {
 //    VoiceSearchView(voiceSearchModel: VoiceSearchModel(privacyService: PrivacyService(), speechService: SpeechRecognitionService()))
 //        .environment(coordinator)
 // }
-

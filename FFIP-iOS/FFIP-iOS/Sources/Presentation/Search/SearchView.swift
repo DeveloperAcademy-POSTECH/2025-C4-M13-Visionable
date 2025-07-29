@@ -40,13 +40,13 @@ struct SearchView: View {
                         trailingType: .none
                     )
                     
-                    Button {
-                        withAnimation { isSheetPresented = true }
-                    } label: {
-                        HStack(spacing: 8) {
-                            Text(searchType.title)
-                                .font(.titleBold24)
-                            if #available(iOS 26.0, *) {
+                    if #available(iOS 26.0, *) {
+                        Button {
+                            withAnimation { isSheetPresented = true }
+                        } label: {
+                            HStack(spacing: 8) {
+                                Text(searchType.title)
+                                    .font(.titleBold24)
                                 Image(.icnKeyboardArrowDown)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -59,22 +59,30 @@ struct SearchView: View {
                                     )
                             }
                         }
-                    }
-                    .tint(.ffipGrayscale1)
-                    .padding(.top, 75)
-                    .accessibilityLabel(
-                        .VoiceOverLocalizable.searchMode(
-                            searchType == .exact ? "지정 탐색" : "연관 탐색"
+                        .tint(.ffipGrayscale1)
+                        .padding(.top, 75)
+                        .accessibilityLabel(
+                            .VoiceOverLocalizable.searchMode(
+                                searchType == .exact ? "지정 탐색" : "연관 탐색"
+                            )
                         )
-                    )
-                    .accessibilityValue(
-                        searchType == .exact
-                        ? .VoiceOverLocalizable.exactSearchModeValue
-                        : .VoiceOverLocalizable.semanticSearchModeValue
-                    )
-                    .accessibilityHint(.VoiceOverLocalizable.changeSearchMode)
-                    .accessibilityAddTraits(.isButton)
-                    .accessibilitySortPriority(1)
+                        .accessibilityValue(
+                            searchType == .exact
+                            ? .VoiceOverLocalizable.exactSearchModeValue
+                            : .VoiceOverLocalizable.semanticSearchModeValue
+                        )
+                        .accessibilityHint(.VoiceOverLocalizable.changeSearchMode)
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilitySortPriority(1)
+                    } else {
+                        Text(searchType.title)
+                            .font(.titleBold24)
+                            .tint(.ffipGrayscale1)
+                            .padding(.top, 75)
+                            .accessibilityLabel(.VoiceOverLocalizable.searchMode("지정 탐색"))
+                            .accessibilityValue(.VoiceOverLocalizable.exactSearchModeValue)
+                            .accessibilitySortPriority(1)
+                    }
                 }
                 
                 // 텍스트필드 검색바
