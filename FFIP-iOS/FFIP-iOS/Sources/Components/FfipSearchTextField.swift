@@ -49,7 +49,7 @@ struct FfipSearchTextField: View {
                 .font(.bodyMedium16)
                 .padding(.vertical, 18)
                 .submitLabel(.search)
-                .frame(height: 52)
+                .frame(height: 55)
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .accessibilityLabel(.VoiceOverLocalizable.textField)
                 .accessibilityHint(.VoiceOverLocalizable.textFieldHint)
