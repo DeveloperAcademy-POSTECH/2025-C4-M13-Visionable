@@ -8,11 +8,17 @@
 import SwiftUI
 import Speech
 
+protocol VoiceSearchModelProtocol {
+    func start() async
+    func stop() async
+}
+
+@available(iOS 26.0, *)
 @MainActor
 @Observable
-final class VoiceSearchModel {
+final class VoiceSearchModel: VoiceSearchModelProtocol {
     private let privacyService: PrivacyService
-    private let speechService: SpeechTranscriptionService
+    private var speechTranscriptionService: SpeechTranscriptionService
 
     private(set) var dictationTranscriber: DictationTranscriber?
     private(set) var detectorStream: AsyncStream<Float>?
@@ -25,23 +31,55 @@ final class VoiceSearchModel {
         speechService: SpeechTranscriptionService
     ) {
         self.privacyService = privacyService
-        self.speechService = speechService
+        self.speechTranscriptionService = speechService
     }
 
     func start() async {
         await privacyService.fetchMicrophoneAuthorization()
 
         do {
-            try await speechService.startTranscribing()
+            try await speechTranscriptionService.startTranscribing()
         } catch {
             print("transcribe error: \(error.localizedDescription)")
         }
         
-        dictationTranscriber = await speechService.dictationTranscriber
-        detectorStream = await speechService.detectorStream
+        dictationTranscriber = await speechTranscriptionService.dictationTranscriber
+        detectorStream = await speechTranscriptionService.detectorStream
     }
 
     func stop() async {
-        await speechService.stopTranscribing()
+        await speechTranscriptionService.stopTranscribing()
+    }
+}
+
+@MainActor
+@Observable
+final class VoiceSearchModelSupportVersion: VoiceSearchModelProtocol {
+    private let privacyService: PrivacyService
+    private var speechRecognitionService: SpeechRecognitionService
+
+    private var listenTranscriptTask: Task<Void, Never>?
+    private var listenSpeechDetectedTask: Task<Void, Never>?
+
+    init(
+        privacyService: PrivacyService,
+        speechService: SpeechRecognitionService
+    ) {
+        self.privacyService = privacyService
+        self.speechRecognitionService = speechService
+    }
+
+    func start() async {
+        await privacyService.fetchMicrophoneAuthorization()
+
+        do {
+            try await speechRecognitionService.startTranscribing()
+        } catch {
+            print("transcribe error: \(error.localizedDescription)")
+        }
+    }
+    
+    func stop() async {
+        await speechRecognitionService.stopTranscribing()
     }
 }

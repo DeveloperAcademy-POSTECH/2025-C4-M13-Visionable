@@ -9,8 +9,10 @@ import SwiftUI
 
 protocol ModuleFactoryProtocol {
     func makeExactCameraView(searchKeyword: String) -> ExactCameraView
+    @available(iOS 26.0, *)
     func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView
     func makeSearchView(searchType: Binding<SearchType>) -> SearchView
+    @available(iOS 26.0, *)
     func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView
     func makePhotoDetailView() -> PhotoDetailView
     func makeOnboardingView() -> OnboardingView
@@ -46,6 +48,7 @@ final class ModuleFactory: ModuleFactoryProtocol {
         return view
     }
     
+    @available(iOS 26.0, *)
     func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView {
         let privacyService = PrivacyService()
         let captureService = VideoCaptureService()
@@ -82,12 +85,13 @@ final class ModuleFactory: ModuleFactoryProtocol {
         return view
     }
     
+    @available(iOS 26.0, *)
     func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView {
         let privacyService = PrivacyService()
-        let speeachService = SpeechTranscriptionService()
+        let speechService = SpeechTranscriptionService()
         let model = VoiceSearchModel(
             privacyService: privacyService,
-            speechService: speeachService
+            speechService: speechService
         )
         let view = VoiceSearchView(
             voiceSearchModel: model,

@@ -8,6 +8,7 @@
 import Speech
 import SwiftUI
 
+@available(iOS 26.0, *)
 struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
@@ -78,21 +79,21 @@ struct VoiceSearchView: View {
         .task {
             transcript = ""
 
-            await voiceSearchModel.start()
+            if #available(iOS 26.0, *) {
+                await voiceSearchModel.start()
+                
+                guard let dictationTranscriber = voiceSearchModel.dictationTranscriber else { return }
+                guard let detectorStream = voiceSearchModel.detectorStream else { return }
 
-            guard
-                let dictationTranscriber = voiceSearchModel.dictationTranscriber
-            else { return }
-            guard let detectorStream = voiceSearchModel.detectorStream else {
-                return
-            }
+                Task {
+                    try await handleDictationResults(dictationTranscriber: dictationTranscriber)
+                }
 
-            Task {
-                try await handleDictationResults(dictationTranscriber: dictationTranscriber)
-            }
-
-            Task {
-                await handleDetectorStream(detectorStream: detectorStream)
+                Task {
+                    await handleDetectorStream(detectorStream: detectorStream)
+                }
+            } else {
+                await voiceSearchModel.start()
             }
         }
     }
@@ -102,6 +103,7 @@ struct VoiceSearchView: View {
         coordinator.pop()
     }
 
+    @available(iOS 26.0, *)
     private func handleDictationResults(dictationTranscriber: DictationTranscriber) async throws {
         for try await case let result in dictationTranscriber.results {
             if showMicButton { return }
@@ -144,3 +146,4 @@ struct VoiceSearchView: View {
 //    VoiceSearchView(voiceSearchModel: VoiceSearchModel(privacyService: PrivacyService(), speechService: SpeechRecognitionService()))
 //        .environment(coordinator)
 // }
+

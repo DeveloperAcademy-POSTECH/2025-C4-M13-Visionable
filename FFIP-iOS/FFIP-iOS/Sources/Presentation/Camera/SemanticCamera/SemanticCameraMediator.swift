@@ -9,6 +9,7 @@
 import SwiftUI
 import Vision
 
+@available(iOS 26.0, *)
 @MainActor
 @Observable
 final class SemanticCameraMediator: NSObject {
