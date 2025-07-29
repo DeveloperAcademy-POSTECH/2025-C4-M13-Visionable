@@ -127,7 +127,7 @@ struct SemanticCameraView: View {
                 FfipCameraTipOverlay(
                     showTip: $showTip,
                     dontShowTipAgain: $dontShowSemanticCameraTipAgain,
-                    ffipCameraTipType: .exact,
+                    ffipCameraTipType: .semantic,
                     tipText1: String(localized: .semanticCameraTip1)
                         .asHighlight(
                             highlightedString: String(localized: .semanticCameraTipGreen1),

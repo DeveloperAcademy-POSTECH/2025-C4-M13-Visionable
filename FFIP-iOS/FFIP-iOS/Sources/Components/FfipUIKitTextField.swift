@@ -33,6 +33,7 @@ struct FfipUIKitTextField: UIViewRepresentable {
     
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
+        uiView.placeholder = placeholder
         if isFirstResponder && !uiView.isFirstResponder {
             uiView.becomeFirstResponder()
         }
