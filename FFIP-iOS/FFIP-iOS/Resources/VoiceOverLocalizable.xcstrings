@@ -7,6 +7,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Back."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "뒤로가기"
           }
         }
@@ -18,6 +24,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Returns to the start screen where you can choose a search mode."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색 모드를 변경할 수 있는 초기 화면으로 돌아갑니다."
           }
         }
@@ -29,6 +41,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Double tap to open the search mode selection."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "눌러서 탐색모드를 변경할 수 있습니다."
           }
         }
@@ -40,6 +58,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "%@ Delete"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "%@ 삭제"
           }
         }
@@ -51,6 +75,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Delete all recent searches"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "최근 탐색어 전체 삭제"
           }
         }
@@ -62,6 +92,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Removes this search term from your recent searches."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "최근 탐색어 목록에서 이 항목을 제거합니다."
           }
         }
@@ -73,6 +109,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Direct Search"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "지정 탐색"
           }
         }
@@ -84,6 +126,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Finds only exact matches for the text you enter."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색창에 입력하는 텍스트와 정확히 일치하는 항목만 찾아줍니다."
           }
         }
@@ -95,6 +143,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Finds only exact matches for the text you enter."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색창에 입력하는 텍스트와 정확히 일치하는 항목만 찾아줍니다."
           }
         }
@@ -106,6 +160,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "No recent searches yet."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "최근 탐색어가 없습니다."
           }
         }
@@ -117,6 +177,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Recent Researches %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "최근 탐색어 %@"
           }
         }
@@ -128,6 +194,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Clears all search terms from your recent searches."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "최근 탐색어 목록을 초기화합니다."
           }
         }
@@ -139,6 +211,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Speak to enter a search term."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색어를 말해주세요"
           }
         }
@@ -150,6 +228,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Double tap to open the camera and begin searching."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탭하면 카메라 뷰를 켜서 탐색을 시작합니다."
           }
         }
@@ -161,6 +245,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Search Mode: %@."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색 모드: %@."
           }
         }
@@ -172,6 +262,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Insight Search"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "연관 탐색"
           }
         }
@@ -183,6 +279,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Finds all related results based on the text you enter. Uses AI to infer and explore even when the name isn’t exact."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색창에 입력하는 텍스트와 연관된 모든 항목을 찾습니다. 정확한 명칭을 입력하지 않아도 AI로 추론하여 비슷한 항목을 탐색합니다."
           }
         }
@@ -194,6 +296,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Finds all related text based on what you enter in the search field."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색창에 입력하는 텍스트와 연관된 모든 항목을 찾아줍니다."
           }
         }
@@ -205,6 +313,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Search Field"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "탐색창"
           }
         }
@@ -216,6 +330,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Type a search term to begin. The camera will open and start searching when you’re done."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "찾고 싶은 탐색어를 입력하세요. 입력을 완료하면 카메라 뷰를 켜서 탐색을 시작합니다."
           }
         }
@@ -227,6 +347,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Voice Input"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "음성 입력"
           }
         }
@@ -238,6 +364,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Once your voice is recognized, the camera opens and search starts."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "정확히 인식되면 자동으로 카메라 뷰를 켜서 탐색을 시작합니다."
           }
         }
@@ -249,6 +381,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "You can enter a search term by voice. Voice recognition begins when you tap."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "음성으로 탐색어를 입력할 수 있습니다. 탭하면 음성 인식이 시작됩니다."
           }
         }

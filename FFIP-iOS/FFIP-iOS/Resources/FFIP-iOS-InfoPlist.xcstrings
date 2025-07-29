@@ -2,52 +2,55 @@
   "sourceLanguage" : "en",
   "strings" : {
     "NSCameraUsageDescription" : {
+      "comment" : "카메라 접근 권한",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP requires access to your camera to capture photos."
+            "value" : "We use your camera to explore the world around you."
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "탐색 기능을 사용하려면\n카메라 접근 권한을 허용해주세요."
           }
         }
       }
     },
     "NSMicrophoneUsageDescription" : {
+      "comment" : "마이크 접근 권한",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP needs microphone access for voice search."
+            "value" : "We use your microphone to enable voice search."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP은 음성 검색을 위해 마이크 접근 권한이 필요합니다."
+            "value" : "음성 검색을 사용하려면\n마이크 접근 권한이 필요합니다."
           }
         }
       }
     },
     "NSSpeechRecognitionUsageDescription" : {
+      "comment" : "음성 인식 안내",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP uses speech recognition to turn your voice into text within the app."
+            "value" : "We use speech recognition to convert your voice into text in the app."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FFIP은 사용자의 음성을 텍스트로 변환하기 위해 음성 인식 기능을 사용합니다."
+            "value" : "사용자의 음성을 텍스트로 변환하기 위해 음성 인식 기능을 사용합니다."
           }
         }
       }
