@@ -12,14 +12,14 @@ struct SearchTypeSelectionView: View {
     let dismissAction: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 32) {
+        VStack(alignment: .leading, spacing: 38) {
             Text(.selectSearchMode)
                 .font(.titleBold20)
                 .foregroundStyle(.ffipGrayscale1)
                 .accessibilityAddTraits(.isHeader)
                 .accessibilitySortPriority(1)
 
-            VStack(spacing: 24) {
+            VStack(spacing: 26) {
                 ForEach(SearchType.allCases) { type in
                     SearchTypeRow(
                         title: String(localized: type.title),
@@ -77,6 +77,8 @@ private struct SearchTypeRow: View {
         HStack {
             HStack(spacing: 8) {
                 Text(title)
+                    .font(.bodyMedium16)
+                    .foregroundStyle(.ffipGrayscale2)
                 if let tagImage {
                     Image(tagImage)
                 }
@@ -94,5 +96,5 @@ private struct SearchTypeRow: View {
 }
 
 // #Preview {
-//    SearchTypeSelectionView(selectedType: .constant(.keyword))
+//     SearchTypeSelectionView(selectedType: .constant(.exact), dismissAction: {})
 // }

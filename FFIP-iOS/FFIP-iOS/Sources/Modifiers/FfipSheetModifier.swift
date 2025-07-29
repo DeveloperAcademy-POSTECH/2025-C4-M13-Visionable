@@ -37,7 +37,6 @@ struct FfipSheetModifier<SheetContent: View>: ViewModifier {
                     }
                     .accessibilityHidden(true)
                 
-                
                 VStack {
                     Spacer()
                     FfipBottomSheet {

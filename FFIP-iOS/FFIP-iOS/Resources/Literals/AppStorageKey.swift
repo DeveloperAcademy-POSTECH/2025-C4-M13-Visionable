@@ -10,5 +10,4 @@ import Foundation
 enum AppStorageKey {
     static let dontShowExactTipAgain = "dontShowExactTipAgain"
     static let dontShowSemanticTipAgain = "dontShowSemanticTipAgain"
-    static let searchType = "searchType"
 }

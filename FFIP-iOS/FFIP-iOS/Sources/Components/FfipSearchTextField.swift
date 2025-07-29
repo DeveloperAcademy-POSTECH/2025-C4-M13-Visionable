@@ -14,7 +14,6 @@ struct FfipSearchTextField: View {
     private let placeholder: String
     private let onVoiceSearch: (() -> Void)?
     private let onSubmit: (() -> Void)?
-    private let onEmptySubmit: (() -> Void)?
     private let withVoiceSearch: Bool
 
     public init(
@@ -23,7 +22,6 @@ struct FfipSearchTextField: View {
         placeholder: String,
         onVoiceSearch: (() -> Void)? = nil,
         onSubmit: (() -> Void)? = nil,
-        onEmptySubmit: (() -> Void)? = nil,
         withVoiceSearch: Bool = true
     ) {
         self._text = text
@@ -31,7 +29,6 @@ struct FfipSearchTextField: View {
         self.placeholder = placeholder
         self.onVoiceSearch = onVoiceSearch
         self.onSubmit = onSubmit
-        self.onEmptySubmit = onEmptySubmit
         self.withVoiceSearch = withVoiceSearch
     }
 
@@ -41,7 +38,7 @@ struct FfipSearchTextField: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            HStack(spacing: 12) {
+            ZStack(alignment: .trailing) {
                 FfipUIKitTextField(
                     text: $text,
                     placeholder: placeholder,
@@ -51,22 +48,18 @@ struct FfipSearchTextField: View {
                 .foregroundStyle(.ffipGrayscale1)
                 .font(.bodyMedium16)
                 .padding(.vertical, 18)
-                .padding(.leading, 20)
-                .padding(.trailing, 52)
                 .submitLabel(.search)
-                .frame(height: 52)
+                .frame(height: 55)
+                .frame(minWidth: 0, maxWidth: .infinity)
                 .accessibilityLabel(.VoiceOverLocalizable.textField)
                 .accessibilityHint(.VoiceOverLocalizable.textFieldHint)
-                .frame(minWidth: 0, maxWidth: .infinity)
-                
-                if isFocused && !isTextEmpty {
-                    Button {
-                        text = ""
-                    } label: {
-                        Image(.icnXButton)
-                    }
-                    .padding(.trailing, 20)
+                Button {
+                    text = ""
+                } label: {
+                    Image(.icnXButton)
                 }
+                .padding(.trailing, 20)
+                .opacity(isFocused && !isTextEmpty ? 1 : 0)
             }
             .background(.ffipGrayscale5)
             .cornerRadius(50)
@@ -87,10 +80,13 @@ struct FfipSearchTextField: View {
     }
 }
 
- #Preview {
-    FfipSearchTextField(
-        text: .constant("dddddddddddddddddddddddddddddddd"),
-        isFocused: true,
-        placeholder: "어쩌구저쩌구 플레이스홀더"
-    )
- }
+// #Preview {
+//    @Previewable @State var text: String = ""
+//    FfipSearchTextField(
+//        text: $text,
+//        isFocused: true,
+//        placeholder: "어쩌구저쩌구 플레이스홀더",
+//        withVoiceSearch: false
+//    )
+//    .padding(.horizontal, 20)
+// }
