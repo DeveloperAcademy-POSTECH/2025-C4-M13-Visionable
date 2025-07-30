@@ -42,6 +42,13 @@ struct FFIPAppRootView: View {
                 }
         }
         .task {
+            showOnboardingIfFirstLaunch()
+        }
+    }
+    
+    private func showOnboardingIfFirstLaunch() {
+        let isFirstLaunch = !UserDefaults.standard.bool(forKey: UserDefaultsKey.hasSeenOnboarding)
+        if isFirstLaunch {
             coordinator.push(.onboarding)
         }
     }
