@@ -66,14 +66,16 @@ struct FfipCameraPopupTipCardView: View {
                             Text(content.title)
                                 .font(.titleBold20)
                                 .foregroundStyle(.ffipGrayscale1NoDark)
-                                .padding(.bottom, 4)
+                                .lineSpacing(2)
+                                .padding(.bottom, 10)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .lineLimit(2)
+                                .multilineTextAlignment(.center)
                             
                             Text(content.description)
                                 .font(.labelMedium14)
                                 .foregroundStyle(.ffipGrayscale4)
-                            
-                            Spacer()
-                            
+                                                        
                             ZStack {
                                 LottieView(animation: .named(content.lottieName))
                                     .looping()
@@ -151,5 +153,5 @@ struct FfipCameraPopupTipModel: Identifiable {
 }
 
 // #Preview {
-//    FfipCameraPopupTipOverlay(showPopupTip: .constant(true), type: .semantic)
+//     FfipCameraPopupTipOverlay(showPopupTip: .constant(true), type: .exact)
 // }
