@@ -77,17 +77,26 @@ struct FFIPWidgetEntryView: View {
                 .font(.widgetSemiBold16)
                 .foregroundStyle(.ffipGrayscale2)
 
-                Link(
-                    destination: URL(
-                        string: widgetType == .exactSearch
-                            ? URLLiterals.DeepLink.voiceSearchExact
-                            : URLLiterals.DeepLink.voiceSearchSemantic
-                    )!
-                ) {
-                    Image(.icnSettingsVoice)
-                        .tint(.ffipGrayscale1)
-                        .frame(width: 55, height: 55)
-                        .background(Circle().fill(.ffipGrayscale5))
+                if #available(iOS 26.0, *) {
+                    Link(
+                        destination: URL(
+                            string: widgetType == .exactSearch
+                                ? URLLiterals.DeepLink.voiceSearchExact
+                                : URLLiterals.DeepLink.voiceSearchSemantic
+                        )!
+                    ) {
+                        Image(.icnSettingsVoice)
+                            .tint(.ffipGrayscale1)
+                            .frame(width: 55, height: 55)
+                            .background(Circle().fill(.ffipGrayscale5))
+                    }
+                } else {
+                    Link(destination: URL(string: URLLiterals.DeepLink.voiceSearchSupportVersion)!) {
+                        Image(.icnSettingsVoice)
+                            .tint(.ffipGrayscale1)
+                            .frame(width: 55, height: 55)
+                            .background(Circle().fill(.ffipGrayscale5))
+                    }
                 }
             }
             .containerRelativeFrame([.horizontal])
@@ -126,16 +135,4 @@ struct FFIPSemanticSearchWidget: Widget {
         .description(String(localized: .relatedSearchWidgetDescription))
         .supportedFamilies([.systemSmall])
     }
-}
-
-#Preview(as: .systemSmall) {
-    FFIPExactSearchWidget()
-} timeline: {
-    SimpleEntry(date: .now)
-}
-
-#Preview(as: .systemSmall) {
-    FFIPSemanticSearchWidget()
-} timeline: {
-    SimpleEntry(date: .now)
 }

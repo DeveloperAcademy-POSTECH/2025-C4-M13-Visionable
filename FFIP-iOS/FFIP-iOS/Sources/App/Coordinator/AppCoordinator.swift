@@ -27,6 +27,4 @@ final class AppCoordinator {
     func popToRoot() {
         path.removeLast(path.count)
     }
-    
-    // TODO: - 추가로 필요한 화면 전환 방식에 대해서 아래 부분에 해당 주석을 지우고 추가할 것 !
 }

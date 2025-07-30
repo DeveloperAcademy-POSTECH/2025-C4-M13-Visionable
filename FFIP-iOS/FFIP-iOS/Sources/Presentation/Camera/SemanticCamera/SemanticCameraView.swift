@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 import Vision
 
+@available(iOS 26.0, *)
 struct SemanticCameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Environment(\.modelContext) private var modelContext
@@ -176,6 +177,7 @@ struct SemanticCameraView: View {
     }
 }
 
+@available(iOS 26.0, *)
 private extension SemanticCameraView {
     func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue

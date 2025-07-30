@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(iOS 26.0, *)
 final class LanguageModel: NSObject {
     private let foundationModelsService: FoundationModelsService
 

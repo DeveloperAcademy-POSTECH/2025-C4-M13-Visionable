@@ -1,21 +1,20 @@
 //
-//  VoiceSearchView.swift
+//  VoiceSearchSupportVersionView.swift
 //  FFIP-iOS
 //
-//  Created by mini on 7/8/25.
+//  Created by mini on 7/30/25.
 //
 
 import Speech
 import SwiftUI
 
-struct VoiceSearchView: View {
+struct VoiceSearchSupportVersionView: View {
     @Environment(AppCoordinator.self) private var coordinator
-    @Bindable var voiceSearchModel: VoiceSearchModel
+    @Bindable var voiceSearchSupportVersionModel: VoiceSearchSupportVersionModel
     @Binding var searchType: SearchType
 
-    @State private var transcript: String = ""
     @State private var willCameraPush: Bool = false
-    @State private var isUserSpeaking = false
+    @State private var isUserSpeaking = true
     @State private var showMicButton = false
 
     var body: some View {
@@ -37,9 +36,9 @@ struct VoiceSearchView: View {
                     .frame(height: 58)
                 HStack {
                     Text(
-                        transcript == ""
+                        voiceSearchSupportVersionModel.transcript.isEmpty
                             ? String(localized: .searchPlaceholder)
-                            : "\"\(transcript)\""
+                            : "\"\(voiceSearchSupportVersionModel.transcript)\""
                     )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
@@ -76,66 +75,26 @@ struct VoiceSearchView: View {
         .navigationBarBackButtonHidden(true)
         .background(.ffipBackground1Main)
         .task {
-            transcript = ""
-
-            await voiceSearchModel.start()
-
-            guard
-                let dictationTranscriber = voiceSearchModel.dictationTranscriber
-            else { return }
-            guard let detectorStream = voiceSearchModel.detectorStream else {
-                return
-            }
-
-            Task {
-                try await handleDictationResults(dictationTranscriber: dictationTranscriber)
-            }
-
-            Task {
-                await handleDetectorStream(detectorStream: detectorStream)
+            await voiceSearchSupportVersionModel.start()
+        }
+        .onChange(of: voiceSearchSupportVersionModel.willCameraPush) { _, willCameraPush in
+            if willCameraPush {
+                if voiceSearchSupportVersionModel.transcript.isEmpty {
+                    isUserSpeaking = false
+                } else {
+                    Task {
+                        await voiceSearchSupportVersionModel.stop()
+                        try? await Task.sleep(for: .seconds(1))
+                        coordinator.push(.exactCamera(searchKeyword: voiceSearchSupportVersionModel.transcript))
+                    }
+                }
             }
         }
     }
 
     private func handleBackAction() async {
-        await voiceSearchModel.stop()
+        await voiceSearchSupportVersionModel.stop()
         coordinator.pop()
-    }
-
-    private func handleDictationResults(dictationTranscriber: DictationTranscriber) async throws {
-        for try await case let result in dictationTranscriber.results {
-            if showMicButton { return }
-
-            let text = String(result.text.characters)
-            transcript = text
-
-            await voiceSearchModel.stop()
-
-            try await Task.sleep(for: .seconds(1))
-
-            willCameraPush = true
-
-            try await Task.sleep(for: .seconds(1))
-
-            switch searchType {
-            case .exact:
-                coordinator.push(.exactCamera(searchKeyword: transcript))
-            case .semantic:
-                coordinator.push(.semanticCamera(searchKeyword: transcript))
-            }
-            break
-        }
-    }
-
-    private func handleDetectorStream(detectorStream: AsyncStream<Float>) async {
-        for await db in detectorStream {
-            if db > -50 {
-                isUserSpeaking = true
-                try? await Task.sleep(for: .seconds(2))
-            } else {
-                isUserSpeaking = false
-            }
-        }
     }
 }
 

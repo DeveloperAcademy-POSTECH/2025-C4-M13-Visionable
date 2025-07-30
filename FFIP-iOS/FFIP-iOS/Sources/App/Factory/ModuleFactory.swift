@@ -9,9 +9,12 @@ import SwiftUI
 
 protocol ModuleFactoryProtocol {
     func makeExactCameraView(searchKeyword: String) -> ExactCameraView
+    @available(iOS 26.0, *)
     func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView
     func makeSearchView(searchType: Binding<SearchType>) -> SearchView
+    @available(iOS 26.0, *)
     func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView
+    func makeVoiceSearchSupportVersionVoew(searchType: Binding<SearchType>) -> VoiceSearchSupportVersionView
     func makePhotoDetailView() -> PhotoDetailView
     func makeOnboardingView() -> OnboardingView
 }
@@ -46,6 +49,7 @@ final class ModuleFactory: ModuleFactoryProtocol {
         return view
     }
     
+    @available(iOS 26.0, *)
     func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView {
         let privacyService = PrivacyService()
         let captureService = VideoCaptureService()
@@ -82,15 +86,30 @@ final class ModuleFactory: ModuleFactoryProtocol {
         return view
     }
     
+    @available(iOS 26.0, *)
     func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView {
         let privacyService = PrivacyService()
-        let speeachService = SpeechTranscriptionService()
+        let speechTranscriptionService = SpeechTranscriptionService()
         let model = VoiceSearchModel(
             privacyService: privacyService,
-            speechService: speeachService
+            speechService: speechTranscriptionService
         )
         let view = VoiceSearchView(
             voiceSearchModel: model,
+            searchType: searchType
+        )
+        return view
+    }
+    
+    func makeVoiceSearchSupportVersionVoew(searchType: Binding<SearchType>) -> VoiceSearchSupportVersionView {
+        let privacyService = PrivacyService()
+        let speechRecognitionService = SpeechRecognitionService()
+        let model = VoiceSearchSupportVersionModel(
+            privacyService: privacyService,
+            speechService: speechRecognitionService
+        )
+        let view = VoiceSearchSupportVersionView(
+            voiceSearchSupportVersionModel: model,
             searchType: searchType
         )
         return view

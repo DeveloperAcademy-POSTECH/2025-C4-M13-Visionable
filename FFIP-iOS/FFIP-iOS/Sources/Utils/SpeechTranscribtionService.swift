@@ -9,6 +9,7 @@
 import Foundation
 import Speech
 
+@available(iOS 26.0, *)
 actor SpeechTranscriptionService {
     private var audioEngine: AVAudioEngine?
     private var analyzerFormat: AVAudioFormat?
@@ -172,6 +173,7 @@ actor SpeechTranscriptionService {
     }
 }
 
+@available(iOS 26.0, *)
 extension SpeechTranscriptionService {
     public func ensureModel(transcriber: DictationTranscriber, locale: Locale)
         async throws {
@@ -282,5 +284,6 @@ final class BufferConverter {
     }
 }
 
+@available(iOS 26.0, *)
 extension SpeechDetector: @retroactive SpeechModule,
     @unchecked @retroactive Sendable {}
