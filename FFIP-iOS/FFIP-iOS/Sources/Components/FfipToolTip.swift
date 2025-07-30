@@ -62,7 +62,9 @@ struct FfipToolTip: View {
                 .font(.captionMedium12)
                 .foregroundColor(.ffipBackground1Main)
                 .multilineTextAlignment(.leading)
-                .padding(10)
+                .padding(.vertical, 12)
+                .padding(.leading, 14)
+                .padding(.trailing, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 4)
                         .fill(.ffipGrayscale1)
@@ -81,7 +83,9 @@ struct FfipToolTip: View {
                 .font(.captionMedium12)
                 .foregroundColor(.ffipBackground1Main)
                 .multilineTextAlignment(.leading)
-                .padding(10)
+                .padding(.vertical, 12)
+                .padding(.leading, 16)
+                .padding(.trailing, 14)
                 .background(
                     RoundedRectangle(cornerRadius: 4)
                         .fill(.ffipGrayscale1)
@@ -119,25 +123,25 @@ struct Triangle: Shape {
 //            .padding()
 //            .background(Color.blue)
 //            .cornerRadius(10)
-//            .ffipToolTip(message: "Top에 표시됩니다.", position: .top, spacing: 10)
+//            .ffipToolTip(isToolTipVisible: .constant(true), message: "Top에 표시됩니다.", position: .top, spacing: 10)
 //
 //        Text("Bottom")
 //            .padding()
 //            .background(Color.green)
 //            .cornerRadius(10)
-//            .ffipToolTip(message: "Bottom에 표시됩니다.", position: .bottom, spacing: 12)
+//            .ffipToolTip(isToolTipVisible: .constant(true), message: "Bottom에 표시됩니다.", position: .bottom, spacing: 12)
 //
 //        Text("Leading")
 //            .padding()
 //            .background(Color.orange)
 //            .cornerRadius(10)
-//            .ffipToolTip(message: "왼쪽에 표시됩니다.", position: .leading, spacing: 10)
+//            .ffipToolTip(isToolTipVisible: .constant(true), message: "왼쪽에 표시됩니다.", position: .leading, spacing: 10)
 //
 //        Text("Trailing")
 //            .padding()
 //            .background(Color.purple)
 //            .cornerRadius(10)
-//            .ffipToolTip(message: "입력한 텍스트와 연관된\n모든 항목을 탐색합니다.", position: .trailing, spacing: 12)
+//            .ffipToolTip(isToolTipVisible: .constant(true), message: "입력한 텍스트와 연관된\n모든 항목을 탐색합니다.", position: .trailing, spacing: 12)
 //    }
 //    .padding()
 // }

@@ -26,12 +26,14 @@ struct FfipUIKitTextField: UIViewRepresentable {
         
         textField.textColor = .ffipGrayscale1
         textField.font = .bodyMedium16
+        textField.addPadding(left: 20, right: 52)
         
         return textField
     }
     
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
+        uiView.placeholder = placeholder
         if isFirstResponder && !uiView.isFirstResponder {
             uiView.becomeFirstResponder()
         }

@@ -73,7 +73,7 @@ struct SemanticCameraView: View {
                     onClose: {
                         Task {
                             await mediator.stop()
-                            coordinator.pop()
+                            coordinator.popToRoot()
                             deleteAllCapturedImages()
                         }
                     }
@@ -102,7 +102,10 @@ struct SemanticCameraView: View {
                             }
                         )
                         .onTapGesture {
-                            coordinator.push(.photoDetail)
+                            Task {
+                                await mediator.stop()
+                                coordinator.push(.photoDetail)
+                            }
                         }
                 }
                 .padding(.bottom, 12)
@@ -124,7 +127,7 @@ struct SemanticCameraView: View {
                 FfipCameraTipOverlay(
                     showTip: $showTip,
                     dontShowTipAgain: $dontShowSemanticCameraTipAgain,
-                    ffipCameraTipType: .exact,
+                    ffipCameraTipType: .semantic,
                     tipText1: String(localized: .semanticCameraTip1)
                         .asHighlight(
                             highlightedString: String(localized: .semanticCameraTipGreen1),
@@ -268,4 +271,3 @@ private extension SemanticCameraView {
         }
     }
 }
-

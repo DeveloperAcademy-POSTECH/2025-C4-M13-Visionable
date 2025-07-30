@@ -11,8 +11,7 @@ import SwiftUI
 struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
-
-    @AppStorage(AppStorageKey.searchType) var searchType: SearchType = .exact
+    @Binding var searchType: SearchType
 
     @State private var transcript: String = ""
     @State private var willCameraPush: Bool = false
@@ -75,6 +74,7 @@ struct VoiceSearchView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .background(.ffipBackground1Main)
         .task {
             transcript = ""
 
