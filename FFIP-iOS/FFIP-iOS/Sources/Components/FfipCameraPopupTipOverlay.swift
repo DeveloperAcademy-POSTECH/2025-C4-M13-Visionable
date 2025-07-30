@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Lottie
 
 struct FfipCameraPopupTipOverlay: View {
     @Binding var showPopupTip: Bool
@@ -16,7 +17,7 @@ struct FfipCameraPopupTipOverlay: View {
         ZStack {
             Color.black.opacity(0.8)
                 .onTapGesture { showPopupTip = false }
-   
+            
             VStack(spacing: 0) {
                 Spacer()
                 
@@ -71,21 +72,26 @@ struct FfipCameraPopupTipCardView: View {
                                 .font(.labelMedium14)
                                 .foregroundStyle(.ffipGrayscale4)
                             
+                            Spacer()
+                            // TODO: - 로티 화면 넣을 자리
                             ZStack {
-                                Image(content.imageName)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 138)
-                                    .padding(.top, 20)
+                                LottieView(animation: .named(content.lottieName))
+                                    .looping()
+                                    .frame(width: 250, height: 250)
                                 
-                                // TODO: - 로티 화면 넣을 자리
+                                if type == .exact && index == 0 {
+                                    Image(.onboardingIPhone)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 122)
+                                        .padding(.top, 50)
+                                }
                             }
-                            .frame(width: 225, height: 225)
                         }
                         .tag(index)
                     }
                     .padding(.top, 50)
-                    .padding(.bottom, 36)
+                    .padding(.horizontal, 15)
                 }
             }
             .frame(minWidth: 300)
@@ -104,34 +110,34 @@ enum FfipCameraPopupTipType {
             FfipCameraPopupTipModel(
                 title: String(localized: .exactCameraPopupTip1Title),
                 description: String(localized: .exactCameraPopupTip1Description),
-                imageName: .onboardingIPhone
+                lottieName: LottieLiterals.Onboarding.scan
             ),
             FfipCameraPopupTipModel(
                 title: String(localized: .exactCameraPopupTip2Title),
                 description: String(localized: .exactCameraPopupTip2Description),
-                imageName: .onboardingIPhone
+                lottieName: LottieLiterals.Onboarding.zoom
             ),
             FfipCameraPopupTipModel(
                 title: String(localized: .exactCameraPopupTip3Title),
                 description: String(localized: .exactCameraPopupTip3Description),
-                imageName: .onboardingIPhone
+                lottieName: LottieLiterals.Onboarding.green
             )]
             
         case .semantic: [
             FfipCameraPopupTipModel(
                 title: String(localized: .semanticCameraPopupTip1Title),
                 description: String(localized: .semanticCameraPopupTip1Description),
-                imageName: .onboardingIPhone
+                lottieName: LottieLiterals.Onboarding.tap
             ),
             FfipCameraPopupTipModel(
                 title: String(localized: .semanticCameraPopupTip2Title),
                 description: String(localized: .semanticCameraPopupTip2Description),
-                imageName: .onboardingIPhone
+                lottieName: LottieLiterals.Onboarding.grid
             ),
             FfipCameraPopupTipModel(
                 title: String(localized: .semanticCameraPopupTip3Title),
                 description: String(localized: .semanticCameraPopupTip3Description),
-                imageName: .onboardingIPhone
+                lottieName: LottieLiterals.Onboarding.grid2
             )]
         }
     }
@@ -141,9 +147,9 @@ struct FfipCameraPopupTipModel: Identifiable {
     let id = UUID()
     let title: String
     let description: String
-    let imageName: ImageResource
+    let lottieName: String
 }
 
-// #Preview {
-//    FfipCameraPopupTipOverlay(showPopupTip: .constant(true), type: .exact)
-// }
+#Preview {
+    FfipCameraPopupTipOverlay(showPopupTip: .constant(true), type: .semantic)
+}
