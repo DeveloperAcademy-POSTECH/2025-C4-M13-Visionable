@@ -47,6 +47,9 @@ struct FFIP_iOSApp: App {
                 case "voiceSearchSemantic":
                     coordinator.push(.voiceSearch)
                     searchType = .semantic
+                case "voiceSearchSupportVersion":
+                    coordinator.push(.voiceSearchSupportVersion)
+                    searchType = .exact
                 default: break
                 }
             }

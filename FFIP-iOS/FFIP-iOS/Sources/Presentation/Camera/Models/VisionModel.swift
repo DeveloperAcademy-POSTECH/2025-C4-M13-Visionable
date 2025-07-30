@@ -39,17 +39,18 @@ extension VisionModel {
     
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
-            let isSmudge = try await visionService.performDetectSmudge(in: buffer, threshold: 0.9)
-            if isSmudge {
-                countDetectSmudge += 1
-                if countDetectSmudge > 5 {
+            if #available(iOS 26.0, *) {
+                let isSmudge = try await visionService.performDetectSmudge(in: buffer, threshold: 0.9)
+                if isSmudge {
+                    countDetectSmudge += 1
+                    if countDetectSmudge > 5 {
+                        countDetectSmudge = 0
+                    }
+                    return
+                } else {
                     countDetectSmudge = 0
                 }
-                return
-            } else {
-                countDetectSmudge = 0
             }
-            
             let textRects = try await visionService.performTextRecognition(image: buffer)
             self.recognizedTextObservations = textRects
         } catch {
@@ -59,7 +60,11 @@ extension VisionModel {
 
     func filterMatchedObservations() -> [RecognizedTextObservation] {
         recognizedTextObservations.filter {
-            $0.transcript.localizedCaseInsensitiveContains(searchKeyword)
+            if #available(iOS 26.0, *) {
+                $0.transcript.localizedCaseInsensitiveContains(searchKeyword)
+            } else {
+                $0.topCandidates(1).first?.string.localizedCaseInsensitiveContains(searchKeyword) ?? false
+            }
         }
     }
 }

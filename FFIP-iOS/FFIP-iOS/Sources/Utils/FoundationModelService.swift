@@ -7,6 +7,7 @@
 
 import FoundationModels
 
+@available(iOS 26.0, *)
 actor FoundationModelsService {
     private(set) var relatedKeywords: RelatedKeywords?
     // private let session: LanguageModelSession
@@ -33,6 +34,7 @@ actor FoundationModelsService {
     }
 }
 
+@available(iOS 26.0, *)
 @Generable
 struct RelatedKeywords {
     let findKeyword: String

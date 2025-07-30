@@ -8,11 +8,12 @@
 import SwiftUI
 import Speech
 
+@available(iOS 26.0, *)
 @MainActor
 @Observable
 final class VoiceSearchModel {
     private let privacyService: PrivacyService
-    private let speechService: SpeechTranscriptionService
+    private var speechTranscriptionService: SpeechTranscriptionService
 
     private(set) var dictationTranscriber: DictationTranscriber?
     private(set) var detectorStream: AsyncStream<Float>?
@@ -25,23 +26,23 @@ final class VoiceSearchModel {
         speechService: SpeechTranscriptionService
     ) {
         self.privacyService = privacyService
-        self.speechService = speechService
+        self.speechTranscriptionService = speechService
     }
 
     func start() async {
         await privacyService.fetchMicrophoneAuthorization()
 
         do {
-            try await speechService.startTranscribing()
+            try await speechTranscriptionService.startTranscribing()
         } catch {
             print("transcribe error: \(error.localizedDescription)")
         }
         
-        dictationTranscriber = await speechService.dictationTranscriber
-        detectorStream = await speechService.detectorStream
+        dictationTranscriber = await speechTranscriptionService.dictationTranscriber
+        detectorStream = await speechTranscriptionService.detectorStream
     }
 
     func stop() async {
-        await speechService.stopTranscribing()
+        await speechTranscriptionService.stopTranscribing()
     }
 }

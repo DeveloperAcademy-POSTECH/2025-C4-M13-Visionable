@@ -22,6 +22,9 @@ actor SpeechRecognitionService {
     }
     
     private var transcript: String = ""
+    private var silenceTimerTask: Task<Void, Never>?
+    var onLongSpeechPause: (@Sendable () -> Void)?
+    var onTranscriptChanged: (@Sendable (String) -> Void)?
     
     private let speechRecognizer: SFSpeechRecognizer?
     private(set) var audioEngine: AVAudioEngine?
@@ -31,25 +34,13 @@ actor SpeechRecognitionService {
     public init() {
         speechRecognizer = SFSpeechRecognizer()
         if speechRecognizer == nil {
-            Task { await self.transcribe(RecognizerError.nilRecognizer) }
+            Task { await self.transcribe(RecognizerError.nilRecognizer.message) }
         }
-    }
-    
-    func startTranscribing() async throws {
-        await transcribe()
-    }
-    
-    func stopTranscribing() async {
-        await reset()
-    }
-    
-    func getTranscript() -> String {
-        transcript
     }
     
     private func transcribe() async {
         guard let speechRecognizer, speechRecognizer.isAvailable else {
-            self.transcribe(RecognizerError.recognizerIsUnavailable)
+            self.transcribe(RecognizerError.recognizerIsUnavailable.message)
             return
         }
         
@@ -63,7 +54,7 @@ actor SpeechRecognitionService {
             })
         } catch {
             await self.reset()
-            self.transcribe(error)
+            self.transcribe(error.localizedDescription)
         }
     }
     
@@ -111,27 +102,61 @@ actor SpeechRecognitionService {
 
         if let result {
             let message = result.bestTranscription.formattedString
+
             Task {
                 await self.transcribe(message)
+                await onTranscriptChanged?(message)
+                await self.restartSilenceTimer()
             }
         } else if let error {
             Task {
-                await self.transcribe(error)
+                await self.transcribe((error as NSError).localizedDescription)
+            }
+        }
+    }
+}
+
+extension SpeechRecognitionService {
+    func startTranscribing() async throws {
+        await transcribe()
+    }
+    
+    func stopTranscribing() async {
+        await reset()
+    }
+    
+    func getTranscript() -> String {
+        transcript
+    }
+    
+    func setOnLongSpeechPause(_ handler: @escaping @Sendable () -> Void) {
+        self.onLongSpeechPause = handler
+    }
+    
+    func setOnTranscriptChanged(_ handler: @escaping @Sendable (String) -> Void) {
+        self.onTranscriptChanged = handler
+    }
+}
+
+private extension SpeechRecognitionService {
+    func transcribe(_ message: String) {
+        self.transcript = message
+    }
+    
+    func restartSilenceTimer() {
+        cancelSilenceTimer()
+        let handler = self.onLongSpeechPause
+        
+        silenceTimerTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            await MainActor.run { @MainActor in
+                handler?()
             }
         }
     }
 
-    private func transcribe(_ message: String) {
-        self.transcript = message
-    }
-    
-    private func transcribe(_ error: Error) {
-        var errorMessage = ""
-        if let error = error as? RecognizerError {
-            errorMessage += error.message
-        } else {
-            errorMessage += error.localizedDescription
-        }
-        self.transcript = "<< \(errorMessage) >>"
+    func cancelSilenceTimer() {
+        silenceTimerTask?.cancel()
+        silenceTimerTask = nil
     }
 }
