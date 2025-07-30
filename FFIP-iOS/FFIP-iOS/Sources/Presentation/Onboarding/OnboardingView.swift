@@ -64,6 +64,7 @@ struct OnboardingUpperContentView: View {
     @State private var onboardingText = ""
     @State private var isImageTimerRunning = false
     @State private var onChangeTask: Task<Void, Never>?
+    @State private var typingTask: Task<Void, Never>?
     
     let type: FfipOnboardingType
     let typingText: String?
@@ -114,32 +115,35 @@ struct OnboardingUpperContentView: View {
     }
     
     private func startTypingAnimation() {
-        isTextFiledVisible = true
+        typingTask?.cancel()
         onboardingText = ""
+        isTextFiledVisible = true
         guard let typingText else { return }
-
-        Task {
+        
+        typingTask = Task {
             for char in typingText {
                 onboardingText.append(char)
                 try? await Task.sleep(for: typingSpeed)
+                guard !Task.isCancelled else { break }
             }
         }
     }
     
     private func handleOnboardingAnimation() {
         onChangeTask?.cancel()
+        typingTask?.cancel()
         currentImageResourceIndex = 0
         isTextFiledVisible = false
         onChangeTask = Task {
             try? await Task.sleep(for: .seconds(imageInterval))
             guard !Task.isCancelled else { return }
             withAnimation(.easeInOut(duration: 0.5)) {
-                currentImageResourceIndex += 1
-                if type != .first {
-                    startTypingAnimation()
-                } else {
-                    triggerHapticFeedback()
-                }
+                currentImageResourceIndex += 1                
+            }
+            if type != .first {
+                startTypingAnimation()
+            } else {
+                triggerHapticFeedback()
             }
         }
     }
