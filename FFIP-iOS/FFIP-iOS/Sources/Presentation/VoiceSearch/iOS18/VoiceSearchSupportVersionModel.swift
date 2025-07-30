@@ -14,8 +14,8 @@ final class VoiceSearchSupportVersionModel {
     private let privacyService: PrivacyService
     private var speechRecognitionService: SpeechRecognitionService
 
-    private var listenTranscriptTask: Task<Void, Never>?
-    private var listenSpeechDetectedTask: Task<Void, Never>?
+    private(set) var transcript: String = ""
+    private(set) var willCameraPush: Bool = false
 
     init(
         privacyService: PrivacyService,
@@ -30,6 +30,17 @@ final class VoiceSearchSupportVersionModel {
 
         do {
             try await speechRecognitionService.startTranscribing()
+            await speechRecognitionService.setOnTranscriptChanged { [weak self] text in
+                Task { @MainActor in
+                    self?.transcript = text
+                }
+            }
+            await speechRecognitionService.setOnLongSpeechPause { [weak self] in
+                Task { @MainActor in
+                    try await Task.sleep(for: .seconds(1))
+                    self?.willCameraPush = true
+                }
+            }
         } catch {
             print("transcribe error: \(error.localizedDescription)")
         }
