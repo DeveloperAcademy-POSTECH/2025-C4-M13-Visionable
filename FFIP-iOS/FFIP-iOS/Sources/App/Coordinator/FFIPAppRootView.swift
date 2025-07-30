@@ -50,7 +50,6 @@ struct FFIPAppRootView: View {
         let isFirstLaunch = !UserDefaults.standard.bool(forKey: UserDefaultsKey.hasSeenOnboarding)
         if isFirstLaunch {
             coordinator.push(.onboarding)
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.hasSeenOnboarding)
         }
     }
 }
