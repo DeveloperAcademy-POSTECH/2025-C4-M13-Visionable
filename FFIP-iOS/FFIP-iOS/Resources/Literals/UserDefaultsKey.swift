@@ -7,4 +7,5 @@
 
 enum UserDefaultsKey {
     static let recentSearch = "recentSearchKeywords"
+    static let hasSeenOnboarding = "hasSeenOnboarding"
 }
