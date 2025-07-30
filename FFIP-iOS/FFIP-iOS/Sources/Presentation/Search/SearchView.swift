@@ -100,7 +100,11 @@ struct SearchView: View {
                         isFocused: searchFocusState.isEditing,
                         placeholder: String(localized: searchType.placeholder),
                         onVoiceSearch: {
-                            coordinator.push(.voiceSearch)
+                            if #available(iOS 26.0, *) {
+                                coordinator.push(.voiceSearch)
+                            } else {
+                                coordinator.push(.voiceSearchSupportVersion)
+                            }
                         },
                         onSubmit: {
                             if searchType == .exact {
