@@ -73,7 +73,7 @@ struct FfipCameraPopupTipCardView: View {
                                 .foregroundStyle(.ffipGrayscale4)
                             
                             Spacer()
-                            // TODO: - 로티 화면 넣을 자리
+                            
                             ZStack {
                                 LottieView(animation: .named(content.lottieName))
                                     .looping()
@@ -150,6 +150,6 @@ struct FfipCameraPopupTipModel: Identifiable {
     let lottieName: String
 }
 
-#Preview {
-    FfipCameraPopupTipOverlay(showPopupTip: .constant(true), type: .semantic)
-}
+// #Preview {
+//    FfipCameraPopupTipOverlay(showPopupTip: .constant(true), type: .semantic)
+// }
