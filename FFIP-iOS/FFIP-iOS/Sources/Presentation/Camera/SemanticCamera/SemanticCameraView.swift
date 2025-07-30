@@ -236,7 +236,7 @@ private extension SemanticCameraView {
             guard let targetImage = capturedImages.first(where: { $0.id == id }) else { return }
             
             let filteredRecognizedTexts = result.recognizedTexts.filter { observation in
-                observation.transcript == result.keyword && result.similarity >= 0.7
+                observation.transcript.contains(result.keyword ?? "") && result.similarity >= 0.7
             }
             targetImage.similarKeyword = result.keyword
             targetImage.similarity = result.similarity
