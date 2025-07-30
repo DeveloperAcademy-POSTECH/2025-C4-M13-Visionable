@@ -42,6 +42,7 @@ struct FFIPAppRootView: View {
                         if #available(iOS 26.0, *) {
                             moduleFactory.makeVoiceSearchView(searchType: $searchType)
                         }
+                    case .voiceSearchSupportVersion: moduleFactory.makeVoiceSearchSupportVersionVoew(searchType: $searchType)
                     case .photoDetail: moduleFactory.makePhotoDetailView()
                     case .onboarding: moduleFactory.makeOnboardingView()
                     }

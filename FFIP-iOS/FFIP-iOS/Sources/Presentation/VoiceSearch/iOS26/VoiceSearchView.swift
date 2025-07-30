@@ -13,12 +13,12 @@ struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
     @Binding var searchType: SearchType
-
+    
     @State private var transcript: String = ""
     @State private var willCameraPush: Bool = false
     @State private var isUserSpeaking = false
     @State private var showMicButton = false
-
+    
     var body: some View {
         ZStack {
             VStack {
@@ -39,19 +39,19 @@ struct VoiceSearchView: View {
                 HStack {
                     Text(
                         transcript == ""
-                            ? String(localized: .searchPlaceholder)
-                            : "\"\(transcript)\""
+                        ? String(localized: .searchPlaceholder)
+                        : "\"\(transcript)\""
                     )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
                     .accessibilityLabel(.VoiceOverLocalizable.sayKeyword)
                     .accessibilityHint(.VoiceOverLocalizable.voiceInput)
                     .accessibilitySortPriority(1)
-
+                    
                     Spacer()
                 }
                 .padding(.leading, 30)
-
+                
                 HStack {
                     Text(.willCameraPushInstruction)
                         .font(.titleBold24)
@@ -60,17 +60,17 @@ struct VoiceSearchView: View {
                     Spacer()
                 }
                 .padding(.leading, 30)
-
+                
                 Spacer()
             }
             VStack {
                 Spacer()
-
+                
                 VoiceListenerView(
                     isUserSpeaking: $isUserSpeaking,
                     showMicButton: $showMicButton
                 )
-
+                
                 Spacer()
             }
         }
@@ -78,47 +78,42 @@ struct VoiceSearchView: View {
         .background(.ffipBackground1Main)
         .task {
             transcript = ""
-
-            if #available(iOS 26.0, *) {
-                await voiceSearchModel.start()
-                
-                guard let dictationTranscriber = voiceSearchModel.dictationTranscriber else { return }
-                guard let detectorStream = voiceSearchModel.detectorStream else { return }
-
-                Task {
-                    try await handleDictationResults(dictationTranscriber: dictationTranscriber)
-                }
-
-                Task {
-                    await handleDetectorStream(detectorStream: detectorStream)
-                }
-            } else {
-                await voiceSearchModel.start()
+            
+            await voiceSearchModel.start()
+            
+            guard let dictationTranscriber = voiceSearchModel.dictationTranscriber else { return }
+            guard let detectorStream = voiceSearchModel.detectorStream else { return }
+            
+            Task {
+                try await handleDictationResults(dictationTranscriber: dictationTranscriber)
+            }
+            
+            Task {
+                await handleDetectorStream(detectorStream: detectorStream)
             }
         }
     }
-
+    
     private func handleBackAction() async {
         await voiceSearchModel.stop()
         coordinator.pop()
     }
-
-    @available(iOS 26.0, *)
+    
     private func handleDictationResults(dictationTranscriber: DictationTranscriber) async throws {
         for try await case let result in dictationTranscriber.results {
             if showMicButton { return }
-
+            
             let text = String(result.text.characters)
             transcript = text
-
+            
             await voiceSearchModel.stop()
-
+            
             try await Task.sleep(for: .seconds(1))
-
+            
             willCameraPush = true
-
+            
             try await Task.sleep(for: .seconds(1))
-
+            
             switch searchType {
             case .exact:
                 coordinator.push(.exactCamera(searchKeyword: transcript))
@@ -128,7 +123,7 @@ struct VoiceSearchView: View {
             break
         }
     }
-
+    
     private func handleDetectorStream(detectorStream: AsyncStream<Float>) async {
         for await db in detectorStream {
             if db > -50 {

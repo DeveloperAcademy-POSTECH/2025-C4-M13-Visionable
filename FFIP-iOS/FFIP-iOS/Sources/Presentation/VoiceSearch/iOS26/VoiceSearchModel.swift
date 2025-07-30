@@ -8,15 +8,10 @@
 import SwiftUI
 import Speech
 
-protocol VoiceSearchModelProtocol {
-    func start() async
-    func stop() async
-}
-
 @available(iOS 26.0, *)
 @MainActor
 @Observable
-final class VoiceSearchModel: VoiceSearchModelProtocol {
+final class VoiceSearchModel {
     private let privacyService: PrivacyService
     private var speechTranscriptionService: SpeechTranscriptionService
 
@@ -49,37 +44,5 @@ final class VoiceSearchModel: VoiceSearchModelProtocol {
 
     func stop() async {
         await speechTranscriptionService.stopTranscribing()
-    }
-}
-
-@MainActor
-@Observable
-final class VoiceSearchModelSupportVersion: VoiceSearchModelProtocol {
-    private let privacyService: PrivacyService
-    private var speechRecognitionService: SpeechRecognitionService
-
-    private var listenTranscriptTask: Task<Void, Never>?
-    private var listenSpeechDetectedTask: Task<Void, Never>?
-
-    init(
-        privacyService: PrivacyService,
-        speechService: SpeechRecognitionService
-    ) {
-        self.privacyService = privacyService
-        self.speechRecognitionService = speechService
-    }
-
-    func start() async {
-        await privacyService.fetchMicrophoneAuthorization()
-
-        do {
-            try await speechRecognitionService.startTranscribing()
-        } catch {
-            print("transcribe error: \(error.localizedDescription)")
-        }
-    }
-    
-    func stop() async {
-        await speechRecognitionService.stopTranscribing()
     }
 }

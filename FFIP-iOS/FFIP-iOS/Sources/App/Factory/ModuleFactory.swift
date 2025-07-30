@@ -14,6 +14,7 @@ protocol ModuleFactoryProtocol {
     func makeSearchView(searchType: Binding<SearchType>) -> SearchView
     @available(iOS 26.0, *)
     func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView
+    func makeVoiceSearchSupportVersionVoew(searchType: Binding<SearchType>) -> VoiceSearchSupportVersionView
     func makePhotoDetailView() -> PhotoDetailView
     func makeOnboardingView() -> OnboardingView
 }
@@ -88,13 +89,27 @@ final class ModuleFactory: ModuleFactoryProtocol {
     @available(iOS 26.0, *)
     func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView {
         let privacyService = PrivacyService()
-        let speechService = SpeechTranscriptionService()
+        let speechTranscriptionService = SpeechTranscriptionService()
         let model = VoiceSearchModel(
             privacyService: privacyService,
-            speechService: speechService
+            speechService: speechTranscriptionService
         )
         let view = VoiceSearchView(
             voiceSearchModel: model,
+            searchType: searchType
+        )
+        return view
+    }
+    
+    func makeVoiceSearchSupportVersionVoew(searchType: Binding<SearchType>) -> VoiceSearchSupportVersionView {
+        let privacyService = PrivacyService()
+        let speechRecognitionService = SpeechRecognitionService()
+        let model = VoiceSearchSupportVersionModel(
+            privacyService: privacyService,
+            speechService: speechRecognitionService
+        )
+        let view = VoiceSearchSupportVersionView(
+            voiceSearchSupportVersionModel: model,
             searchType: searchType
         )
         return view
