@@ -169,9 +169,15 @@ struct ExactCameraView: View {
     }
 
     private func handleZoomButtonTapped() async {
-        if mediator.zoomFactor >= 4.0 {
+        if mediator.zoomFactor > 4.0 {
             await mediator.zoom(to: 4.0)
-        } else if mediator.zoomFactor >= 2.0 {
+        } else if mediator.zoomFactor == 4.0 {
+            await mediator.zoom(to: 1.0)
+        } else if mediator.zoomFactor > 2.0 {
+            await mediator.zoom(to: 2.0)
+        } else if mediator.zoomFactor == 2.0 {
+            await mediator.zoom(to: 4.0)
+        } else if mediator.zoomFactor == 1.0 {
             await mediator.zoom(to: 2.0)
         } else {
             await mediator.zoom(to: 1.0)
