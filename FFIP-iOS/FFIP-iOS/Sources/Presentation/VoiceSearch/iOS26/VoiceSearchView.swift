@@ -11,6 +11,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
+    @Bindable var searchModel: SearchModel
     @Bindable var voiceSearchModel: VoiceSearchModel
     @Binding var searchType: SearchType
     
@@ -116,6 +117,7 @@ struct VoiceSearchView: View {
             
             switch searchType {
             case .exact:
+                searchModel.addRecentSearchKeyword(transcript)
                 coordinator.push(.exactCamera(searchKeyword: transcript))
             case .semantic:
                 coordinator.push(.semanticCamera(searchKeyword: transcript))
