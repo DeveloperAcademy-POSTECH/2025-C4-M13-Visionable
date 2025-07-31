@@ -43,6 +43,7 @@ final class CameraModel: NSObject {
             device: videoDevice,
             delegate: self
         )
+        await deviceService.setAutoFocusMode()
         await setDefaultZoom()
     }
 
