@@ -49,7 +49,9 @@ struct FfipCameraHeaderBar: View {
         let action: () -> Void
 
         var body: some View {
-            let zoomFactor = zoomFactor / 2
+            var zoomFactor = zoomFactor / 2
+            zoomFactor = CGFloat(Int(zoomFactor * 10))
+            zoomFactor /= 10
             let zoomText: String
             if zoomFactor.truncatingRemainder(dividingBy: 1) < 0.1 {
                 zoomText = String(format: "%.0fx", zoomFactor)
@@ -79,3 +81,4 @@ struct FfipCameraHeaderBar: View {
         }
     }
 }
+

@@ -57,7 +57,13 @@ actor SpeechTranscriptionService {
     }
 
     private func prepareSpeechModules() async throws {
-        let selectedLocale = Locale.current
+        let preferredLanguage = Locale.preferredLanguages.first ?? "ko-KR"
+        let selectedLocale: Locale
+        if preferredLanguage.hasPrefix("en") {
+            selectedLocale = Locale(identifier: "en_US")
+        } else {
+            selectedLocale = Locale(identifier: "ko_KR")
+        }
 
         let dictationTranscriber = DictationTranscriber(
             locale: selectedLocale,

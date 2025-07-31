@@ -40,7 +40,7 @@ extension VisionModel {
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
             if #available(iOS 26.0, *) {
-                let isSmudge = try await visionService.performDetectSmudge(in: buffer, threshold: 0.9)
+                let isSmudge = try await visionService.performDetectSmudge(in: buffer, threshold: 0.95)
                 if isSmudge {
                     countDetectSmudge += 1
                     if countDetectSmudge > 5 {

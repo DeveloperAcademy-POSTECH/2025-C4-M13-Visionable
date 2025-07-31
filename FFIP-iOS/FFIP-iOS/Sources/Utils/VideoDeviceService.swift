@@ -64,4 +64,13 @@ actor VideoDeviceService {
         }
         return true
     }
+    
+    func setAutoFocusMode() {
+        guard let videoDevice else { return }
+        try? videoDevice.lockForConfiguration()
+        if videoDevice.isFocusModeSupported(.continuousAutoFocus) {
+            videoDevice.focusMode = .continuousAutoFocus
+        }
+        videoDevice.unlockForConfiguration()
+    }
 }

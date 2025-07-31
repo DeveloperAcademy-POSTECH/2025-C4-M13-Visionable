@@ -88,14 +88,19 @@ final class ModuleFactory: ModuleFactoryProtocol {
     
     @available(iOS 26.0, *)
     func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView {
+        let keywords = UserDefaults.standard.stringArray(forKey: UserDefaultsKey.recentSearch) ?? []
+        let searchModel = SearchModel(recentSearchKeywords: keywords)
+        
         let privacyService = PrivacyService()
         let speechTranscriptionService = SpeechTranscriptionService()
-        let model = VoiceSearchModel(
+        let voiceSearchModel = VoiceSearchModel(
             privacyService: privacyService,
             speechService: speechTranscriptionService
         )
+        
         let view = VoiceSearchView(
-            voiceSearchModel: model,
+            searchModel: searchModel,
+            voiceSearchModel: voiceSearchModel,
             searchType: searchType
         )
         return view

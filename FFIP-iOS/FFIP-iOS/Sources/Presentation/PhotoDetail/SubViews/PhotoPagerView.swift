@@ -26,14 +26,20 @@ struct PhotoPagerView: View {
                                     ForEach(recognizedTexts, id: \.self) { text in
                                         FfipBoundingBox(observation: text)
                                             .frame(width: geo.size.width, height: geo.size.height)
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 4)
+                                                    .stroke(
+                                                        images[index].recognizedTexts == nil || !images[index].isAnalyzed
+                                                        ? .clear
+                                                        : .ffipPointGreen1,
+                                                        lineWidth: 1
+                                                    )
+                                            }
                                     }
                                 }
                             }
                         }
                         .tag(index)
-                        .onTapGesture {
-                            // TODO: - 멈춰
-                        }
                     }
                 }
             }
