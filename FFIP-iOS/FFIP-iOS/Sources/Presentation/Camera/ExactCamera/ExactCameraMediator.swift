@@ -60,6 +60,7 @@ final class ExactCameraMediator: NSObject {
     }
 
     func zoom(to factor: CGFloat) async {
+        guard !isCameraPaused else { return }
         zoomFactor = await cameraModel.zoom(to: factor)
     }
 
