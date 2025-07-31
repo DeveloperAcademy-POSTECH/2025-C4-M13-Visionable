@@ -29,11 +29,10 @@ struct FfipToastMessageModifier: ViewModifier {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
                 .padding(.bottom, bottomPadding)
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                        withAnimation {
-                            isToastVisible = false
-                        }
+                .task {
+                    try? await Task.sleep(for: .seconds(duration))
+                    withAnimation {
+                        isToastVisible = false
                     }
                 }
             }
