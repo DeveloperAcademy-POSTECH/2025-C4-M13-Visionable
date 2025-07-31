@@ -37,6 +37,7 @@ final class ExactCameraMediator: NSObject {
         await visionModel.prepare()
 
         guard let framesStream = cameraModel.framesStream else { return }
+        guard let analysisFramesStream = cameraModel.analysisFramesStream else { return }
         Task {
             for await imageBuffer in framesStream {
                 frame = imageBuffer
@@ -44,7 +45,7 @@ final class ExactCameraMediator: NSObject {
         }
 
         Task {
-            for await imageBuffer in framesStream {
+            for await imageBuffer in analysisFramesStream {
                 await visionModel.processFrame(imageBuffer)
                 if visionModel.countDetectSmudge == 5 {
                     showSmudgeToast = true
@@ -59,6 +60,7 @@ final class ExactCameraMediator: NSObject {
     }
 
     func zoom(to factor: CGFloat) async {
+        guard !isCameraPaused else { return }
         zoomFactor = await cameraModel.zoom(to: factor)
     }
 
