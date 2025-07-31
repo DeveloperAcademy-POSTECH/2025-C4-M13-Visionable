@@ -12,7 +12,10 @@ import Vision
 
 final class CameraModel: NSObject {
     private(set) var framesStream: AsyncStream<CVImageBuffer>?
+    private(set) var analysisFramesStream: AsyncStream<CVImageBuffer>?
     private var framesStreamContinuation:
+        AsyncStream<CVImageBuffer>.Continuation?
+    private var analysisFramesStreamContinuation:
         AsyncStream<CVImageBuffer>.Continuation?
 
     private let privacyService: PrivacyService
@@ -47,6 +50,7 @@ final class CameraModel: NSObject {
         await captureService.stopSession()
         //        frame = nil
         framesStreamContinuation?.finish()
+        analysisFramesStreamContinuation?.finish()
     }
 }
 
@@ -55,6 +59,9 @@ extension CameraModel {
     func setupStream() {
         framesStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
             self.framesStreamContinuation = continuation
+        }
+        analysisFramesStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
+            self.analysisFramesStreamContinuation = continuation
         }
     }
 
@@ -95,6 +102,7 @@ extension CameraModel: AVCaptureVideoDataOutputSampleBufferDelegate {
         Task { @MainActor in
             guard !isCameraPaused else { return }
             framesStreamContinuation?.yield(imageBuffer)
+            analysisFramesStreamContinuation?.yield(imageBuffer)
         }
     }
 }
