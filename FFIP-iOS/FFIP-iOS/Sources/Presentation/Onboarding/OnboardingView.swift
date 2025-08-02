@@ -45,6 +45,7 @@ struct OnboardingView: View {
                 
                 FfipButton(title: steps[currentStepIndex].buttonTitle) {
                     if currentStepIndex == 1 {
+                        UserDefaults.standard.set(true, forKey: UserDefaultsKey.hasSeenOnboarding)
                         coordinator.popToRoot()
                     } else {
                         currentStepIndex += 1
