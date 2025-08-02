@@ -1,5 +1,5 @@
 {
-  "sourceLanguage" : "en",
+  "sourceLanguage" : "ko",
   "strings" : {
     "NSCameraUsageDescription" : {
       "comment" : "카메라 접근 권한",

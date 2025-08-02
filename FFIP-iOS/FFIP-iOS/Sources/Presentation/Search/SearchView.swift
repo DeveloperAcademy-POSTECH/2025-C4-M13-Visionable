@@ -18,7 +18,6 @@ public enum SearchFocusState {
 struct SearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
-    @Binding var searchType: SearchType
     
     @FocusState private var isFocused: Bool
     @State private var searchFocusState: SearchFocusState = .home
@@ -38,7 +37,7 @@ struct SearchView: View {
                         trailingType: .none
                     )
 
-                    Text(searchType.title)
+                    Text("지정 탐색")
                         .font(.titleBold24)
                         .tint(.ffipGrayscale1)
                         .padding(.top, 75)
@@ -60,12 +59,10 @@ struct SearchView: View {
                     FfipSearchTextField(
                         text: $searchText,
                         isFocused: searchFocusState.isEditing,
-                        placeholder: "searchType.placeholder",
+                        placeholder: "탐색어를 입력해주세요.",
                         onVoiceSearch: { coordinator.push(.voiceSearch) },
                         onSubmit: {
-                            if searchType == .exact {
-                                searchModel.addRecentSearchKeyword(searchText)
-                            }
+                            searchModel.addRecentSearchKeyword(searchText)
                             coordinator.push(.exactCamera(searchKeyword: searchText))
                             
                             searchFocusState = .home
@@ -77,10 +74,10 @@ struct SearchView: View {
                 .padding(.top, 16)
                 
                 // 지정탐색 일 때만 하단에 뜨는 최근 탐색어 (by 검색모드)
-                if searchFocusState.isHome && searchType == .exact {
+                if searchFocusState.isHome {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text(".recentSearchTitle")
+                            Text("최근 탐색어")
                                 .font(.labelMedium12)
                                 .foregroundStyle(.ffipGrayscale2)
                                 .padding(.top, 32)
@@ -101,11 +98,11 @@ struct SearchView: View {
                 }
                 
                 // 지정탐색일 때만 하단에 뜨는 최근 탐색어 (by 편집모드)
-                if searchFocusState.isEditing && searchType == .exact {
+                if searchFocusState.isEditing {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .trailing, spacing: 12) {
                             VStack(alignment: .leading, spacing: 20) {
-                                Text(".recentSearchTitle")
+                                Text("최근 탐색어")
                                     .font(.labelMedium14)
                                     .foregroundStyle(.ffipGrayscale3)
                                 
@@ -124,7 +121,7 @@ struct SearchView: View {
                                     }
                                 )
                             }
-                            Text(".recentSearchesCleared")
+                            Text("전체 삭제")
                                 .font(.labelMedium14)
                                 .foregroundStyle(.ffipGrayscale2)
                                 .onTapGesture {
@@ -142,7 +139,7 @@ struct SearchView: View {
                         VStack {
                             Spacer()
                                 .frame(height: 147)
-                            Text(".noRecentSearchesMessage")
+                            Text("최근 탐색어가 없습니다.")
                                 .font(.bodyMedium16)
                                 .foregroundStyle(.ffipGrayscale3)
                                 .accessibilityLabel(".VoiceOverLocalizable.noRecentKeyword")

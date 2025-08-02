@@ -18,7 +18,7 @@ final class VisionModel: NSObject {
 
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
 //    private(set) var matchedObservations = [RecognizedTextObservation]()
-    private(set) var countDetectSmudge: Int = 0
+
     init(
         searchKeyword: String,
         visionService: VisionService

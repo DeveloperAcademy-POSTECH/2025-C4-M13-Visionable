@@ -11,7 +11,6 @@ import SwiftUI
 struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchModel: VoiceSearchModel
-    @Binding var searchType: SearchType
 
     @State private var willCameraPush: Bool = false
     @State private var isUserSpeaking = true
@@ -37,7 +36,7 @@ struct VoiceSearchView: View {
                 HStack {
                     Text(
                         voiceSearchModel.transcript.isEmpty
-                            ? ".searchPlaceholder"
+                            ? "탐색할 내용을 입력해주세요."
                             : "\"\(voiceSearchModel.transcript)\""
                     )
                     .font(.titleBold24)
@@ -51,7 +50,7 @@ struct VoiceSearchView: View {
                 .padding(.leading, 30)
 
                 HStack {
-                    Text(".willCameraPushInstruction")
+                    Text("탐색을 시작합니다.")
                         .font(.titleBold24)
                         .foregroundStyle(.ffipGrayscale1)
                         .opacity(willCameraPush ? 1 : 0)

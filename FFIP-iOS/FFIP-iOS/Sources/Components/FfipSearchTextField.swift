@@ -11,7 +11,7 @@ struct FfipSearchTextField: View {
     @Binding var text: String
 
     private let isFocused: Bool
-    private let placeholder: String
+    private let placeholder: LocalizedStringResource
     private let onVoiceSearch: (() -> Void)?
     private let onSubmit: (() -> Void)?
     private let withVoiceSearch: Bool
@@ -19,7 +19,7 @@ struct FfipSearchTextField: View {
     public init(
         text: Binding<String>,
         isFocused: Bool = false,
-        placeholder: String,
+        placeholder: LocalizedStringResource,
         onVoiceSearch: (() -> Void)? = nil,
         onSubmit: (() -> Void)? = nil,
         withVoiceSearch: Bool = true
@@ -41,7 +41,7 @@ struct FfipSearchTextField: View {
             ZStack(alignment: .trailing) {
                 FfipUIKitTextField(
                     text: $text,
-                    placeholder: placeholder,
+                    placeholder: String(localized: placeholder),
                     isFirstResponder: isFocused,
                     onSubmit: onSubmit
                 )

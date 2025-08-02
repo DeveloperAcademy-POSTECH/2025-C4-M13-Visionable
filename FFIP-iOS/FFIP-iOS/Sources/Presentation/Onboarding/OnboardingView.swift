@@ -21,7 +21,7 @@ struct OnboardingView: View {
             VStack(spacing: 0) {
                 OnboardingUpperContentView(
                     type: steps[currentStepIndex],
-                    typingText: steps[currentStepIndex].textFieldFilledKeyword
+                    typingText: String(localized: steps[currentStepIndex].textFieldFilledKeyword ?? "")
                 )
                 
                 TabView(selection: $currentStepIndex) {
@@ -44,7 +44,7 @@ struct OnboardingView: View {
                 .padding(.bottom, 8)
                 
                 FfipButton(title: steps[currentStepIndex].buttonTitle) {
-                    if currentStepIndex == 2 {
+                    if currentStepIndex == 1 {
                         coordinator.popToRoot()
                     } else {
                         currentStepIndex += 1
@@ -155,23 +155,13 @@ struct OnboardingBottomContentView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if let badge = type.badgeText {
-                Text(badge)
-                    .font(.onboardingSemiBold12)
-                    .foregroundColor(.ffipBackground1Main)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 4)
-                    .background(.ffipPointGreen1)
-                    .cornerRadius(4)
-            }
-            
             Text(type.title)
                 .font(.onboardingBold24)
                 .multilineTextAlignment(.leading)
                 .lineSpacing(8)
                 .foregroundStyle(.ffipGrayscale1)
                 .padding(.bottom, 10)
-                .padding(.top, type == .third ? 16 : 0)
+                .padding(.top, 0)
             
             Text(type.description)
                 .font(.bodyMedium16)
@@ -183,7 +173,7 @@ struct OnboardingBottomContentView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 20)
-        .padding(.top, type == .third ? 19 : 39)
+        .padding(.top, 39)
     }
 }
 

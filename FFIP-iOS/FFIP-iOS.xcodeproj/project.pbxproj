@@ -214,7 +214,7 @@
 				};
 			};
 			buildConfigurationList = 3DA2F81D2E1CC6F5003884E3 /* Build configuration list for PBXProject "FFIP-iOS" */;
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,

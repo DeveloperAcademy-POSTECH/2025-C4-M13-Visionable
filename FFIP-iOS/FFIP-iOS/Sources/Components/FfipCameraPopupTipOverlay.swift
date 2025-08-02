@@ -104,42 +104,25 @@ struct FfipCameraPopupTipCardView: View {
 }
 
 enum FfipCameraPopupTipType {
-    case exact, semantic
+    case exact
     
     var contents: [FfipCameraPopupTipModel] {
         switch self {
         case .exact: [
             FfipCameraPopupTipModel(
-                title: "exactCameraPopupTip1Title",
-                description: "exactCameraPopupTip1Description",
+                title: String(localized:  "일정한 속도를 유지하세요"),
+                description: String(localized: "더 정확한 탐색 결과를 얻을 수 있어요."),
                 lottieName: LottieLiterals.Onboarding.scan
             ),
             FfipCameraPopupTipModel(
-                title: "exactCameraPopupTip2Title",
-                description: "exactCameraPopupTip2Description",
+                title: String(localized: "줌 기능을 활용해보세요"),
+                description: String(localized: "탐색 영역을 자유롭게 조정할 수 있어요."),
                 lottieName: LottieLiterals.Onboarding.zoom
             ),
             FfipCameraPopupTipModel(
-                title: "exactCameraPopupTip3Title",
-                description: "exactCameraPopupTip3Description",
+                title: String(localized: "화면을 멈추고 확인하세요"),
+                description: String(localized: "두 번 연속 탭하면 진동과 FF!p 박스도 멈춰요."),
                 lottieName: LottieLiterals.Onboarding.green
-            )]
-            
-        case .semantic: [
-            FfipCameraPopupTipModel(
-                title: "semanticCameraPopupTip1Title",
-                description: "semanticCameraPopupTip1Description",
-                lottieName: LottieLiterals.Onboarding.tap
-            ),
-            FfipCameraPopupTipModel(
-                title: "semanticCameraPopupTip2Title",
-                description: "semanticCameraPopupTip2Description",
-                lottieName: LottieLiterals.Onboarding.grid
-            ),
-            FfipCameraPopupTipModel(
-                title: "semanticCameraPopupTip3Title",
-                description: "semanticCameraPopupTip3Description",
-                lottieName: LottieLiterals.Onboarding.grid2
             )]
         }
     }
