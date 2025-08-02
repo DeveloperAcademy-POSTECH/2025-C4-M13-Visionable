@@ -34,24 +34,10 @@ struct SimpleEntry: TimelineEntry {
     let date: Date
 }
 
-enum FfipWidgetType: String {
-    case exactSearch = "지정탐색"
-    case semanticSearch = "연관탐색"
-}
-
 struct FFIPWidgetEntryView: View {
-    let widgetType: FfipWidgetType
-
     var body: some View {
         VStack(spacing: 13) {
-            Link(
-                destination: URL(
-                    string:
-                        widgetType == .exactSearch
-                        ? URLLiterals.DeepLink.searchExact
-                        : URLLiterals.DeepLink.searchSemantic
-                )!
-            ) {
+            Link(destination: URL(string: URLLiterals.DeepLink.searchExact)!) {
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 100)
                         .fill(.ffipGrayscale5)
@@ -64,39 +50,17 @@ struct FFIPWidgetEntryView: View {
 
             HStack(spacing: 14) {
                 VStack(alignment: .leading) {
-                    HStack(spacing: 4) {
-                        Text(.appName)
-                        Image(.icnAImark)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 12)
-                            .opacity(widgetType == .semanticSearch ? 1 : 0)
-                    }
-                    Text(widgetType.rawValue)
+                    Text("FF!p")
+                    Text("지정탐색")
                 }
                 .font(.widgetSemiBold16)
                 .foregroundStyle(.ffipGrayscale2)
 
-                if #available(iOS 26.0, *) {
-                    Link(
-                        destination: URL(
-                            string: widgetType == .exactSearch
-                                ? URLLiterals.DeepLink.voiceSearchExact
-                                : URLLiterals.DeepLink.voiceSearchSemantic
-                        )!
-                    ) {
-                        Image(.icnSettingsVoice)
-                            .tint(.ffipGrayscale1)
-                            .frame(width: 55, height: 55)
-                            .background(Circle().fill(.ffipGrayscale5))
-                    }
-                } else {
-                    Link(destination: URL(string: URLLiterals.DeepLink.voiceSearchSupportVersion)!) {
-                        Image(.icnSettingsVoice)
-                            .tint(.ffipGrayscale1)
-                            .frame(width: 55, height: 55)
-                            .background(Circle().fill(.ffipGrayscale5))
-                    }
+                Link(destination: URL(string: URLLiterals.DeepLink.voiceSearchExact)!) {
+                    Image(.icnSettingsVoice)
+                        .tint(.ffipGrayscale1)
+                        .frame(width: 55, height: 55)
+                        .background(Circle().fill(.ffipGrayscale5))
                 }
             }
             .containerRelativeFrame([.horizontal])
@@ -112,27 +76,10 @@ struct FFIPExactSearchWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { _ in
-            FFIPWidgetEntryView(widgetType: .exactSearch)
+            FFIPWidgetEntryView()
         }
-        .configurationDisplayName(
-            String(localized: .designatedSearchWidgetConfigurationDisplayName)
-        )
-        .description(String(localized: .designatedSearchWidgetDescription))
-        .supportedFamilies([.systemSmall])
-    }
-}
-
-struct FFIPSemanticSearchWidget: Widget {
-    let kind: String = "FFIPRelatedSearchWidget"
-
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { _ in
-            FFIPWidgetEntryView(widgetType: .semanticSearch)
-        }
-        .configurationDisplayName(
-            String(localized: .relatedSearchWidgetConfigurationDisplayName)
-        )
-        .description(String(localized: .relatedSearchWidgetDescription))
+        .configurationDisplayName("지정탐색")
+        .description("탐색어가 주변에 있는지 빠르게 찾아보세요.")
         .supportedFamilies([.systemSmall])
     }
 }

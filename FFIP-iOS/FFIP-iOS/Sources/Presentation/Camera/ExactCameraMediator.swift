@@ -1,5 +1,5 @@
 //
-//  RelatedCameraMediator.swift
+//  ExactCameraMediator.swift
 //  FFIP-iOS
 //
 //  Created by SeanCho on 7/18/25.
@@ -9,60 +9,66 @@
 import SwiftUI
 import Vision
 
-@available(iOS 26.0, *)
 @MainActor
 @Observable
-final class SemanticCameraMediator: NSObject {
+final class ExactCameraMediator: NSObject {
     private(set) var frame: CVImageBuffer?
-    
+    private(set) var matchedObservations = [RecognizedTextObservation]()
+
     private(set) var zoomFactor: CGFloat = 2.0
     private(set) var isCameraPaused: Bool = false
     private(set) var isTorchOn: Bool = false
     
     private let cameraModel: CameraModel
-    var visionModel: VisionModel
-    private let languageModel: LanguageModel
-    
+    private let visionModel: VisionModel
+
     init(
         cameraModel: CameraModel,
-        visionModel: VisionModel,
-        languageModel: LanguageModel
+        visionModel: VisionModel
     ) {
         self.cameraModel = cameraModel
         self.visionModel = visionModel
-        self.languageModel = languageModel
     }
-    
+
     func start() async {
         await cameraModel.start()
         await visionModel.prepare()
-        
+
         guard let framesStream = cameraModel.framesStream else { return }
+        guard let analysisFramesStream = cameraModel.analysisFramesStream else { return }
         Task {
             for await imageBuffer in framesStream {
                 frame = imageBuffer
             }
         }
+
+        Task {
+            for await imageBuffer in analysisFramesStream {
+                await visionModel.processFrame(imageBuffer)
+                matchedObservations = visionModel.filterMatchedObservations()
+            }
+        }
     }
-    
+
     func stop() async {
         await cameraModel.stop()
     }
-    
+
     func zoom(to factor: CGFloat) async {
+        guard !isCameraPaused else { return }
         zoomFactor = await cameraModel.zoom(to: factor)
     }
-    
+
     func pauseCamera() {
         isCameraPaused = true
         cameraModel.pauseCamera()
     }
-    
+
     func resumeCamera() {
         isCameraPaused = false
         cameraModel.resumeCamera()
     }
-    
+
     func toggleTorch() async {
         if isTorchOn {
             isTorchOn = await cameraModel.turnOffTorch()
@@ -70,24 +76,8 @@ final class SemanticCameraMediator: NSObject {
             isTorchOn = await cameraModel.turnOnTorch()
         }
     }
-    
-    func analyzeCapturedImage(_ imageBuffer: CVImageBuffer) async -> CapturedImageAnalysisResultDTO? {
-        await visionModel.processFrame(imageBuffer)
-        let recognizedTexts = visionModel.recognizedTextObservations.map { $0.transcript }
-        print("searchKeyword:", visionModel.searchKeyword)
-        print("recognizedTexts:", recognizedTexts)
-        
-        guard let result = try? await languageModel.findMostSimilarKeywordWithScore(
-            to: visionModel.searchKeyword,
-            from: recognizedTexts
-        ) else {
-            return nil
-        }
-                
-        return CapturedImageAnalysisResultDTO(
-            keyword: result.keyword,
-            similarity: result.similarity,
-            recognizedTexts: visionModel.recognizedTextObservations
-        )
+
+    func changeSearchKeyword(keyword: String) {
+        visionModel.changeSearchKeyword(keyword: keyword)
     }
 }

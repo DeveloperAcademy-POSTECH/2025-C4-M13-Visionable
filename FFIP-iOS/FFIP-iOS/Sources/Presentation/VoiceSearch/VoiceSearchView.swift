@@ -1,5 +1,5 @@
 //
-//  VoiceSearchSupportVersionView.swift
+//  VoiceSearchView.swift
 //  FFIP-iOS
 //
 //  Created by mini on 7/30/25.
@@ -8,10 +8,9 @@
 import Speech
 import SwiftUI
 
-struct VoiceSearchSupportVersionView: View {
+struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
-    @Bindable var voiceSearchSupportVersionModel: VoiceSearchSupportVersionModel
-    @Binding var searchType: SearchType
+    @Bindable var voiceSearchModel: VoiceSearchModel
 
     @State private var willCameraPush: Bool = false
     @State private var isUserSpeaking = true
@@ -36,14 +35,14 @@ struct VoiceSearchSupportVersionView: View {
                     .frame(height: 58)
                 HStack {
                     Text(
-                        voiceSearchSupportVersionModel.transcript.isEmpty
-                            ? String(localized: .searchPlaceholder)
-                            : "\"\(voiceSearchSupportVersionModel.transcript)\""
+                        voiceSearchModel.transcript.isEmpty
+                            ? "탐색할 내용을 입력해주세요."
+                            : "\"\(voiceSearchModel.transcript)\""
                     )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
-                    .accessibilityLabel(.VoiceOverLocalizable.sayKeyword)
-                    .accessibilityHint(.VoiceOverLocalizable.voiceInput)
+                    .accessibilityLabel("탐색어를 말해주세요")
+                    .accessibilityHint("정확히 인식되면 자동으로 카메라 뷰를 켜서 탐색을 시작합니다.")
                     .accessibilitySortPriority(1)
 
                     Spacer()
@@ -51,7 +50,7 @@ struct VoiceSearchSupportVersionView: View {
                 .padding(.leading, 30)
 
                 HStack {
-                    Text(.willCameraPushInstruction)
+                    Text("탐색을 시작합니다.")
                         .font(.titleBold24)
                         .foregroundStyle(.ffipGrayscale1)
                         .opacity(willCameraPush ? 1 : 0)
@@ -75,17 +74,17 @@ struct VoiceSearchSupportVersionView: View {
         .navigationBarBackButtonHidden(true)
         .background(.ffipBackground1Main)
         .task {
-            await voiceSearchSupportVersionModel.start()
+            await voiceSearchModel.start()
         }
-        .onChange(of: voiceSearchSupportVersionModel.willCameraPush) { _, willCameraPush in
+        .onChange(of: voiceSearchModel.willCameraPush) { _, willCameraPush in
             if willCameraPush {
-                if voiceSearchSupportVersionModel.transcript.isEmpty {
+                if voiceSearchModel.transcript.isEmpty {
                     isUserSpeaking = false
                 } else {
                     Task {
-                        await voiceSearchSupportVersionModel.stop()
+                        await voiceSearchModel.stop()
                         try? await Task.sleep(for: .seconds(1))
-                        coordinator.push(.exactCamera(searchKeyword: voiceSearchSupportVersionModel.transcript))
+                        coordinator.push(.exactCamera(searchKeyword: voiceSearchModel.transcript))
                     }
                 }
             }
@@ -93,7 +92,7 @@ struct VoiceSearchSupportVersionView: View {
     }
 
     private func handleBackAction() async {
-        await voiceSearchSupportVersionModel.stop()
+        await voiceSearchModel.stop()
         coordinator.pop()
     }
 }

@@ -18,13 +18,10 @@ public enum SearchFocusState {
 struct SearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
-    @Binding var searchType: SearchType
     
     @FocusState private var isFocused: Bool
     @State private var searchFocusState: SearchFocusState = .home
     @State private var isToolTipPresented: Bool = false
-    @State private var isSheetPresented: Bool = false
-    @State private var isToastPresented: Bool = false
     @State private var searchText: String = ""
     
     var body: some View {
@@ -39,50 +36,14 @@ struct SearchView: View {
                         centerType: .none,
                         trailingType: .none
                     )
-                    
-                    if #available(iOS 26.0, *) {
-                        Button {
-                            withAnimation { isSheetPresented = true }
-                        } label: {
-                            HStack(spacing: 8) {
-                                Text(searchType.title)
-                                    .font(.titleBold24)
-                                Image(.icnKeyboardArrowDown)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20)
-                                    .ffipToolTip(
-                                        isToolTipVisible: $isToolTipPresented,
-                                        message: String(localized: searchType == .exact ? .exactSearchToolTip : .semanticSearchToolTip),
-                                        position: .trailing,
-                                        spacing: 9
-                                    )
-                            }
-                        }
+
+                    Text("지정 탐색")
+                        .font(.titleBold24)
                         .tint(.ffipGrayscale1)
                         .padding(.top, 75)
-                        .accessibilityLabel(
-                            .VoiceOverLocalizable.searchMode(
-                                searchType == .exact ? "지정 탐색" : "연관 탐색"
-                            )
-                        )
-                        .accessibilityValue(
-                            searchType == .exact
-                            ? .VoiceOverLocalizable.exactSearchModeValue
-                            : .VoiceOverLocalizable.semanticSearchModeValue
-                        )
-                        .accessibilityHint(.VoiceOverLocalizable.changeSearchMode)
-                        .accessibilityAddTraits(.isButton)
+                        .accessibilityLabel("탐색 모드: 지정 탐색")
+                        .accessibilityValue("탐색창에 입력하는 텍스트와 정확히 일치하는 항목만 찾아줍니다.")
                         .accessibilitySortPriority(1)
-                    } else {
-                        Text(searchType.title)
-                            .font(.titleBold24)
-                            .tint(.ffipGrayscale1)
-                            .padding(.top, 75)
-                            .accessibilityLabel(.VoiceOverLocalizable.searchMode("지정 탐색"))
-                            .accessibilityValue(.VoiceOverLocalizable.exactSearchModeValue)
-                            .accessibilitySortPriority(1)
-                    }
                 }
                 
                 // 텍스트필드 검색바
@@ -91,30 +52,18 @@ struct SearchView: View {
                         Button(action: navigationBackButtonTapped) {
                             Image(.icnNavBack)
                         }
-                        .accessibilityLabel(.VoiceOverLocalizable.back)
-                        .accessibilityHint(.VoiceOverLocalizable.backHint)
+                        .accessibilityLabel("뒤로가기")
+                        .accessibilityHint("탐색 모드를 변경할 수 있는 초기 화면으로 돌아갑니다.")
                     }
                     
                     FfipSearchTextField(
                         text: $searchText,
                         isFocused: searchFocusState.isEditing,
-                        placeholder: String(localized: searchType.placeholder),
-                        onVoiceSearch: {
-                            if #available(iOS 26.0, *) {
-                                coordinator.push(.voiceSearch)
-                            } else {
-                                coordinator.push(.voiceSearchSupportVersion)
-                            }
-                        },
+                        placeholder: "탐색어를 입력해주세요.",
+                        onVoiceSearch: { coordinator.push(.voiceSearch) },
                         onSubmit: {
-                            if searchType == .exact {
-                                searchModel.addRecentSearchKeyword(searchText)
-                            }
-                            coordinator.push(
-                                searchType == .exact
-                                ? .exactCamera(searchKeyword: searchText)
-                                : .semanticCamera(searchKeyword: searchText)
-                            )
+                            searchModel.addRecentSearchKeyword(searchText)
+                            coordinator.push(.exactCamera(searchKeyword: searchText))
                             
                             searchFocusState = .home
                         },
@@ -125,10 +74,10 @@ struct SearchView: View {
                 .padding(.top, 16)
                 
                 // 지정탐색 일 때만 하단에 뜨는 최근 탐색어 (by 검색모드)
-                if searchFocusState.isHome && searchType == .exact {
+                if searchFocusState.isHome {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text(.recentSearchTitle)
+                            Text("최근 탐색어")
                                 .font(.labelMedium12)
                                 .foregroundStyle(.ffipGrayscale2)
                                 .padding(.top, 32)
@@ -149,11 +98,11 @@ struct SearchView: View {
                 }
                 
                 // 지정탐색일 때만 하단에 뜨는 최근 탐색어 (by 편집모드)
-                if searchFocusState.isEditing && searchType == .exact {
+                if searchFocusState.isEditing {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .trailing, spacing: 12) {
                             VStack(alignment: .leading, spacing: 20) {
-                                Text(.recentSearchTitle)
+                                Text("최근 탐색어")
                                     .font(.labelMedium14)
                                     .foregroundStyle(.ffipGrayscale3)
                                 
@@ -172,18 +121,14 @@ struct SearchView: View {
                                     }
                                 )
                             }
-                            Text(.recentSearchesCleared)
+                            Text("전체 삭제")
                                 .font(.labelMedium14)
                                 .foregroundStyle(.ffipGrayscale2)
                                 .onTapGesture {
                                     searchModel.deleteAllRecentSearchKeyword()
                                 }
-                                .accessibilityLabel(
-                                    .VoiceOverLocalizable.deleteRecentAll
-                                )
-                                .accessibilityHint(
-                                    .VoiceOverLocalizable.resetRecentKeywords
-                                )
+                                .accessibilityLabel("최근 탐색어 전체 삭제")
+                                .accessibilityHint("최근 탐색어 목록을 초기화합니다.")
                                 .accessibilityAddTraits(.isButton)
                         }
                         .transition(
@@ -194,12 +139,10 @@ struct SearchView: View {
                         VStack {
                             Spacer()
                                 .frame(height: 147)
-                            Text(.noRecentSearchesMessage)
+                            Text("최근 탐색어가 없습니다.")
                                 .font(.bodyMedium16)
                                 .foregroundStyle(.ffipGrayscale3)
-                                .accessibilityLabel(
-                                    .VoiceOverLocalizable.noRecentKeyword
-                                )
+                                .accessibilityLabel("최근 탐색어가 없습니다.")
                         }
                         .frame(maxWidth: .infinity)
                     }
@@ -217,20 +160,6 @@ struct SearchView: View {
                 }
             }
         }
-        .onChange(of: searchType) {
-            withAnimation { isToastPresented = true }
-        }
-        .ffipSheet(isPresented: $isSheetPresented) {
-            SearchTypeSelectionView(
-                selectedType: $searchType,
-                dismissAction: dismissFfipSheet
-            )
-        }
-        .showFfipToastMessage(
-            toastType: .check,
-            toastTitle: String(localized: .searchModeUpdated),
-            isToastVisible: $isToastPresented
-        )
     }
 }
 
@@ -248,16 +177,6 @@ private extension SearchView {
         withAnimation(.easeInOut(duration: 0.25)) {
             searchFocusState = .home
             isFocused = false
-        }
-    }
-    
-    func dismissFfipSheet() {
-        if isToolTipPresented { isToolTipPresented = false }
-        
-        withAnimation { isSheetPresented = false }
-        Task {
-            try? await Task.sleep(for: .seconds(0.2))
-            withAnimation { isToolTipPresented = true }
         }
     }
 }

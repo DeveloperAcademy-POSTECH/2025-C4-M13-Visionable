@@ -28,6 +28,28 @@
 | [**Vision**](https://developer.apple.com/documentation/vision) | 텍스트 인식 (OCR)과 카메라 설정에서 사용하는 Vision Model을 활용하기 위해 사용 |
 | [**WidgetKit**](https://developer.apple.com/documentation/vision) | 홈 화면에서 앱에 쉽게 접근할 수 있는 위젯 기능 구현을 위해 사용 |
 
+<br>
+
+## 🌠 Image Processing Flow
+### 1. AsyncStream을 활용한 프레임 분석 주기 설정
+실시간 인터랙션 (Camera-Model 간)을 핵심 기능으로 담고 있는 FF!p의 기능 특성 상,   
+1초의 60 프레임을 모두 Vision 모델에 분석 요청하는 것은 프로세서에 많은 부담을 주는 일이죠. 발열과 hang, shut down 문제로 이어질 수 있습니다.
+
+반면, 이와 동시에 실시간 인터랙션이라는 사용자의 경험을 주기 위해 가능한 많은 프레임을 처리해 실시간성의 사용자 경험을 제공할 필요도 있었습니다.
+이에 저희 팀은 비동기 데이터 스트림 처리를 수행할 수 있는 Swift Concurrency의 `AsyncStream(AsyncSequence)`을 활용한 프레임 분석 주기를 설정했습니다.
+<img width="1243" height="535" alt="Screenshot 2025-07-31 at 12 44 05 PM" src="https://github.com/user-attachments/assets/6802042b-4418-467d-8885-5168f5800279" />
+
+### 2. VMMS (View-Mediator-Model-Service) Architecture
+각 모듈별 역할을 명확하게 구분하기 위해, 저희 팀은 View, Mediator, Model, Service 구조로 각 역할을 분리했습니다.
+
+- View : UI 담당, 사용자에게 카메라 요청을 최초 전달하고 / 모델의 분석 결과를 받아 바운딩 박스를 그려주는 역할.
+- Mediator : 카메라와 관련된 `CameraModel`과 모델과 관련된 `VisionModel` `LangaugeModel` 사이의 중재자 역할. 
+- Model : 비즈니스 로직 책임. 관찰 가능한 객체 (`@Observable`) 타입으로 선언되어, View에서 요청하는 데이터와, 메서드를 갖고 있는 데이터 변경에 대응할 수 있도록 책임을 갖고 있는 곳.
+- Service : Apple이 제공해주는 내장 프레임워크와 직접 요청과 응답을 주고받는 역할. 비동기 처리를 담당하므로 `actor`로 선언되어 있음.
+<img width="1243" height="535" alt="Screenshot 2025-07-31 at 12 44 18 PM" src="https://github.com/user-attachments/assets/7b892dd1-a82c-4019-af22-5fbb45c49dcc" />
+<img width="1243" height="535" alt="Screenshot 2025-07-31 at 12 44 28 PM" src="https://github.com/user-attachments/assets/47c7e137-f87c-4748-a7c3-51e63f6175a9" />
+<img width="1243" height="535" alt="Screenshot 2025-07-31 at 12 44 35 PM" src="https://github.com/user-attachments/assets/23a8568e-a786-4b8e-8f86-dedac0f75908" />
+
 
 <br>
 

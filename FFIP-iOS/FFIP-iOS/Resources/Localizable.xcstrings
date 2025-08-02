@@ -1,922 +1,478 @@
 {
-  "sourceLanguage" : "en",
+  "sourceLanguage" : "ko",
   "strings" : {
+    "" : {
+
+    },
+    "\"%@\"" : {
+
+    },
+    "%@ 삭제" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Delete"
+          }
+        }
+      }
+    },
     "%lld" : {
 
     },
-    "aiBadge" : {
-      "comment" : "연관 탐색 AI 뱃지",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AI Powered"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AI 기반 탐색"
-          }
-        }
-      }
-    },
-    "appName" : {
+    "FF!p" : {
       "comment" : "앱 이름",
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "FF!p"
           }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "FF!p"
-          }
         }
       }
     },
-    "designatedSearchWidget_configurationDisplayName" : {
-      "comment" : "w_지정 탐색",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Direct Search"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "지정탐색"
-          }
-        }
-      }
-    },
-    "designatedSearchWidget_description" : {
-      "comment" : "w_지정 탐색 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quickly find exact matches nearby."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색어가 주변에 있는지 빠르게 찾아보세요."
-          }
-        }
-      }
-    },
-    "dontShowAgain" : {
+    "다시 보지 않기" : {
       "comment" : "툴팁 다시 보지 않기",
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Don’t show this again"
           }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "다시 보지 않기"
-          }
         }
       }
     },
-    "exactCameraPopupTip1_Description" : {
-      "comment" : "tip1_지정 속도 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Better results come that way."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "더 정확한 탐색 결과를 얻을 수 있어요."
-          }
-        }
-      }
-    },
-    "exactCameraPopupTip1_Title" : {
-      "comment" : "tip1_지정 속도",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keep a steady pace"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "일정한 속도를 유지하세요"
-          }
-        }
-      }
-    },
-    "exactCameraPopupTip2_Description" : {
-      "comment" : "tip2_지정 줌 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Set your focus just right."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색 영역을 자유롭게 조정할 수 있어요."
-          }
-        }
-      }
-    },
-    "exactCameraPopupTip2_Title" : {
-      "comment" : "tip2_지정 줌",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zoom in or out"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "줌 기능을 활용해보세요"
-          }
-        }
-      }
-    },
-    "exactCameraPopupTip3_Description" : {
-      "comment" : "tip3_지정 더블 탭 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "It stops the buzz and the box."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "두 번 연속 탭하면 진동과 FF!p 박스도 멈춰요."
-          }
-        }
-      }
-    },
-    "exactCameraPopupTip3_Title" : {
-      "comment" : "tip3_지정 더블 탭",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Double tap to pause"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "화면을 멈추고 확인하세요"
-          }
-        }
-      }
-    },
-    "exactCameraTip1" : {
-      "comment" : "tip_지정 탐색 1 진동 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A vibration means\nyour input was found."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색어가 감지되면\n진동으로 알 수 있어요."
-          }
-        }
-      }
-    },
-    "exactCameraTip2" : {
-      "comment" : "tip_지정 탐색 2 더블 탭 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Double tap the screen\nto pause the search."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색을 잠시 멈추려면\n화면을 두 번 탭하세요."
-          }
-        }
-      }
-    },
-    "exactCameraTipGreen1" : {
-      "comment" : "tip_지정 탐색 1 진동 그린",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "vibration"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "진동"
-          }
-        }
-      }
-    },
-    "exactCameraTipGreen2" : {
-      "comment" : "tip_지정 탐색 2 더블 탭 그린",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Double tap"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "두 번 탭"
-          }
-        }
-      }
-    },
-    "exactSearch" : {
-      "comment" : "OCR 중심의 일치 항목 검색 기능",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Direct Search"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "지정 탐색"
-          }
-        }
-      }
-    },
-    "exactSearchPlaceholder" : {
-      "comment" : "지정 탐색 플레이스홀더",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter a search term."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색어를 입력해주세요."
-          }
-        }
-      }
-    },
-    "exactSearchToolTip" : {
-      "comment" : "지정 탐색 설명 툴팁",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finds item that exactly matches your input."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "입력한 텍스트와\n일치하는 항목만 탐색합니다."
-          }
-        }
-      }
-    },
-    "helloWorld" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hello, World!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "헬로 월드"
-          }
-        }
-      }
-    },
-    "next" : {
+    "다음" : {
       "comment" : "다음 보기",
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Next"
           }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "다음"
-          }
         }
       }
     },
-    "noRecentSearchesMessage" : {
-      "comment" : "최근 탐색어가 없습니다",
-      "extractionState" : "manual",
+    "더 정확한 탐색 결과를 얻을 수 있어요." : {
+      "comment" : "tip1_지정 속도 설명",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No recent searches yet"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "최근 탐색어가 없습니다."
+            "value" : "Better results come that way."
           }
         }
       }
     },
-    "onboarding1_Description" : {
-      "comment" : "ob1_삡 설명",
-      "extractionState" : "manual",
+    "두 번 연속 탭하면 진동과 FF!p 박스도 멈춰요." : {
+      "comment" : "tip3_지정 더블 탭 설명",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Book titles, station names, shop signs—\nNo more than 3 seconds."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "책 제목, 역 이름, 가게 간판\n이제는 3초도 찾아 헤매지 마세요."
+            "value" : "It stops the buzz and the box."
           }
         }
       }
     },
-    "onboarding1_Title" : {
-      "comment" : "ob1_삡",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Want to find fast?\nAnytime—FF!p it"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "빠르게 찾고 싶다면\n어디서든 하나, 둘, FF!p"
-          }
-        }
-      }
-    },
-    "onboarding2_Description" : {
-      "comment" : "ob2_지정 탐색 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Just type the word,\nand see results pop up in real time."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "찾는 단어만 정확히 입력하면\n실시간으로 찾아서 보여드려요."
-          }
-        }
-      }
-    },
-    "onboarding2_TextFieldKeyword" : {
-      "comment" : "ob2_지정 탐색어 예시",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Project Hail Mary"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "어린 왕자"
-          }
-        }
-      }
-    },
-    "onboarding2_Title" : {
-      "comment" : "ob2_지정 탐색",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Know the exact word?\nTry FF!p Direct Search"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "이름을 알고 있다면\nFF!p 지정 탐색"
-          }
-        }
-      }
-    },
-    "onboarding3_Description" : {
-      "comment" : "ob3_연관 탐색 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter a related word or theme,\nand we’ll find what’s just right."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "연관된 단어나 주제만 입력해도\n알맞은 정보가 있는지 찾아드려요."
-          }
-        }
-      }
-    },
-    "onboarding3_TextFieldKeyword" : {
-      "comment" : "ob3_연관 탐색어 예시",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Any Sci-fi book?"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iOS 개발자 입문 책 있어?"
-          }
-        }
-      }
-    },
-    "onboarding3_Title" : {
-      "comment" : "ob3_연관 탐색",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not sure what it’s called?\nTry FF!p Insight Search"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "이름을 잘 모른다면 \nFF!p 연관 탐색"
-          }
-        }
-      }
-    },
-    "recentSearchesCleared" : {
-      "comment" : "전체 삭제",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear All"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "전체 삭제"
-          }
-        }
-      }
-    },
-    "recentSearchTitle" : {
-      "comment" : "최근 탐색어",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recent Searches"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "최근 탐색어"
-          }
-        }
-      }
-    },
-    "relatedSearchWidget_configurationDisplayName" : {
-      "comment" : "w_연관 탐색",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Insight Search"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "탐색 모드를 전환했습니다."
-          }
-        }
-      }
-    },
-    "relatedSearchWidget_description" : {
-      "comment" : "w_연관 탐색 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Easily explore related results nearby."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색어 관련 정보가 내 주변에 있는지\n간편하게 찾아보세요."
-          }
-        }
-      }
-    },
-    "searchModeUpdated" : {
-      "comment" : "탐색 모드 전환 토스트",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search mode changed."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색 모드를 전환했습니다."
-          }
-        }
-      }
-    },
-    "searchPlaceholder" : {
-      "comment" : "연관탐색 플레이스홀더",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "What are you looking for?"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색할 내용을 입력해주세요."
-          }
-        }
-      }
-    },
-    "selectSearchMode" : {
-      "comment" : "탐색 모드를 선택하세요.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select search mode"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "탐색 모드 선택"
-          }
-        }
-      }
-    },
-    "semanticCameraPopupTip1_Description" : {
-      "comment" : "tip1_연관 더블탭 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search that moment instantly."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "원하는 순간만 빠르게 탐색해요."
-          }
-        }
-      }
-    },
-    "semanticCameraPopupTip1_Title" : {
-      "comment" : "tip1_연관 더블 탭",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Double tap to snap"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "화면을 두 번 탭해서\n탐색 영역을 정하세요"
-          }
-        }
-      }
-    },
-    "semanticCameraPopupTip2_Description" : {
-      "comment" : "tip2_연관 스냅북 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "It turns green after all analysis."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "분석이 완료되면 초록색으로 변해요."
-          }
-        }
-      }
-    },
-    "semanticCameraPopupTip2_Title" : {
-      "comment" : "tip2_연관 스냅북",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "See your results\nin the Snapbook"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "스냅북에서\n탐색 결과를 모아보세요"
-          }
-        }
-      }
-    },
-    "semanticCameraPopupTip3_Description" : {
-      "comment" : "tip3_연관 스냅북 초기화 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "It clears when you close the camera."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "카메라를 끄면 스냅북은 모두 지워져요!"
-          }
-        }
-      }
-    },
-    "semanticCameraPopupTip3_Title" : {
-      "comment" : "tip3_연관 스냅북 삡 박스",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Found snaps\nget a green frame"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "찾은 탐색어가 있으면\n초록색 테두리가 나타나요"
-          }
-        }
-      }
-    },
-    "semanticCameraTip1" : {
-      "comment" : "tip_연관 탐색 1 더블 탭 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Double tap the screen\nto explore any moment."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "탐색하고 싶은 순간마다\n화면을 두 번 연속 탭하세요."
-          }
-        }
-      }
-    },
-    "semanticCameraTip2" : {
-      "comment" : "tip_연관 탐색 2 스냅북 설명",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "See results in the Snapbook\nat the bottom right."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "화면 오른쪽 아래 스냅북에서 \n탐색 결과를 볼 수 있어요."
-          }
-        }
-      }
-    },
-    "semanticCameraTipGreen1" : {
-      "comment" : "tip_연관 탐색 1 더블 탭 그린",
-      "extractionState" : "manual",
+    "두 번 탭" : {
+      "comment" : "tip_지정 탐색 2 더블 탭 그린",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Double tap"
           }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "두 번 연속 탭"
-          }
         }
       }
     },
-    "semanticCameraTipGreen2" : {
-      "comment" : "tip_연관 탐색 2 스냅북 그린",
-      "extractionState" : "manual",
+    "뒤로가기" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Snapbook"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "스냅북"
+            "value" : "Back."
           }
         }
       }
     },
-    "semanticSearch" : {
-      "comment" : "Foundation Model 기반 의미 추론 검색 기능",
-      "extractionState" : "manual",
+    "빠르게 찾고 싶다면\n어디서든 하나, 둘, FF!p" : {
+      "comment" : "ob1_삡",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Insight Search"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "연관 탐색"
+            "value" : "Want to find fast?\nAnytime—FF!p it"
           }
         }
       }
     },
-    "semanticSearchToolTip" : {
-      "comment" : "tip_연관 탐색 설명",
-      "extractionState" : "manual",
+    "어린 왕자" : {
+      "comment" : "ob2_지정 탐색어 예시",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finds all items related to your input."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "입력한 텍스트와 연관된\n모든 항목을 탐색합니다."
+            "value" : "Project Hail Mary"
           }
         }
       }
     },
-    "semantictSearchPlaceholder" : {
-      "comment" : "연관 탐색 플레이스홀더",
-      "extractionState" : "manual",
+    "음성 입력" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "What are you looking for?"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "탐색할 내용을 입력해주세요."
+            "value" : "Voice Input"
           }
         }
       }
     },
-    "startExplore" : {
+    "음성으로 탐색어를 입력할 수 있습니다. 탭하면 음성 인식이 시작됩니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can enter a search term by voice. Voice recognition begins when you tap."
+          }
+        }
+      }
+    },
+    "이름을 알고 있다면\nFF!p 지정 탐색" : {
+      "comment" : "ob2_지정 탐색",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Know the exact word?\nTry FF!p Direct Search"
+          }
+        }
+      }
+    },
+    "일정한 속도를 유지하세요" : {
+      "comment" : "tip1_지정 속도",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep a steady pace"
+          }
+        }
+      }
+    },
+    "전체 삭제" : {
+      "comment" : "전체 삭제",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear All"
+          }
+        }
+      }
+    },
+    "정확히 인식되면 자동으로 카메라 뷰를 켜서 탐색을 시작합니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Once your voice is recognized, the camera opens and search starts."
+          }
+        }
+      }
+    },
+    "줌 기능을 활용해보세요" : {
+      "comment" : "tip2_지정 줌",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom in or out"
+          }
+        }
+      }
+    },
+    "지정 탐색" : {
+      "comment" : "OCR 중심의 일치 항목 검색 기능",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direct Search"
+          }
+        }
+      }
+    },
+    "지정탐색" : {
+      "comment" : "w_지정 탐색",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        }
+      }
+    },
+    "진동" : {
+      "comment" : "tip_지정 탐색 1 진동 그린",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vibration"
+          }
+        }
+      }
+    },
+    "찾고 싶은 탐색어를 입력하세요. 입력을 완료하면 카메라 뷰를 켜서 탐색을 시작합니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type a search term to begin. The camera will open and start searching when you’re done."
+          }
+        }
+      }
+    },
+    "찾는 단어만 정확히 입력하면\n실시간으로 찾아서 보여드려요." : {
+      "comment" : "ob2_지정 탐색 설명",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Just type the word,\nand see results pop up in real time."
+          }
+        }
+      }
+    },
+    "책 제목, 역 이름, 가게 간판\n이제는 3초도 찾아 헤매지 마세요." : {
+      "comment" : "ob1_삡 설명",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Book titles, station names, shop signs—\nNo more than 3 seconds."
+          }
+        }
+      }
+    },
+    "최근 탐색어" : {
+      "comment" : "최근 탐색어",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Searches"
+          }
+        }
+      }
+    },
+    "최근 탐색어 %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Researches %@"
+          }
+        }
+      }
+    },
+    "최근 탐색어 목록에서 이 항목을 제거합니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removes this search term from your recent searches."
+          }
+        }
+      }
+    },
+    "최근 탐색어 목록을 초기화합니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clears all search terms from your recent searches."
+          }
+        }
+      }
+    },
+    "최근 탐색어 전체 삭제" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete all recent searches"
+          }
+        }
+      }
+    },
+    "최근 탐색어가 없습니다." : {
+      "comment" : "최근 탐색어가 없습니다",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No recent searches yet"
+          }
+        }
+      }
+    },
+    "탐색 모드: 지정 탐색" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Mode: Direct Search."
+          }
+        }
+      }
+    },
+    "탐색 모드를 변경할 수 있는 초기 화면으로 돌아갑니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Returns to the start screen where you can choose a search mode."
+          }
+        }
+      }
+    },
+    "탐색 시작하기" : {
       "comment" : "ob_탐색 시작하기",
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Let’s FF!p"
           }
-        },
-        "ko" : {
+        }
+      }
+    },
+    "탐색 영역을 자유롭게 조정할 수 있어요." : {
+      "comment" : "tip2_지정 줌 설명",
+      "localizations" : {
+        "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색 시작하기"
+            "state" : "translated",
+            "value" : "Set your focus just right."
           }
         }
       }
     },
-    "willCameraPushInstruction" : {
+    "탐색어가 감지되면\n진동으로 알 수 있어요." : {
+      "comment" : "tip_지정 탐색 1 진동 설명",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A vibration means\nyour input was found."
+          }
+        }
+      }
+    },
+    "탐색어가 주변에 있는지 빠르게 찾아보세요." : {
+      "comment" : "w_지정 탐색 설명",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quickly find exact matches nearby."
+          }
+        }
+      }
+    },
+    "탐색어를 말해주세요" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speak to enter a search term."
+          }
+        }
+      }
+    },
+    "탐색어를 입력해주세요." : {
+      "comment" : "지정 탐색 플레이스홀더",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a search term."
+          }
+        }
+      }
+    },
+    "탐색을 시작합니다." : {
       "comment" : "음성인식 완료 후 탐색 시작",
-      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Starting search now."
           }
-        },
-        "ko" : {
+        }
+      }
+    },
+    "탐색을 잠시 멈추려면\n화면을 두 번 탭하세요." : {
+      "comment" : "tip_지정 탐색 2 더블 탭 설명",
+      "localizations" : {
+        "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색을 시작합니다."
+            "state" : "translated",
+            "value" : "Double tap the screen\nto pause the search."
+          }
+        }
+      }
+    },
+    "탐색창" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Field"
+          }
+        }
+      }
+    },
+    "탐색창에 입력하는 텍스트와 정확히 일치하는 항목만 찾아줍니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finds only exact matches for the text you enter."
+          }
+        }
+      }
+    },
+    "탐색할 내용을 입력해주세요." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What are you looking for?"
+          }
+        }
+      }
+    },
+    "탭하면 카메라 뷰를 켜서 탐색을 시작합니다." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double tap to open the camera and begin searching."
+          }
+        }
+      }
+    },
+    "화면을 멈추고 확인하세요" : {
+      "comment" : "tip3_지정 더블 탭",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double tap to pause"
           }
         }
       }

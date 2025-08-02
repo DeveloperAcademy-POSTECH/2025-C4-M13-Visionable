@@ -86,18 +86,11 @@ struct ExactCameraView: View {
 
             VStack {
                 Spacer()
-                    .showFfipToastMessage(
-                        toastType: .warning,
-                        toastTitle: "렌즈의 지문을 닦거나 천천히 움직여 주세요.",
-                        isToastVisible: $mediator.showSmudgeToast
-                    )
 
                 FfipSearchTextField(
                     text: $searchText,
                     isFocused: isTextFieldFocused,
-                    placeholder: String(
-                        localized: .searchPlaceholder
-                    ),
+                    placeholder: "탐색어를 입력해주세요.",
                     onSubmit: {
                         lastSearchText = searchText
                         mediator.changeSearchKeyword(keyword: searchText)
@@ -119,21 +112,17 @@ struct ExactCameraView: View {
                     showTip: $showTip,
                     dontShowTipAgain: $dontShowExactCameraTipAgain,
                     ffipCameraTipType: .exact,
-                    tipText1: String(localized: .exactCameraTip1)
+                    tipText1: String(localized: "탐색어가 감지되면\n진동으로 알 수 있어요.")
                         .asHighlight(
-                            highlightedString: String(
-                                localized: .exactCameraTipGreen1
-                            ),
+                            highlightedString: String(localized: "진동"),
                             highlightColor: .ffipPointGreen1
                         ),
-                    tipText2: String(localized: .exactCameraTip2)
+                    tipText2: String(localized: "탐색을 잠시 멈추려면\n화면을 두 번 탭하세요.")
                         .asHighlight(
-                            highlightedString: String(
-                                localized: .exactCameraTipGreen2
-                            ),
+                            highlightedString: String(localized: "두 번 탭"),
                             highlightColor: .ffipPointGreen1
                         ),
-                    dontShowAgainText: String(localized: .dontShowAgain)
+                    dontShowAgainText: String(localized: "다시 보지 않기")
                 )
             }
             

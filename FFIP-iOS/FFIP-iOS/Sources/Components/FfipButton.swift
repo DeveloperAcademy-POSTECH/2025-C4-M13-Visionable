@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct FfipButton: View {
-    private let title: String
+    private let title: LocalizedStringResource
     private let action: () -> Void
     
     public init(
-        title: String,
+        title: LocalizedStringResource,
         action: @escaping () -> Void
     ) {
         self.title = title

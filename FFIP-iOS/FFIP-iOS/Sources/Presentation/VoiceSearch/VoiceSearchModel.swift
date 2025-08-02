@@ -1,5 +1,5 @@
 //
-//  VoiceSearchSupportVersionModel.swift
+//  VoiceSearchModel.swift
 //  FFIP-iOS
 //
 //  Created by mini on 7/30/25.
@@ -10,7 +10,7 @@ import Speech
 
 @MainActor
 @Observable
-final class VoiceSearchSupportVersionModel {
+final class VoiceSearchModel {
     private let privacyService: PrivacyService
     private var speechRecognitionService: SpeechRecognitionService
 
