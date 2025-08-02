@@ -33,16 +33,8 @@ struct FFIPAppRootView: View {
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .exactCamera(let searchKeyword): moduleFactory.makeExactCameraView(searchKeyword: searchKeyword)
-                    case .semanticCamera(let searchKeyword):
-                        if #available(iOS 26.0, *) {
-                            moduleFactory.makeSemanticCameraView(searchKeyword: searchKeyword)
-                        }
                     case .search: moduleFactory.makeSearchView(searchType: $searchType)
-                    case .voiceSearch:
-                        if #available(iOS 26.0, *) {
-                            moduleFactory.makeVoiceSearchView(searchType: $searchType)
-                        }
-                    case .voiceSearchSupportVersion: moduleFactory.makeVoiceSearchSupportVersionVoew(searchType: $searchType)
+                    case .voiceSearch: moduleFactory.makeVoiceSearchView(searchType: $searchType)
                     case .photoDetail: moduleFactory.makePhotoDetailView()
                     case .onboarding: moduleFactory.makeOnboardingView()
                     }

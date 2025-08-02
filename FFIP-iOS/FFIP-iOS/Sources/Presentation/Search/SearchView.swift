@@ -39,50 +39,14 @@ struct SearchView: View {
                         centerType: .none,
                         trailingType: .none
                     )
-                    
-                    if #available(iOS 26.0, *) {
-                        Button {
-                            withAnimation { isSheetPresented = true }
-                        } label: {
-                            HStack(spacing: 8) {
-                                Text(searchType.title)
-                                    .font(.titleBold24)
-                                Image(.icnKeyboardArrowDown)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20)
-                                    .ffipToolTip(
-                                        isToolTipVisible: $isToolTipPresented,
-                                        message: String(localized: searchType == .exact ? .exactSearchToolTip : .semanticSearchToolTip),
-                                        position: .trailing,
-                                        spacing: 9
-                                    )
-                            }
-                        }
+
+                    Text(searchType.title)
+                        .font(.titleBold24)
                         .tint(.ffipGrayscale1)
                         .padding(.top, 75)
-                        .accessibilityLabel(
-                            .VoiceOverLocalizable.searchMode(
-                                searchType == .exact ? "지정 탐색" : "연관 탐색"
-                            )
-                        )
-                        .accessibilityValue(
-                            searchType == .exact
-                            ? .VoiceOverLocalizable.exactSearchModeValue
-                            : .VoiceOverLocalizable.semanticSearchModeValue
-                        )
-                        .accessibilityHint(.VoiceOverLocalizable.changeSearchMode)
-                        .accessibilityAddTraits(.isButton)
+                        .accessibilityLabel(.VoiceOverLocalizable.searchMode("지정 탐색"))
+                        .accessibilityValue(.VoiceOverLocalizable.exactSearchModeValue)
                         .accessibilitySortPriority(1)
-                    } else {
-                        Text(searchType.title)
-                            .font(.titleBold24)
-                            .tint(.ffipGrayscale1)
-                            .padding(.top, 75)
-                            .accessibilityLabel(.VoiceOverLocalizable.searchMode("지정 탐색"))
-                            .accessibilityValue(.VoiceOverLocalizable.exactSearchModeValue)
-                            .accessibilitySortPriority(1)
-                    }
                 }
                 
                 // 텍스트필드 검색바
@@ -99,13 +63,7 @@ struct SearchView: View {
                         text: $searchText,
                         isFocused: searchFocusState.isEditing,
                         placeholder: String(localized: searchType.placeholder),
-                        onVoiceSearch: {
-                            if #available(iOS 26.0, *) {
-                                coordinator.push(.voiceSearch)
-                            } else {
-                                coordinator.push(.voiceSearchSupportVersion)
-                            }
-                        },
+                        onVoiceSearch: { coordinator.push(.voiceSearch) },
                         onSubmit: {
                             if searchType == .exact {
                                 searchModel.addRecentSearchKeyword(searchText)

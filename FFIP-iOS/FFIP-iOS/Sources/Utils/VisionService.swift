@@ -21,19 +21,6 @@ actor VisionService {
         recognizeTextRequest.customWords.append(searchKeyword)
     }
     
-    @available(iOS 26.0, *)
-    func performDetectSmudge(in imageBuffer: CVImageBuffer, threshold: Float) async throws -> Bool {
-        let detectLensSmudgeRequest = DetectLensSmudgeRequest()
-        let smudgeObservation = try await detectLensSmudgeRequest.perform(on: imageBuffer)
-        let confidence = smudgeObservation.confidence
-        
-        if confidence > threshold {
-            return true
-        } else {
-            return false
-        }
-    }
-    
     func performTextRecognition(
         image: CVImageBuffer
     ) async throws -> [RecognizedTextObservation] {
@@ -48,11 +35,7 @@ actor VisionService {
     
     func recognizedTexts(observations: [RecognizedTextObservation]) -> [String] {
         observations.map {
-            if #available(iOS 26.0, *) {
-                $0.transcript
-            } else {
-                $0.topCandidates(1).first?.string ?? ""
-            }
+            $0.topCandidates(1).first?.string ?? ""
         }
     }
 }

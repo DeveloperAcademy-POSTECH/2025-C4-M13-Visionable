@@ -77,26 +77,11 @@ struct FFIPWidgetEntryView: View {
                 .font(.widgetSemiBold16)
                 .foregroundStyle(.ffipGrayscale2)
 
-                if #available(iOS 26.0, *) {
-                    Link(
-                        destination: URL(
-                            string: widgetType == .exactSearch
-                                ? URLLiterals.DeepLink.voiceSearchExact
-                                : URLLiterals.DeepLink.voiceSearchSemantic
-                        )!
-                    ) {
-                        Image(.icnSettingsVoice)
-                            .tint(.ffipGrayscale1)
-                            .frame(width: 55, height: 55)
-                            .background(Circle().fill(.ffipGrayscale5))
-                    }
-                } else {
-                    Link(destination: URL(string: URLLiterals.DeepLink.voiceSearchSupportVersion)!) {
-                        Image(.icnSettingsVoice)
-                            .tint(.ffipGrayscale1)
-                            .frame(width: 55, height: 55)
-                            .background(Circle().fill(.ffipGrayscale5))
-                    }
+                Link(destination: URL(string: URLLiterals.DeepLink.voiceSearchSupportVersion)!) {
+                    Image(.icnSettingsVoice)
+                        .tint(.ffipGrayscale1)
+                        .frame(width: 55, height: 55)
+                        .background(Circle().fill(.ffipGrayscale5))
                 }
             }
             .containerRelativeFrame([.horizontal])

@@ -1,5 +1,5 @@
 //
-//  VoiceSearchSupportVersionView.swift
+//  VoiceSearchView.swift
 //  FFIP-iOS
 //
 //  Created by mini on 7/30/25.
@@ -8,9 +8,9 @@
 import Speech
 import SwiftUI
 
-struct VoiceSearchSupportVersionView: View {
+struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
-    @Bindable var voiceSearchSupportVersionModel: VoiceSearchSupportVersionModel
+    @Bindable var voiceSearchModel: VoiceSearchModel
     @Binding var searchType: SearchType
 
     @State private var willCameraPush: Bool = false
@@ -36,9 +36,9 @@ struct VoiceSearchSupportVersionView: View {
                     .frame(height: 58)
                 HStack {
                     Text(
-                        voiceSearchSupportVersionModel.transcript.isEmpty
+                        voiceSearchModel.transcript.isEmpty
                             ? String(localized: .searchPlaceholder)
-                            : "\"\(voiceSearchSupportVersionModel.transcript)\""
+                            : "\"\(voiceSearchModel.transcript)\""
                     )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
@@ -75,17 +75,17 @@ struct VoiceSearchSupportVersionView: View {
         .navigationBarBackButtonHidden(true)
         .background(.ffipBackground1Main)
         .task {
-            await voiceSearchSupportVersionModel.start()
+            await voiceSearchModel.start()
         }
-        .onChange(of: voiceSearchSupportVersionModel.willCameraPush) { _, willCameraPush in
+        .onChange(of: voiceSearchModel.willCameraPush) { _, willCameraPush in
             if willCameraPush {
-                if voiceSearchSupportVersionModel.transcript.isEmpty {
+                if voiceSearchModel.transcript.isEmpty {
                     isUserSpeaking = false
                 } else {
                     Task {
-                        await voiceSearchSupportVersionModel.stop()
+                        await voiceSearchModel.stop()
                         try? await Task.sleep(for: .seconds(1))
-                        coordinator.push(.exactCamera(searchKeyword: voiceSearchSupportVersionModel.transcript))
+                        coordinator.push(.exactCamera(searchKeyword: voiceSearchModel.transcript))
                     }
                 }
             }
@@ -93,7 +93,7 @@ struct VoiceSearchSupportVersionView: View {
     }
 
     private func handleBackAction() async {
-        await voiceSearchSupportVersionModel.stop()
+        await voiceSearchModel.stop()
         coordinator.pop()
     }
 }
