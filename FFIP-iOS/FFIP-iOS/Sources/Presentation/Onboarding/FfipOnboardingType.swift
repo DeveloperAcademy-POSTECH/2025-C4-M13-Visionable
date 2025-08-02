@@ -13,18 +13,18 @@ enum FfipOnboardingType: CaseIterable {
     var title: String {
         switch self {
         case .first:
-            String(localized: .onboarding1Title)
+            ".onboarding1Title"
         case .second:
-            String(localized: .onboarding2Title)
+            ".onboarding2Title"
         case .third:
-            String(localized: .onboarding3Title)
+            ".onboarding3Title"
         }
     }
     
     var badgeText: String? {
         switch self {
         case .third:
-            String(localized: .aiBadge)
+            ".aiBadge"
         default: nil
         }
     }
@@ -32,20 +32,20 @@ enum FfipOnboardingType: CaseIterable {
     var description: String {
         switch self {
         case .first:
-            String(localized: .onboarding1Description)
+            ".onboarding1Description"
         case .second:
-            String(localized: .onboarding2Description)
+            ".onboarding2Description"
         case .third:
-            String(localized: .onboarding3Description)
+            ".onboarding3Description"
         }
     }
     
     var buttonTitle: String {
         switch self {
         case .first, .second:
-            String(localized: .next)
+            ".next"
         case .third:
-            String(localized: .startExplore)
+            ".startExplore"
         }
     }
     
@@ -62,8 +62,10 @@ enum FfipOnboardingType: CaseIterable {
     
     var textFieldFilledKeyword: String? {
         switch self {
-        case .second: String(localized: .onboarding2TextFieldKeyword)
-        case .third: String(localized: .onboarding3TextFieldKeyword)
+        case .second:
+            ".onboarding2TextFieldKeyword"
+        case .third:
+            ".onboarding3TextFieldKeyword"
         default: nil
         }
     }

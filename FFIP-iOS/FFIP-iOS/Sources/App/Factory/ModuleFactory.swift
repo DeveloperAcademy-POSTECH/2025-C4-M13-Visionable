@@ -63,7 +63,7 @@ final class ModuleFactory: @preconcurrency ModuleFactoryProtocol {
             speechService: speechRecognitionService
         )
         let view = VoiceSearchView(
-            voiceSearchSupportVersionModel: model,
+            voiceSearchModel: model,
             searchType: searchType
         )
         return view

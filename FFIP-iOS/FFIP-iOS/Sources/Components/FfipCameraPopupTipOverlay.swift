@@ -110,35 +110,35 @@ enum FfipCameraPopupTipType {
         switch self {
         case .exact: [
             FfipCameraPopupTipModel(
-                title: String(localized: .exactCameraPopupTip1Title),
-                description: String(localized: .exactCameraPopupTip1Description),
+                title: "exactCameraPopupTip1Title",
+                description: "exactCameraPopupTip1Description",
                 lottieName: LottieLiterals.Onboarding.scan
             ),
             FfipCameraPopupTipModel(
-                title: String(localized: .exactCameraPopupTip2Title),
-                description: String(localized: .exactCameraPopupTip2Description),
+                title: "exactCameraPopupTip2Title",
+                description: "exactCameraPopupTip2Description",
                 lottieName: LottieLiterals.Onboarding.zoom
             ),
             FfipCameraPopupTipModel(
-                title: String(localized: .exactCameraPopupTip3Title),
-                description: String(localized: .exactCameraPopupTip3Description),
+                title: "exactCameraPopupTip3Title",
+                description: "exactCameraPopupTip3Description",
                 lottieName: LottieLiterals.Onboarding.green
             )]
             
         case .semantic: [
             FfipCameraPopupTipModel(
-                title: String(localized: .semanticCameraPopupTip1Title),
-                description: String(localized: .semanticCameraPopupTip1Description),
+                title: "semanticCameraPopupTip1Title",
+                description: "semanticCameraPopupTip1Description",
                 lottieName: LottieLiterals.Onboarding.tap
             ),
             FfipCameraPopupTipModel(
-                title: String(localized: .semanticCameraPopupTip2Title),
-                description: String(localized: .semanticCameraPopupTip2Description),
+                title: "semanticCameraPopupTip2Title",
+                description: "semanticCameraPopupTip2Description",
                 lottieName: LottieLiterals.Onboarding.grid
             ),
             FfipCameraPopupTipModel(
-                title: String(localized: .semanticCameraPopupTip3Title),
-                description: String(localized: .semanticCameraPopupTip3Description),
+                title: "semanticCameraPopupTip3Title",
+                description: "semanticCameraPopupTip3Description",
                 lottieName: LottieLiterals.Onboarding.grid2
             )]
         }

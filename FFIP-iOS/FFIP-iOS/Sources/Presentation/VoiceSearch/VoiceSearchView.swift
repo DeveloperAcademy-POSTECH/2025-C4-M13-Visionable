@@ -37,13 +37,13 @@ struct VoiceSearchView: View {
                 HStack {
                     Text(
                         voiceSearchModel.transcript.isEmpty
-                            ? String(localized: .searchPlaceholder)
+                            ? ".searchPlaceholder"
                             : "\"\(voiceSearchModel.transcript)\""
                     )
                     .font(.titleBold24)
                     .foregroundStyle(.ffipGrayscale1)
-                    .accessibilityLabel(.VoiceOverLocalizable.sayKeyword)
-                    .accessibilityHint(.VoiceOverLocalizable.voiceInput)
+                    .accessibilityLabel(".VoiceOverLocalizable.sayKeyword")
+                    .accessibilityHint(".VoiceOverLocalizable.voiceInput")
                     .accessibilitySortPriority(1)
 
                     Spacer()
@@ -51,7 +51,7 @@ struct VoiceSearchView: View {
                 .padding(.leading, 30)
 
                 HStack {
-                    Text(.willCameraPushInstruction)
+                    Text(".willCameraPushInstruction")
                         .font(.titleBold24)
                         .foregroundStyle(.ffipGrayscale1)
                         .opacity(willCameraPush ? 1 : 0)

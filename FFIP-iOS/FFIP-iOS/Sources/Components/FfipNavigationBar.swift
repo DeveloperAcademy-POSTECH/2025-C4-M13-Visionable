@@ -53,8 +53,8 @@ private extension FfipNavigationBar {
                     .scaledToFit()
                     .frame(width: 20)
             }
-            .accessibilityLabel(.VoiceOverLocalizable.back)
-            .accessibilityHint(.VoiceOverLocalizable.backHint)
+            .accessibilityLabel(".VoiceOverLocalizable.back")
+            .accessibilityHint(".VoiceOverLocalizable.backHint")
         case .none:
             Spacer().frame(width: 20).opacity(0)
         }

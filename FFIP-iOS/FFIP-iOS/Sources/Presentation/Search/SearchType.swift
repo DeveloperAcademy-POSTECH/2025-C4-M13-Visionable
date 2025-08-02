@@ -13,17 +13,17 @@ enum SearchType: String, CaseIterable, Identifiable {
     
     var id: String { rawValue }
     
-    var title: LocalizedStringResource {
+    var title: String {
         switch self {
-        case .exact: return .exactSearch
-        case .semantic: return .semanticSearch
+        case .exact: return ".exactSearch"
+        case .semantic: return ".semanticSearch"
         }
     }
     
-    var placeholder: LocalizedStringResource {
+    var placeholder: String {
         switch self {
-        case .exact: return .exactSearchPlaceholder
-        case .semantic: return .semantictSearchPlaceholder
+        case .exact: return ".exactSearchPlaceholder"
+        case .semantic: return ".semantictSearchPlaceholder"
         }
     }
     

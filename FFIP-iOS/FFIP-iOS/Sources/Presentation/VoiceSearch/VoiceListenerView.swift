@@ -23,8 +23,8 @@ struct VoiceListenerView: View {
                     unDetectCount = 0
                     showMicButton = false
                 })
-                .accessibilityLabel(.VoiceOverLocalizable.voiceInput)
-                .accessibilityHint(.VoiceOverLocalizable.voiceSearhHint)
+                .accessibilityLabel(".VoiceOverLocalizable.voiceInput")
+                .accessibilityHint(".VoiceOverLocalizable.voiceSearhHint")
                 .accessibilityAddTraits(.isButton)
                 .accessibilitySortPriority(1)
             } else {

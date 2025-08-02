@@ -51,8 +51,8 @@ struct FfipSearchTextField: View {
                 .submitLabel(.search)
                 .frame(height: 55)
                 .frame(minWidth: 0, maxWidth: .infinity)
-                .accessibilityLabel(.VoiceOverLocalizable.textField)
-                .accessibilityHint(.VoiceOverLocalizable.textFieldHint)
+                .accessibilityLabel(".VoiceOverLocalizable.textField")
+                .accessibilityHint(".VoiceOverLocalizable.textFieldHint")
                 Button {
                     text = ""
                 } label: {
@@ -73,8 +73,8 @@ struct FfipSearchTextField: View {
                         .frame(width: 55, height: 55)
                         .background(Circle().fill(.ffipGrayscale5))
                 }
-                .accessibilityLabel(.VoiceOverLocalizable.voiceInput)
-                .accessibilityHint(.VoiceOverLocalizable.voiceSearhHint)
+                .accessibilityLabel(".VoiceOverLocalizable.voiceInput")
+                .accessibilityHint(".VoiceOverLocalizable.voiceSearhHint")
             }
         }
     }

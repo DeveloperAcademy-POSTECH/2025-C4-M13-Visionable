@@ -23,8 +23,6 @@ struct SearchView: View {
     @FocusState private var isFocused: Bool
     @State private var searchFocusState: SearchFocusState = .home
     @State private var isToolTipPresented: Bool = false
-    @State private var isSheetPresented: Bool = false
-    @State private var isToastPresented: Bool = false
     @State private var searchText: String = ""
     
     var body: some View {
@@ -44,8 +42,8 @@ struct SearchView: View {
                         .font(.titleBold24)
                         .tint(.ffipGrayscale1)
                         .padding(.top, 75)
-                        .accessibilityLabel(.VoiceOverLocalizable.searchMode("지정 탐색"))
-                        .accessibilityValue(.VoiceOverLocalizable.exactSearchModeValue)
+                        .accessibilityLabel(".VoiceOverLocalizable.searchMode")
+                        .accessibilityValue(".VoiceOverLocalizable.exactSearchModeValue")
                         .accessibilitySortPriority(1)
                 }
                 
@@ -55,24 +53,20 @@ struct SearchView: View {
                         Button(action: navigationBackButtonTapped) {
                             Image(.icnNavBack)
                         }
-                        .accessibilityLabel(.VoiceOverLocalizable.back)
-                        .accessibilityHint(.VoiceOverLocalizable.backHint)
+                        .accessibilityLabel(".VoiceOverLocalizable.back")
+                        .accessibilityHint(".VoiceOverLocalizable.backHint")
                     }
                     
                     FfipSearchTextField(
                         text: $searchText,
                         isFocused: searchFocusState.isEditing,
-                        placeholder: String(localized: searchType.placeholder),
+                        placeholder: "searchType.placeholder",
                         onVoiceSearch: { coordinator.push(.voiceSearch) },
                         onSubmit: {
                             if searchType == .exact {
                                 searchModel.addRecentSearchKeyword(searchText)
                             }
-                            coordinator.push(
-                                searchType == .exact
-                                ? .exactCamera(searchKeyword: searchText)
-                                : .semanticCamera(searchKeyword: searchText)
-                            )
+                            coordinator.push(.exactCamera(searchKeyword: searchText))
                             
                             searchFocusState = .home
                         },
@@ -86,7 +80,7 @@ struct SearchView: View {
                 if searchFocusState.isHome && searchType == .exact {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text(.recentSearchTitle)
+                            Text(".recentSearchTitle")
                                 .font(.labelMedium12)
                                 .foregroundStyle(.ffipGrayscale2)
                                 .padding(.top, 32)
@@ -111,7 +105,7 @@ struct SearchView: View {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .trailing, spacing: 12) {
                             VStack(alignment: .leading, spacing: 20) {
-                                Text(.recentSearchTitle)
+                                Text(".recentSearchTitle")
                                     .font(.labelMedium14)
                                     .foregroundStyle(.ffipGrayscale3)
                                 
@@ -130,18 +124,14 @@ struct SearchView: View {
                                     }
                                 )
                             }
-                            Text(.recentSearchesCleared)
+                            Text(".recentSearchesCleared")
                                 .font(.labelMedium14)
                                 .foregroundStyle(.ffipGrayscale2)
                                 .onTapGesture {
                                     searchModel.deleteAllRecentSearchKeyword()
                                 }
-                                .accessibilityLabel(
-                                    .VoiceOverLocalizable.deleteRecentAll
-                                )
-                                .accessibilityHint(
-                                    .VoiceOverLocalizable.resetRecentKeywords
-                                )
+                                .accessibilityLabel(".VoiceOverLocalizable.deleteRecentAll")
+                                .accessibilityHint(".VoiceOverLocalizable.resetRecentKeywords")
                                 .accessibilityAddTraits(.isButton)
                         }
                         .transition(
@@ -152,12 +142,10 @@ struct SearchView: View {
                         VStack {
                             Spacer()
                                 .frame(height: 147)
-                            Text(.noRecentSearchesMessage)
+                            Text(".noRecentSearchesMessage")
                                 .font(.bodyMedium16)
                                 .foregroundStyle(.ffipGrayscale3)
-                                .accessibilityLabel(
-                                    .VoiceOverLocalizable.noRecentKeyword
-                                )
+                                .accessibilityLabel(".VoiceOverLocalizable.noRecentKeyword")
                         }
                         .frame(maxWidth: .infinity)
                     }
@@ -175,20 +163,6 @@ struct SearchView: View {
                 }
             }
         }
-        .onChange(of: searchType) {
-            withAnimation { isToastPresented = true }
-        }
-        .ffipSheet(isPresented: $isSheetPresented) {
-            SearchTypeSelectionView(
-                selectedType: $searchType,
-                dismissAction: dismissFfipSheet
-            )
-        }
-        .showFfipToastMessage(
-            toastType: .check,
-            toastTitle: String(localized: .searchModeUpdated),
-            isToastVisible: $isToastPresented
-        )
     }
 }
 
@@ -206,16 +180,6 @@ private extension SearchView {
         withAnimation(.easeInOut(duration: 0.25)) {
             searchFocusState = .home
             isFocused = false
-        }
-    }
-    
-    func dismissFfipSheet() {
-        if isToolTipPresented { isToolTipPresented = false }
-        
-        withAnimation { isSheetPresented = false }
-        Task {
-            try? await Task.sleep(for: .seconds(0.2))
-            withAnimation { isToolTipPresented = true }
         }
     }
 }

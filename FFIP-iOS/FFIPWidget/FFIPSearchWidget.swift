@@ -65,7 +65,7 @@ struct FFIPWidgetEntryView: View {
             HStack(spacing: 14) {
                 VStack(alignment: .leading) {
                     HStack(spacing: 4) {
-                        Text(.appName)
+                        Text("appName")
                         Image(.icnAImark)
                             .resizable()
                             .scaledToFit()
@@ -99,25 +99,8 @@ struct FFIPExactSearchWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { _ in
             FFIPWidgetEntryView(widgetType: .exactSearch)
         }
-        .configurationDisplayName(
-            String(localized: .designatedSearchWidgetConfigurationDisplayName)
-        )
-        .description(String(localized: .designatedSearchWidgetDescription))
-        .supportedFamilies([.systemSmall])
-    }
-}
-
-struct FFIPSemanticSearchWidget: Widget {
-    let kind: String = "FFIPRelatedSearchWidget"
-
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { _ in
-            FFIPWidgetEntryView(widgetType: .semanticSearch)
-        }
-        .configurationDisplayName(
-            String(localized: .relatedSearchWidgetConfigurationDisplayName)
-        )
-        .description(String(localized: .relatedSearchWidgetDescription))
+        .configurationDisplayName("designatedSearchWidgetConfigurationDisplayName")
+        .description("designatedSearchWidgetDescription")
         .supportedFamilies([.systemSmall])
     }
 }

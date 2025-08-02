@@ -95,9 +95,7 @@ struct ExactCameraView: View {
                 FfipSearchTextField(
                     text: $searchText,
                     isFocused: isTextFieldFocused,
-                    placeholder: String(
-                        localized: .searchPlaceholder
-                    ),
+                    placeholder: "searchPlaceholder",
                     onSubmit: {
                         lastSearchText = searchText
                         mediator.changeSearchKeyword(keyword: searchText)
@@ -119,21 +117,17 @@ struct ExactCameraView: View {
                     showTip: $showTip,
                     dontShowTipAgain: $dontShowExactCameraTipAgain,
                     ffipCameraTipType: .exact,
-                    tipText1: String(localized: .exactCameraTip1)
+                    tipText1: ".exactCameraTip1"
                         .asHighlight(
-                            highlightedString: String(
-                                localized: .exactCameraTipGreen1
-                            ),
+                            highlightedString: ".exactCameraTipGreen1",
                             highlightColor: .ffipPointGreen1
                         ),
-                    tipText2: String(localized: .exactCameraTip2)
+                    tipText2: ".exactCameraTip2"
                         .asHighlight(
-                            highlightedString: String(
-                                localized: .exactCameraTipGreen2
-                            ),
+                            highlightedString: ".exactCameraTipGreen2",
                             highlightColor: .ffipPointGreen1
                         ),
-                    dontShowAgainText: String(localized: .dontShowAgain)
+                    dontShowAgainText: ".dontShowAgain"
                 )
             }
             

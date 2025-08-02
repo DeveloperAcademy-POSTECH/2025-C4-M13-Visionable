@@ -1,6 +1,75 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    ".noRecentSearchesMessage" : {
+
+    },
+    ".recentSearchesCleared" : {
+
+    },
+    ".recentSearchTitle" : {
+
+    },
+    ".searchPlaceholder" : {
+
+    },
+    ".VoiceOverLocalizable.back" : {
+
+    },
+    ".VoiceOverLocalizable.backHint" : {
+
+    },
+    ".VoiceOverLocalizable.delete(keyword)" : {
+
+    },
+    ".VoiceOverLocalizable.deleteRecentAll" : {
+
+    },
+    ".VoiceOverLocalizable.deleteRecentKeyword" : {
+
+    },
+    ".VoiceOverLocalizable.exactSearchModeValue" : {
+
+    },
+    ".VoiceOverLocalizable.noRecentKeyword" : {
+
+    },
+    ".VoiceOverLocalizable.recentKeyword(keyword)" : {
+
+    },
+    ".VoiceOverLocalizable.recentKeywordkeyword" : {
+
+    },
+    ".VoiceOverLocalizable.resetRecentKeywords" : {
+
+    },
+    ".VoiceOverLocalizable.sayKeyword" : {
+
+    },
+    ".VoiceOverLocalizable.searchCapsule" : {
+
+    },
+    ".VoiceOverLocalizable.searchMode" : {
+
+    },
+    ".VoiceOverLocalizable.textField" : {
+
+    },
+    ".VoiceOverLocalizable.textFieldHint" : {
+
+    },
+    ".VoiceOverLocalizable.voiceInput" : {
+
+    },
+    ".VoiceOverLocalizable.voiceSearhHint" : {
+
+    },
+    ".willCameraPushInstruction" : {
+
+    },
+    "\"%@\"" : {
+
+    },
     "%lld" : {
 
     },
@@ -75,6 +144,12 @@
           }
         }
       }
+    },
+    "designatedSearchWidgetConfigurationDisplayName" : {
+
+    },
+    "designatedSearchWidgetDescription" : {
+
     },
     "dontShowAgain" : {
       "comment" : "툴팁 다시 보지 않기",
