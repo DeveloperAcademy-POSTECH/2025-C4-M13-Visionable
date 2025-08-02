@@ -51,8 +51,8 @@ struct FfipSearchTextField: View {
                 .submitLabel(.search)
                 .frame(height: 55)
                 .frame(minWidth: 0, maxWidth: .infinity)
-                .accessibilityLabel(".VoiceOverLocalizable.textField")
-                .accessibilityHint(".VoiceOverLocalizable.textFieldHint")
+                .accessibilityLabel("탐색창")
+                .accessibilityHint("찾고 싶은 탐색어를 입력하세요. 입력을 완료하면 카메라 뷰를 켜서 탐색을 시작합니다.")
                 Button {
                     text = ""
                 } label: {
@@ -73,8 +73,8 @@ struct FfipSearchTextField: View {
                         .frame(width: 55, height: 55)
                         .background(Circle().fill(.ffipGrayscale5))
                 }
-                .accessibilityLabel(".VoiceOverLocalizable.voiceInput")
-                .accessibilityHint(".VoiceOverLocalizable.voiceSearhHint")
+                .accessibilityLabel("음성 입력")
+                .accessibilityHint("음성으로 탐색어를 입력할 수 있습니다. 탭하면 음성 인식이 시작됩니다.")
             }
         }
     }

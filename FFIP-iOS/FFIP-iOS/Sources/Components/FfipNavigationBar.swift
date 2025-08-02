@@ -53,8 +53,8 @@ private extension FfipNavigationBar {
                     .scaledToFit()
                     .frame(width: 20)
             }
-            .accessibilityLabel(".VoiceOverLocalizable.back")
-            .accessibilityHint(".VoiceOverLocalizable.backHint")
+            .accessibilityLabel("뒤로가기")
+            .accessibilityHint("탐색 모드를 변경할 수 있는 초기 화면으로 돌아갑니다.")
         case .none:
             Spacer().frame(width: 20).opacity(0)
         }

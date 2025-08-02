@@ -18,16 +18,16 @@ struct FfipRecentSearchCapsule: View {
                 .font(.labelMedium14)
                 .foregroundStyle(.ffipGrayscale1)
                 .lineLimit(1)
-                .accessibilityLabel(".VoiceOverLocalizable.recentKeywordkeyword")
-                .accessibilityHint(".VoiceOverLocalizable.searchCapsule")
+                .accessibilityLabel("최근 탐색어 \(keyword)")
+                .accessibilityHint("탭하면 카메라 뷰를 켜서 탐색을 시작합니다.")
                 .accessibilityAddTraits(.isButton)
             
             Button(action: onTapDelete) {
                 Image(.btnClose)
                     .tint(.ffipGrayscale2)
             }
-            .accessibilityLabel(".VoiceOverLocalizable.delete(keyword)")
-            .accessibilityHint(".VoiceOverLocalizable.deleteRecentKeyword")
+            .accessibilityLabel("\(keyword) 삭제")
+            .accessibilityHint("최근 탐색어 목록에서 이 항목을 제거합니다.")
             .accessibilityAddTraits(.isButton)
         }
         .padding(.vertical, 10)

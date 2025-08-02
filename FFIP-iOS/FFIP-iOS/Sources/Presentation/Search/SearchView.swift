@@ -41,8 +41,8 @@ struct SearchView: View {
                         .font(.titleBold24)
                         .tint(.ffipGrayscale1)
                         .padding(.top, 75)
-                        .accessibilityLabel(".VoiceOverLocalizable.searchMode")
-                        .accessibilityValue(".VoiceOverLocalizable.exactSearchModeValue")
+                        .accessibilityLabel("탐색 모드: 지정 탐색")
+                        .accessibilityValue("탐색창에 입력하는 텍스트와 정확히 일치하는 항목만 찾아줍니다.")
                         .accessibilitySortPriority(1)
                 }
                 
@@ -52,8 +52,8 @@ struct SearchView: View {
                         Button(action: navigationBackButtonTapped) {
                             Image(.icnNavBack)
                         }
-                        .accessibilityLabel(".VoiceOverLocalizable.back")
-                        .accessibilityHint(".VoiceOverLocalizable.backHint")
+                        .accessibilityLabel("뒤로가기")
+                        .accessibilityHint("탐색 모드를 변경할 수 있는 초기 화면으로 돌아갑니다.")
                     }
                     
                     FfipSearchTextField(
@@ -127,8 +127,8 @@ struct SearchView: View {
                                 .onTapGesture {
                                     searchModel.deleteAllRecentSearchKeyword()
                                 }
-                                .accessibilityLabel(".VoiceOverLocalizable.deleteRecentAll")
-                                .accessibilityHint(".VoiceOverLocalizable.resetRecentKeywords")
+                                .accessibilityLabel("최근 탐색어 전체 삭제")
+                                .accessibilityHint("최근 탐색어 목록을 초기화합니다.")
                                 .accessibilityAddTraits(.isButton)
                         }
                         .transition(
@@ -142,7 +142,7 @@ struct SearchView: View {
                             Text("최근 탐색어가 없습니다.")
                                 .font(.bodyMedium16)
                                 .foregroundStyle(.ffipGrayscale3)
-                                .accessibilityLabel(".VoiceOverLocalizable.noRecentKeyword")
+                                .accessibilityLabel("최근 탐색어가 없습니다.")
                         }
                         .frame(maxWidth: .infinity)
                     }
