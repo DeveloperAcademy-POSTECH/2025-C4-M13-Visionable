@@ -7,14 +7,14 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "We use your camera to explore the world around you."
+            "state" : "needs_review",
+            "value" : "We use your camera to scan text in real time the world around you."
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "탐색 기능을 사용하려면\n카메라 접근 권한을 허용해주세요."
+            "state" : "translated",
+            "value" : "앱에서 실시간 텍스트 스캔 기능을 사용하려면 카메라 접근 권한을 허용해주세요."
           }
         }
       }
