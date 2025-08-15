@@ -74,11 +74,11 @@ extension CameraModel {
         _ = await zoom(to: 2.0)
     }
 
-    func turnOffTorch() async -> Bool {
+    func turnOffTorch() async {
         await deviceService.turnOffTorch()
     }
     
-    func turnOnTorch() async -> Bool {
+    func turnOnTorch() async {
         await deviceService.turnOnTorch()
     }
     
