@@ -307,6 +307,23 @@
         }
       }
     },
+    "sheetDimButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismiss Sheet"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시트 닫기"
+          }
+        }
+      }
+    },
     "textField" : {
       "extractionState" : "manual",
       "localizations" : {
