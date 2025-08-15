@@ -21,6 +21,17 @@ enum FfipOnboardingType: CaseIterable {
         }
     }
     
+    var titleAccessibilityLabel: String {
+        switch self {
+        case .first:
+            String(localized: .VoiceOverLocalizable.onboarding1Title)
+        case .second:
+            String(localized: .VoiceOverLocalizable.onboarding2Title)
+        case .third:
+            String(localized: .VoiceOverLocalizable.onboarding3Title)
+        }
+    }
+    
     var badgeText: String? {
         switch self {
         case .third:
@@ -46,6 +57,15 @@ enum FfipOnboardingType: CaseIterable {
             String(localized: .next)
         case .third:
             String(localized: .startExplore)
+        }
+    }
+    
+    var buttonTitleAccessibilityLabel: String {
+        switch self {
+        case .first, .second:
+            String(localized: .next)
+        case .third:
+            String(localized: .VoiceOverLocalizable.startExplore)
         }
     }
     

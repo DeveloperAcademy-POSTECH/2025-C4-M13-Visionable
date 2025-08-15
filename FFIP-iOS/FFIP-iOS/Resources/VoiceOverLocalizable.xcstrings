@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "appName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fip"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "삡"
+          }
+        }
+      }
+    },
     "back" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -103,6 +120,23 @@
         }
       }
     },
+    "exactCameraPopupTip3_Description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "It stops the buzz and the box."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두 번 연속 탭하면 진동과 삡 박스도 멈춰요."
+          }
+        }
+      }
+    },
     "exactSearch" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -167,6 +201,57 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "최근 탐색어가 없습니다."
+          }
+        }
+      }
+    },
+    "onboarding1_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Want to find fast? Anytime fip it"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "빠르게 찾고 싶다면\n어디서든 하나, 둘, 삡"
+          }
+        }
+      }
+    },
+    "onboarding2_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Know the exact word?\nTry fip Direct Search"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이름을 알고 있다면\nFF!p 지정 탐색"
+          }
+        }
+      }
+    },
+    "onboarding3_Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not sure what it’s called?\nTry Fip Insight Search"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이름을 알고 있다면\n삡 지정 탐색"
           }
         }
       }
@@ -320,6 +405,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "시트 닫기"
+          }
+        }
+      }
+    },
+    "startExplore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let’s fip"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색 시작하기"
           }
         }
       }
