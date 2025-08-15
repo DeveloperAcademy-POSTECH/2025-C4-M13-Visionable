@@ -39,30 +39,30 @@ actor VideoDeviceService {
         return 2.0
     }
 
-    func turnOnTorch() -> Bool {
-        guard let videoDevice else { return false }
+    func turnOnTorch() {
+        guard let videoDevice else { return }
         do {
             try videoDevice.lockForConfiguration()
             videoDevice.torchMode = .on
             videoDevice.unlockForConfiguration()
-            return true
+            return
         } catch {
             print("Error setting flash mode: \(error)")
         }
-        return false
+        return
     }
 
-    func turnOffTorch() -> Bool {
-        guard let videoDevice else { return true }
+    func turnOffTorch() {
+        guard let videoDevice else { return }
         do {
             try videoDevice.lockForConfiguration()
             defer { videoDevice.unlockForConfiguration() }
             videoDevice.torchMode = .off
-            return false
+            return
         } catch {
             print("Error setting flash mode: \(error)")
         }
-        return true
+        return
     }
     
     func setAutoFocusMode() {

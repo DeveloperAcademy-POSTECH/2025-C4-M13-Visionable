@@ -51,6 +51,7 @@ struct OnboardingView: View {
                         triggerHapticFeedback()
                     }
                 }
+                .accessibilityLabel(steps[currentStepIndex].buttonTitleAccessibilityLabel)
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -172,6 +173,7 @@ struct OnboardingBottomContentView: View {
                 .foregroundStyle(.ffipGrayscale1)
                 .padding(.bottom, 10)
                 .padding(.top, type == .third ? 16 : 0)
+                .accessibilityLabel(type.titleAccessibilityLabel)
             
             Text(type.description)
                 .font(.bodyMedium16)
