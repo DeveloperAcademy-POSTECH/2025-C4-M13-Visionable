@@ -33,7 +33,7 @@ struct FfipSheetModifier<SheetContent: View>: ViewModifier {
                     .ignoresSafeArea()
             
                 VStack {
-                    Button  {
+                    Button {
                         withAnimation { isPresented = false }
                         onDismiss?()
                     } label: {
