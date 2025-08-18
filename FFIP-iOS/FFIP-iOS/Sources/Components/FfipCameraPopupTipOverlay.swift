@@ -27,7 +27,9 @@ struct FfipCameraPopupTipOverlay: View {
                         .padding(.horizontal, 40)
                         .padding(.bottom, 20)
                     
-                    Button(action: { showPopupTip = false }) {
+                    Button {
+                        showPopupTip = false
+                    } label: {
                         Image(.icnAlertClose)
                             .renderingMode(.template)
                             .resizable()

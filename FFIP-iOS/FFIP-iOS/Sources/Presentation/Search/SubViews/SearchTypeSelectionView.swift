@@ -20,36 +20,35 @@ struct SearchTypeSelectionView: View {
                 .accessibilitySortPriority(1)
 
             VStack(spacing: 26) {
-                ForEach(SearchType.allCases) { type in
-                    SearchTypeRow(
-                        title: String(localized: type.title),
-                        tagImage: type.tagIcon,
-                        isSelected: selectedType == type,
-                        onTap: {
-                            selectedType = type
-                            dismissAction()
-                        }
-                    )
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel(
-                        String(
-                            localized: selectedType == .exact
-                                ? .VoiceOverLocalizable.exactSearch
-                                : .VoiceOverLocalizable.semanticSearch
-                        )
-                    )
-                    .accessibilityValue(
-                        selectedType == .exact
-                        ? .VoiceOverLocalizable.exactSelectValue
-                            : .VoiceOverLocalizable.semanticSelectValue
-                    )
-                    .accessibilityHint(
-                        String(
-                            localized: .VoiceOverLocalizable.changeSearchMode
-                        )
-                    )
-                    .accessibilityAddTraits(.isButton)
-                }
+                SearchTypeRow(
+                    title: String(localized: SearchType.exact.title),
+                    tagImage: SearchType.exact.tagIcon,
+                    isSelected: selectedType == .exact,
+                    onTap: {
+                        selectedType = .exact
+                        dismissAction()
+                    }
+                )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(String(localized: .VoiceOverLocalizable.exactSearch))
+                .accessibilityValue(.VoiceOverLocalizable.exactSelectValue)
+                .accessibilityHint(String(localized: .VoiceOverLocalizable.changeSearchMode))
+                .accessibilityAddTraits(.isButton)
+
+                SearchTypeRow(
+                    title: String(localized: SearchType.semantic.title),
+                    tagImage: SearchType.semantic.tagIcon,
+                    isSelected: selectedType == .semantic,
+                    onTap: {
+                        selectedType = .semantic
+                        dismissAction()
+                    }
+                )
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(String(localized: .VoiceOverLocalizable.semanticSearch))
+                .accessibilityValue(.VoiceOverLocalizable.semanticSelectValue)
+                .accessibilityHint(String(localized: .VoiceOverLocalizable.changeSearchMode))
+                .accessibilityAddTraits(.isButton)
             }
         }
     }

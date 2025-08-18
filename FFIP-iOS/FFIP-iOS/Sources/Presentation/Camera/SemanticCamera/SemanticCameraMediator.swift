@@ -65,9 +65,11 @@ final class SemanticCameraMediator: NSObject {
     
     func toggleTorch() async {
         if isTorchOn {
-            isTorchOn = await cameraModel.turnOffTorch()
+            await cameraModel.turnOffTorch()
+            isTorchOn = false
         } else {
-            isTorchOn = await cameraModel.turnOnTorch()
+            await cameraModel.turnOnTorch()
+            isTorchOn = true
         }
     }
     

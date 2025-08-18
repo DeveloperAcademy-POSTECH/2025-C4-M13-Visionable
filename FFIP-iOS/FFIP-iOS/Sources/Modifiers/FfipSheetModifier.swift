@@ -31,14 +31,17 @@ struct FfipSheetModifier<SheetContent: View>: ViewModifier {
             if isPresented {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
-                    .onTapGesture {
+            
+                VStack {
+                    Button {
                         withAnimation { isPresented = false }
                         onDismiss?()
+                    } label: {
+                        Color.black.opacity(0.001)
+                            .ignoresSafeArea()
                     }
-                    .accessibilityHidden(true)
-                
-                VStack {
-                    Spacer()
+                    .accessibilityLabel(.VoiceOverLocalizable.sheetDimButton)
+                    
                     FfipBottomSheet {
                         sheetContent
                     }
