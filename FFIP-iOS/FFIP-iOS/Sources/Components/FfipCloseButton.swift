@@ -5,7 +5,6 @@
 //  Created by Sean Cho on 8/15/25.
 //
 
-
 import SwiftUI
 
 struct FfipCloseButton: View {
