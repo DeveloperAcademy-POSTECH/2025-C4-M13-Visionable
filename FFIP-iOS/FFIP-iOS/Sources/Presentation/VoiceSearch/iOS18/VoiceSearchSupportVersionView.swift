@@ -11,7 +11,6 @@ import SwiftUI
 struct VoiceSearchSupportVersionView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var voiceSearchSupportVersionModel: VoiceSearchSupportVersionModel
-    @Binding var searchType: SearchType
 
     @State private var willCameraPush: Bool = false
     @State private var isUserSpeaking = true

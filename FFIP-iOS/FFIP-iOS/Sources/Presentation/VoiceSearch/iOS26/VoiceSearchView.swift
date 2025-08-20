@@ -13,7 +13,6 @@ struct VoiceSearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
     @Bindable var voiceSearchModel: VoiceSearchModel
-    @Binding var searchType: SearchType
     
     @State private var transcript: String = ""
     @State private var willCameraPush: Bool = false
@@ -115,14 +114,8 @@ struct VoiceSearchView: View {
             
             try await Task.sleep(for: .seconds(1))
             
-            switch searchType {
-            case .exact:
-                searchModel.addRecentSearchKeyword(transcript)
-                coordinator.push(.exactCamera(searchKeyword: transcript))
-            case .semantic:
-                coordinator.push(.semanticCamera(searchKeyword: transcript))
-            }
-            break
+            searchModel.addRecentSearchKeyword(transcript)
+            coordinator.push(.exactCamera(searchKeyword: transcript))
         }
     }
     

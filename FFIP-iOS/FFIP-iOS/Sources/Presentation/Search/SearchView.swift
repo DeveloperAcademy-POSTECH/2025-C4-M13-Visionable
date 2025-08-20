@@ -18,15 +18,11 @@ public enum SearchFocusState {
 struct SearchView: View {
     @Environment(AppCoordinator.self) private var coordinator
     @Bindable var searchModel: SearchModel
-    @Binding var searchType: SearchType
     
     @FocusState private var isFocused: Bool
     @State private var searchFocusState: SearchFocusState = .home
-    @State private var isToolTipPresented: Bool = false
-    @State private var isSheetPresented: Bool = false
-    @State private var isToastPresented: Bool = false
     @State private var searchText: String = ""
-        
+    
     @AppStorage(AppStorageKey.isShowWidgetNoticeSheet)
     private var isShowWidgetNoticeSheet: Bool = true
     
@@ -43,49 +39,13 @@ struct SearchView: View {
                         trailingType: .none
                     )
                     
-                    if #available(iOS 26.0, *) {
-                        Button {
-                            withAnimation { isSheetPresented = true }
-                        } label: {
-                            HStack(spacing: 8) {
-                                Text(searchType.title)
-                                    .font(.titleBold24)
-                                Image(.icnKeyboardArrowDown)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20)
-                                    .ffipToolTip(
-                                        isToolTipVisible: $isToolTipPresented,
-                                        message: String(localized: searchType == .exact ? .exactSearchToolTip : .semanticSearchToolTip),
-                                        position: .trailing,
-                                        spacing: 9
-                                    )
-                            }
-                        }
+                    Text(.exactSearch)
+                        .font(.titleBold24)
                         .tint(.ffipGrayscale1)
                         .padding(.top, 75)
-                        .accessibilityLabel(
-                            .VoiceOverLocalizable.searchMode(
-                                searchType == .exact ? "지정 탐색" : "연관 탐색"
-                            )
-                        )
-                        .accessibilityValue(
-                            searchType == .exact
-                            ? .VoiceOverLocalizable.exactSearchModeValue
-                            : .VoiceOverLocalizable.semanticSearchModeValue
-                        )
-                        .accessibilityHint(.VoiceOverLocalizable.changeSearchMode)
-                        .accessibilityAddTraits(.isButton)
+                        .accessibilityLabel(.VoiceOverLocalizable.searchMode("지정 탐색"))
+                        .accessibilityValue(.VoiceOverLocalizable.exactSearchModeValue)
                         .accessibilitySortPriority(1)
-                    } else {
-                        Text(searchType.title)
-                            .font(.titleBold24)
-                            .tint(.ffipGrayscale1)
-                            .padding(.top, 75)
-                            .accessibilityLabel(.VoiceOverLocalizable.searchMode("지정 탐색"))
-                            .accessibilityValue(.VoiceOverLocalizable.exactSearchModeValue)
-                            .accessibilitySortPriority(1)
-                    }
                 }
                 
                 // 텍스트필드 검색바
@@ -101,7 +61,7 @@ struct SearchView: View {
                     FfipSearchTextField(
                         text: $searchText,
                         isFocused: searchFocusState.isEditing,
-                        placeholder: String(localized: searchType.placeholder),
+                        placeholder: String(localized: .exactSearchPlaceholder),
                         onVoiceSearch: {
                             if #available(iOS 26.0, *) {
                                 coordinator.push(.voiceSearch)
@@ -110,15 +70,8 @@ struct SearchView: View {
                             }
                         },
                         onSubmit: {
-                            if searchType == .exact {
-                                searchModel.addRecentSearchKeyword(searchText)
-                            }
-                            coordinator.push(
-                                searchType == .exact
-                                ? .exactCamera(searchKeyword: searchText)
-                                : .semanticCamera(searchKeyword: searchText)
-                            )
-                            
+                            searchModel.addRecentSearchKeyword(searchText)
+                            coordinator.push(.exactCamera(searchKeyword: searchText))
                             searchFocusState = .home
                         },
                         withVoiceSearch: searchFocusState.isHome
@@ -127,8 +80,7 @@ struct SearchView: View {
                 }
                 .padding(.top, 16)
                 
-                // 지정탐색 일 때만 하단에 뜨는 최근 탐색어 (by 검색모드)
-                if searchFocusState.isHome && searchType == .exact {
+                if searchFocusState.isHome {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
                             Text(.recentSearchTitle)
@@ -149,10 +101,7 @@ struct SearchView: View {
                             )
                         }
                     }
-                }
-                
-                // 지정탐색일 때만 하단에 뜨는 최근 탐색어 (by 편집모드)
-                if searchFocusState.isEditing && searchType == .exact {
+                } else {
                     if !searchModel.recentSearchKeywords.isEmpty {
                         VStack(alignment: .trailing, spacing: 12) {
                             VStack(alignment: .leading, spacing: 20) {
@@ -212,7 +161,6 @@ struct SearchView: View {
             .padding(.horizontal, 20)
         }
         .navigationBarBackButtonHidden(true)
-        .onAppear { searchViewWillAppear() }
         .onChange(of: isFocused) {
             if isFocused {
                 withAnimation(.easeInOut(duration: 0.25)) {
@@ -220,50 +168,18 @@ struct SearchView: View {
                 }
             }
         }
-        .onChange(of: searchType) {
-            withAnimation { isToastPresented = true }
-        }
         .ffipSheet(isPresented: $isShowWidgetNoticeSheet) {
             WidgetNoticeView(addWidgetButtonTapped: {}, passButtonTapped: {})
         }
-        .ffipSheet(isPresented: $isSheetPresented) {
-            SearchTypeSelectionView(
-                selectedType: $searchType,
-                dismissAction: dismissFfipSheet
-            )
-        }
-        .showFfipToastMessage(
-            toastType: .check,
-            toastTitle: String(localized: .searchModeUpdated),
-            isToastVisible: $isToastPresented
-        )
     }
 }
 
 private extension SearchView {
-    func searchViewWillAppear() {
-        searchText = ""
-        Task {
-            try? await Task.sleep(for: .seconds(0.2))
-            withAnimation { isToolTipPresented = true }
-        }
-    }
-    
     func navigationBackButtonTapped() {
         searchText = ""
         withAnimation(.easeInOut(duration: 0.25)) {
             searchFocusState = .home
             isFocused = false
-        }
-    }
-    
-    func dismissFfipSheet() {
-        if isToolTipPresented { isToolTipPresented = false }
-        
-        withAnimation { isSheetPresented = false }
-        Task {
-            try? await Task.sleep(for: .seconds(0.2))
-            withAnimation { isToolTipPresented = true }
         }
     }
 }

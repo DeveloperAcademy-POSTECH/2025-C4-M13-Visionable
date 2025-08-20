@@ -11,10 +11,10 @@ protocol ModuleFactoryProtocol {
     func makeExactCameraView(searchKeyword: String) -> ExactCameraView
     @available(iOS 26.0, *)
     func makeSemanticCameraView(searchKeyword: String) -> SemanticCameraView
-    func makeSearchView(searchType: Binding<SearchType>) -> SearchView
+    func makeSearchView() -> SearchView
     @available(iOS 26.0, *)
-    func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView
-    func makeVoiceSearchSupportVersionVoew(searchType: Binding<SearchType>) -> VoiceSearchSupportVersionView
+    func makeVoiceSearchView() -> VoiceSearchView
+    func makeVoiceSearchSupportVersionVoew() -> VoiceSearchSupportVersionView
     func makePhotoDetailView() -> PhotoDetailView
     func makeOnboardingView() -> OnboardingView
 }
@@ -76,18 +76,15 @@ final class ModuleFactory: ModuleFactoryProtocol {
         return view
     }
     
-    func makeSearchView(searchType: Binding<SearchType>) -> SearchView {
+    func makeSearchView() -> SearchView {
         let keywords = UserDefaults.standard.stringArray(forKey: UserDefaultsKey.recentSearch) ?? []
         let model = SearchModel(recentSearchKeywords: keywords)
-        let view = SearchView(
-            searchModel: model,
-            searchType: searchType
-        )
+        let view = SearchView(searchModel: model)
         return view
     }
     
     @available(iOS 26.0, *)
-    func makeVoiceSearchView(searchType: Binding<SearchType>) -> VoiceSearchView {
+    func makeVoiceSearchView() -> VoiceSearchView {
         let keywords = UserDefaults.standard.stringArray(forKey: UserDefaultsKey.recentSearch) ?? []
         let searchModel = SearchModel(recentSearchKeywords: keywords)
         
@@ -100,23 +97,19 @@ final class ModuleFactory: ModuleFactoryProtocol {
         
         let view = VoiceSearchView(
             searchModel: searchModel,
-            voiceSearchModel: voiceSearchModel,
-            searchType: searchType
+            voiceSearchModel: voiceSearchModel
         )
         return view
     }
     
-    func makeVoiceSearchSupportVersionVoew(searchType: Binding<SearchType>) -> VoiceSearchSupportVersionView {
+    func makeVoiceSearchSupportVersionVoew() -> VoiceSearchSupportVersionView {
         let privacyService = PrivacyService()
         let speechRecognitionService = SpeechRecognitionService()
         let model = VoiceSearchSupportVersionModel(
             privacyService: privacyService,
             speechService: speechRecognitionService
         )
-        let view = VoiceSearchSupportVersionView(
-            voiceSearchSupportVersionModel: model,
-            searchType: searchType
-        )
+        let view = VoiceSearchSupportVersionView(voiceSearchSupportVersionModel: model)
         return view
     }
     

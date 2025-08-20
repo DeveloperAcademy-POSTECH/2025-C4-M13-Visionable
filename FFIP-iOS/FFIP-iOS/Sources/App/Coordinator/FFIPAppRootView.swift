@@ -9,15 +9,12 @@ import SwiftUI
 
 struct FFIPAppRootView: View {
     @Environment(AppCoordinator.self) private var coordinator
-    @Binding var searchType: SearchType
     
     private let moduleFactory: ModuleFactoryProtocol
     
     public init(
-        searchType: Binding<SearchType>,
         moduleFactory: ModuleFactoryProtocol
     ) {
-        self._searchType = searchType
         self.moduleFactory = moduleFactory
     }
     
@@ -28,7 +25,7 @@ struct FFIPAppRootView: View {
                 set: { coordinator.path = $0 }
             )
         ) {
-            moduleFactory.makeSearchView(searchType: $searchType)
+            moduleFactory.makeSearchView()
                 .navigationBarBackButtonHidden(true)
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
@@ -37,12 +34,12 @@ struct FFIPAppRootView: View {
                         if #available(iOS 26.0, *) {
                             moduleFactory.makeSemanticCameraView(searchKeyword: searchKeyword)
                         }
-                    case .search: moduleFactory.makeSearchView(searchType: $searchType)
+                    case .search: moduleFactory.makeSearchView()
                     case .voiceSearch:
                         if #available(iOS 26.0, *) {
-                            moduleFactory.makeVoiceSearchView(searchType: $searchType)
+                            moduleFactory.makeVoiceSearchView()
                         }
-                    case .voiceSearchSupportVersion: moduleFactory.makeVoiceSearchSupportVersionVoew(searchType: $searchType)
+                    case .voiceSearchSupportVersion: moduleFactory.makeVoiceSearchSupportVersionVoew()
                     case .photoDetail: moduleFactory.makePhotoDetailView()
                     case .onboarding: moduleFactory.makeOnboardingView()
                     }
