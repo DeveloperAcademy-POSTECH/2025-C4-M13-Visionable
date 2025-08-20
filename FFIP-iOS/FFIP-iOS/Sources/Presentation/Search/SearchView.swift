@@ -26,6 +26,9 @@ struct SearchView: View {
     @State private var isSheetPresented: Bool = false
     @State private var isToastPresented: Bool = false
     @State private var searchText: String = ""
+        
+    @AppStorage(AppStorageKey.isShowWidgetNoticeSheet)
+    private var isShowWidgetNoticeSheet: Bool = true
     
     var body: some View {
         ZStack {
@@ -219,6 +222,9 @@ struct SearchView: View {
         }
         .onChange(of: searchType) {
             withAnimation { isToastPresented = true }
+        }
+        .ffipSheet(isPresented: $isShowWidgetNoticeSheet) {
+            WidgetNoticeView(addWidgetButtonTapped: {}, passButtonTapped: {})
         }
         .ffipSheet(isPresented: $isSheetPresented) {
             SearchTypeSelectionView(

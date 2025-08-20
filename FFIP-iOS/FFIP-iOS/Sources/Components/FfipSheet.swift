@@ -22,9 +22,6 @@ struct FfipBottomSheet<Content: View>: View {
                 .padding(.top, 8)
 
             content
-                .padding(.horizontal, 24)
-                .padding(.top, 32)
-                .padding(.bottom, 60)
         }
         .background(
             RoundedRectangle(cornerRadius: 16)
