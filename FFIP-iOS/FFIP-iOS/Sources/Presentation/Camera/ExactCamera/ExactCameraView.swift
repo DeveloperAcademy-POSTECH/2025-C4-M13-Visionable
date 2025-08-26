@@ -62,9 +62,9 @@ struct ExactCameraView: View {
             VStack(spacing: 0) {
                 FfipCameraHeaderBar(
                     zoomFactor: cameraModel.zoomFactor,
-                    onZoom: { Task { cameraModel.handleZoomButtonTapped } },
+                    onZoom: { Task { await cameraModel.handleZoomButtonTapped() } },
                     isTorchOn: cameraModel.isTorchOn,
-                    onToggleTorch: { Task { cameraModel.toggleTorch } },
+                    onToggleTorch: { Task { await cameraModel.toggleTorch() } },
                     onInfo: { showPopupTip = true },
                     onClose: {
                         Task {
