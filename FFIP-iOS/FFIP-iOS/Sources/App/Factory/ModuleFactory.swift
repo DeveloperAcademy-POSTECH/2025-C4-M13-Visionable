@@ -39,10 +39,9 @@ final class ModuleFactory: ModuleFactoryProtocol {
         let keywords = UserDefaults.standard.stringArray(forKey: UserDefaultsKey.recentSearch) ?? []
         let searchModel = SearchModel(recentSearchKeywords: keywords)
         
-        let cameraMediator = ExactCameraMediator(cameraModel: cameraModel, visionModel: visionModel)
-        
         let view = ExactCameraView(
-            mediator: cameraMediator,
+            cameraModel: cameraModel,
+            visionModel: visionModel,
             searchModel: searchModel,
             searchText: searchKeyword
         )

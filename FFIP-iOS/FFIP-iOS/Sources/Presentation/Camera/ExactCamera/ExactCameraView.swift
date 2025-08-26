@@ -10,7 +10,9 @@ import Vision
 
 struct ExactCameraView: View {
     @Environment(AppCoordinator.self) private var coordinator
-    @Bindable var mediator: ExactCameraMediator
+    
+    @Bindable var cameraModel: CameraModel
+    @Bindable var visionModel: VisionModel
     @Bindable var searchModel: SearchModel
 
     @State private var zoomGestureValue: CGFloat = 1.0
@@ -30,7 +32,7 @@ struct ExactCameraView: View {
         ZStack {
             VStack {
                 ZStack {
-                    FrameView(image: mediator.frame)
+                    FrameView(image: cameraModel.frame)
                         .gesture(
                             MagnificationGesture()
                                 .onChanged { value in
@@ -47,7 +49,7 @@ struct ExactCameraView: View {
                             }
                         )
 
-                    ForEach(mediator.matchedObservations, id: \.self) { observation in
+                    ForEach(visionModel.matchedObservations, id: \.self) { observation in
                         FfipBoundingBox(observation: observation)
                     }
                 }
@@ -59,14 +61,14 @@ struct ExactCameraView: View {
 
             VStack(spacing: 0) {
                 FfipCameraHeaderBar(
-                    zoomFactor: mediator.zoomFactor,
-                    onZoom: { Task { await handleZoomButtonTapped() } },
-                    isTorchOn: mediator.isTorchOn,
-                    onToggleTorch: { Task { await mediator.toggleTorch() } },
+                    zoomFactor: cameraModel.zoomFactor,
+                    onZoom: { Task { cameraModel.handleZoomButtonTapped } },
+                    isTorchOn: cameraModel.isTorchOn,
+                    onToggleTorch: { Task { cameraModel.toggleTorch } },
                     onInfo: { showPopupTip = true },
                     onClose: {
                         Task {
-                            await mediator.stop()
+                            await cameraModel.stop()
                             coordinator.popToRoot()
                         }
                     }
@@ -75,7 +77,7 @@ struct ExactCameraView: View {
             }
 
             FfipCameraLockIcon(
-                isPaused: mediator.isCameraPaused,
+                isPaused: cameraModel.isCameraPaused,
                 show: showLockIcon
             )
 
@@ -89,7 +91,7 @@ struct ExactCameraView: View {
                     .showFfipToastMessage(
                         toastType: .warning,
                         toastTitle: "렌즈의 지문을 닦거나 천천히 움직여 주세요.",
-                        isToastVisible: $mediator.showSmudgeToast
+                        isToastVisible: $visionModel.isShowSmudgeToast
                     )
 
                 FfipSearchTextField(
@@ -100,7 +102,7 @@ struct ExactCameraView: View {
                     ),
                     onSubmit: {
                         lastSearchText = searchText
-                        mediator.changeSearchKeyword(keyword: searchText)
+                        visionModel.changeSearchKeyword(keyword: searchText)
                         searchModel.addRecentSearchKeyword(searchText)
                     },
                     withVoiceSearch: false
@@ -143,12 +145,23 @@ struct ExactCameraView: View {
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden(true)
-        .onChange(of: mediator.matchedObservations) { _, newObservations in
+        .onChange(of: visionModel.matchedObservations) { _, newObservations in
             if !newObservations.isEmpty { triggerHapticFeedback() }
         }
         .task {
             self.lastSearchText = searchText
-            await mediator.start()
+            await cameraModel.start()
+            await visionModel.prepare()
+
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await cameraModel.distributeDisplayFrame()
+                }
+                
+                group.addTask {
+                    await visionModel.distributeAnalyzeFrame(cameraModel.analysisFramesStream)
+                }
+            }
         }
         .onChange(of: isTextFieldFocused) {
             Task {
@@ -158,50 +171,31 @@ struct ExactCameraView: View {
         }
         .animation(.default, value: isTextFieldFocused)
     }
+}
 
-    private func handleZoomGestureChanged(_ value: CGFloat) {
+private extension ExactCameraView {
+    func handleZoomGestureChanged(_ value: CGFloat) {
         let delta = value / zoomGestureValue
         zoomGestureValue = value
-        let zoomFactor = mediator.zoomFactor
         Task {
-            await mediator.zoom(to: zoomFactor * delta)
+            await cameraModel.zoom(to: cameraModel.zoomFactor * delta)
         }
     }
 
-    private func handleZoomButtonTapped() async {
-        if mediator.zoomFactor > 4.0 {
-            await mediator.zoom(to: 4.0)
-        } else if mediator.zoomFactor == 4.0 {
-            await mediator.zoom(to: 1.0)
-        } else if mediator.zoomFactor > 2.0 {
-            await mediator.zoom(to: 2.0)
-        } else if mediator.zoomFactor == 2.0 {
-            await mediator.zoom(to: 4.0)
-        } else if mediator.zoomFactor == 1.0 {
-            await mediator.zoom(to: 2.0)
-        } else {
-            await mediator.zoom(to: 1.0)
-        }
-    }
-
-    private func toggleCameraPauseAndShowLock() {
+    func toggleCameraPauseAndShowLock() {
         showLockTask?.cancel()
-        withAnimation {
-            showLockIcon = true
-        }
-        if mediator.isCameraPaused {
-            mediator.resumeCamera()
+        withAnimation { showLockIcon = true }
+        if cameraModel.isCameraPaused {
+            cameraModel.resumeCamera()
             showLockTask = Task {
-                try? await Task.sleep(
-                    for: .seconds(0.8)
-                )
+                try? await Task.sleep(for: .seconds(0.8))
                 if Task.isCancelled { return }
                 withAnimation {
                     showLockIcon = false
                 }
             }
         } else {
-            mediator.pauseCamera()
+            cameraModel.pauseCamera()
         }
     }
 }

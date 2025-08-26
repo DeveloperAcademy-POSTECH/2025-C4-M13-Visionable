@@ -15,10 +15,12 @@ final class VisionModel: NSObject {
     private let visionService: VisionService
 
     var searchKeyword: String
+    var isShowSmudgeToast: Bool = false
 
     private(set) var recognizedTextObservations = [RecognizedTextObservation]()
-//    private(set) var matchedObservations = [RecognizedTextObservation]()
+    private(set) var matchedObservations = [RecognizedTextObservation]()
     private(set) var countDetectSmudge: Int = 0
+    
     init(
         searchKeyword: String,
         visionService: VisionService
@@ -29,14 +31,27 @@ final class VisionModel: NSObject {
 }
 
 extension VisionModel {
-    func changeSearchKeyword(keyword: String) {
-        searchKeyword = keyword
-    }
-
     func prepare() async {
         await visionService.prepareTextRecognition(searchKeyword: searchKeyword)
     }
     
+    func distributeAnalyzeFrame(_ frameStream: AsyncStream<CVImageBuffer>?) async {
+        guard let frameStream else { return }
+        for await imageBuffer in frameStream {
+            await processFrame(imageBuffer)
+            if countDetectSmudge == 5 {
+                isShowSmudgeToast = true
+            }
+            matchedObservations = filterMatchedObservations()
+        }
+    }
+    
+    func changeSearchKeyword(keyword: String) {
+        searchKeyword = keyword
+    }
+}
+
+private extension VisionModel {
     func processFrame(_ buffer: CVImageBuffer) async {
         do {
             if #available(iOS 26.0, *) {
@@ -57,7 +72,7 @@ extension VisionModel {
             print("Vision Processing Error !")
         }
     }
-
+    
     func filterMatchedObservations() -> [RecognizedTextObservation] {
         recognizedTextObservations.filter {
             if #available(iOS 26.0, *) {

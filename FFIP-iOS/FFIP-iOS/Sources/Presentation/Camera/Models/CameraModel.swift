@@ -10,19 +10,24 @@ import Photos
 import SwiftUI
 import Vision
 
+@Observable
 final class CameraModel: NSObject {
+    private(set) var frame: CVImageBuffer?
+
     private(set) var framesStream: AsyncStream<CVImageBuffer>?
     private(set) var analysisFramesStream: AsyncStream<CVImageBuffer>?
     private var framesStreamContinuation:
         AsyncStream<CVImageBuffer>.Continuation?
     private var analysisFramesStreamContinuation:
         AsyncStream<CVImageBuffer>.Continuation?
+    
+    private(set) var isCameraPaused: Bool = false
+    private(set) var isTorchOn: Bool = false
+    private(set) var zoomFactor: CGFloat = 2.0
 
     private let privacyService: PrivacyService
     private let captureService: VideoCaptureService
     private let deviceService: VideoDeviceService
-
-    private(set) var isCameraPaused: Bool = false
     
     init(
         privacyService: PrivacyService,
@@ -38,13 +43,10 @@ final class CameraModel: NSObject {
         await privacyService.fetchCameraAuthorization()
         await deviceService.fetchVideoDevice()
         guard let videoDevice = await deviceService.videoDevice else { return }
-        setupStream()
-        await captureService.configureSession(
-            device: videoDevice,
-            delegate: self
-        )
+        setupStreams()
+        await captureService.configureSession(device: videoDevice, delegate: self)
         await deviceService.setAutoFocusMode()
-        await setDefaultZoom()
+        await zoom(to: zoomFactor)
     }
 
     func stop() async {
@@ -57,29 +59,41 @@ final class CameraModel: NSObject {
 
 // MARK: - CameraModel Private Extension Method
 extension CameraModel {
-    func setupStream() {
-        framesStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
-            self.framesStreamContinuation = continuation
+    @MainActor
+    func distributeDisplayFrame() async {
+        guard let framesStream else { return }
+        for await imageBuffer in framesStream {
+            frame = imageBuffer
         }
-        analysisFramesStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
-            self.analysisFramesStreamContinuation = continuation
-        }
-    }
-
-    func zoom(to factor: CGFloat) async -> CGFloat {
-        return await deviceService.zoom(to: factor)
-    }
-
-    func setDefaultZoom() async {
-        _ = await zoom(to: 2.0)
-    }
-
-    func turnOffTorch() async -> Bool {
-        await deviceService.turnOffTorch()
     }
     
-    func turnOnTorch() async -> Bool {
-        await deviceService.turnOnTorch()
+    func zoom(to factor: CGFloat) async {
+        guard !isCameraPaused else { return }
+        zoomFactor = await deviceService.zoom(to: factor)
+    }
+
+    func handleZoomButtonTapped() async {
+        if zoomFactor > 4.0 {
+            await zoom(to: 4.0)
+        } else if zoomFactor == 4.0 {
+            await zoom(to: 1.0)
+        } else if zoomFactor > 2.0 {
+            await zoom(to: 2.0)
+        } else if zoomFactor == 2.0 {
+            await zoom(to: 4.0)
+        } else if zoomFactor == 1.0 {
+            await zoom(to: 2.0)
+        } else {
+            await zoom(to: 1.0)
+        }
+    }
+    
+    func toggleTorch() async {
+        if isTorchOn {
+            isTorchOn = await deviceService.turnOffTorch()
+        } else {
+            isTorchOn = await deviceService.turnOnTorch()
+        }
     }
     
     func pauseCamera() {
@@ -88,6 +102,17 @@ extension CameraModel {
 
     func resumeCamera() {
         isCameraPaused = false
+    }
+}
+
+private extension CameraModel {
+    func setupStreams() {
+        framesStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
+            self.framesStreamContinuation = continuation
+        }
+        analysisFramesStream = AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
+            self.analysisFramesStreamContinuation = continuation
+        }
     }
 }
 
